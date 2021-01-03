@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="MemoryManager">
+      <UniqueIdentifier>{c6832676-ce33-4496-b471-660a67eab368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryManager\Allocators">
+      <UniqueIdentifier>{ac134ae3-e6eb-4d32-9c84-c6701c362294}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{9cdbea29-77c0-416a-aad3-0583efafd8f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\HashFunction">
+      <UniqueIdentifier>{1bd9abe1-3421-4ea7-9cde-cbab3f6f0ebd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{f18abee0-76ac-4b84-9ecd-e4b4c35cceef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManager\Zip">
+      <UniqueIdentifier>{86292ded-5ce3-47a6-b1f5-5b839ee235ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Multithreading">
+      <UniqueIdentifier>{f8ddc09e-fb73-4ebb-9acb-5102b3a8df93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\WildcardMatch">
+      <UniqueIdentifier>{5be5df5c-b00a-43e2-a441-3d0442d31225}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MemoryManager\Heap.cpp">
+      <Filter>MemoryManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager\MemoryManager.cpp">
+      <Filter>MemoryManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager\Allocators\AllocatorsUtilities.cpp">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager\Allocators\ChunkAllocator.cpp">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager\Allocators\LinkingPoolAllocator.cpp">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager\Allocators\PoolAllocator.cpp">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager\Allocators\PoolAllocatorVector.cpp">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\HashFunction\CRC32.cpp">
+      <Filter>Utilities\HashFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\HashFunction\SpookyV2.cpp">
+      <Filter>Utilities\HashFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\ResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\ResourceName.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Zip\ZipFile.cpp">
+      <Filter>ResourceManager\Zip</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\Zip\ZipFileSystem.cpp">
+      <Filter>ResourceManager\Zip</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ResourceManager\ResourceAsyncLoader.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Multithreading\Thread.cpp">
+      <Filter>Multithreading</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\NativeFileSystem.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\ResourceCreator.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\ResourceReference.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\WildcardMatch\WildcardMatch.cpp">
+      <Filter>Utilities\WildcardMatch</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MemoryManager\Heap.h">
+      <Filter>MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\MemoryManager.h">
+      <Filter>MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\Allocators\ChunkAllocator.h">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\Allocators\LinkingPoolAllocator.h">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\Allocators\PoolAllocator.h">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\Allocators\PoolAllocatorVector.h">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\HashFunction\CRC32.h">
+      <Filter>Utilities\HashFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\HashFunction\SpookyV2.h">
+      <Filter>Utilities\HashFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\FileSystem.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\NativeFileSystem.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Resource.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceAsyncLoader.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceCreator.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceHandler.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceName.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceReference.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceType.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Zip\ZipFile.h">
+      <Filter>ResourceManager\Zip</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\Zip\ZipFileSystem.h">
+      <Filter>ResourceManager\Zip</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\CustomHeapAllocator.h">
+      <Filter>MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Multithreading\ThreadItemQueue.h">
+      <Filter>Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="Multithreading\Thread.h">
+      <Filter>Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\WildcardMatch\WildcardMatch.h">
+      <Filter>Utilities\WildcardMatch</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
