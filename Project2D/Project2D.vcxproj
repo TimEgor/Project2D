@@ -177,6 +177,7 @@
     <ClCompile Include="MemoryManager\Allocators\AllocatorsUtilities.cpp" />
     <ClCompile Include="MemoryManager\Allocators\ChunkAllocator.cpp" />
     <ClCompile Include="MemoryManager\Allocators\LinkingPoolAllocator.cpp" />
+    <ClCompile Include="MemoryManager\Allocators\LinkingPoolAllocatorVector.cpp" />
     <ClCompile Include="MemoryManager\Allocators\PoolAllocator.cpp" />
     <ClCompile Include="MemoryManager\Allocators\PoolAllocatorVector.cpp" />
     <ClCompile Include="MemoryManager\Heap.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h" />
     <ClInclude Include="MemoryManager\Allocators\ChunkAllocator.h" />
     <ClInclude Include="MemoryManager\Allocators\LinkingPoolAllocator.h" />
+    <ClInclude Include="MemoryManager\Allocators\LinkingPoolAllocatorVector.h" />
     <ClInclude Include="MemoryManager\Allocators\PoolAllocator.h" />
     <ClInclude Include="MemoryManager\Allocators\PoolAllocatorVector.h" />
     <ClInclude Include="MemoryManager\CustomHeapAllocator.h" />
