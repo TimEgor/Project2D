@@ -1,9 +1,9 @@
-#include "PoolAllocatorVector.h"
+#include "LinkingPoolAllocatorVector.h"
 
-PoolAllocatorVector::PoolAllocatorVector(PoolAllocatorVector&& vector)
+LinkingPoolAllocatorVector::LinkingPoolAllocatorVector(LinkingPoolAllocatorVector&& vector)
 	: allocators(std::move(vector.allocators)), heap(vector.heap), elementSize(vector.elementSize), elementsNum(vector.elementsNum) {}
 
-PoolAllocatorVector& PoolAllocatorVector::operator=(PoolAllocatorVector&& vector) {
+LinkingPoolAllocatorVector& LinkingPoolAllocatorVector::operator=(LinkingPoolAllocatorVector&& vector) {
     allocators = std::move(vector.allocators);
 
 	heap = vector.heap;
@@ -16,11 +16,11 @@ PoolAllocatorVector& PoolAllocatorVector::operator=(PoolAllocatorVector&& vector
     return *this;
 }
 
-PoolAllocator& PoolAllocatorVector::operator[](size_t index) {
+LinkingPoolAllocator& LinkingPoolAllocatorVector::operator[](size_t index) {
 	return allocators[index];
 }
 
-bool PoolAllocatorVector::init(Heap* _heap, size_t _elementSize, size_t _elementsNum) {
+bool LinkingPoolAllocatorVector::init(Heap* _heap, size_t _elementSize, size_t _elementsNum) {
 	heap = _heap;
 	elementSize = _elementSize;
 	elementsNum = _elementsNum;
@@ -28,7 +28,7 @@ bool PoolAllocatorVector::init(Heap* _heap, size_t _elementSize, size_t _element
 	return true;
 }
 
-void PoolAllocatorVector::release() {
+void LinkingPoolAllocatorVector::release() {
     elementSize = 0;
     elementsNum = 0;
 
@@ -36,11 +36,11 @@ void PoolAllocatorVector::release() {
         allocator.release();
     }
 
-    allocators = std::vector<PoolAllocator>();
+    allocators = std::vector<LinkingPoolAllocator>();
 }
 
-PoolAllocatorVector::AllocationInfo PoolAllocatorVector::allocate() {
-	PoolAllocator* choosenAllocator = nullptr;
+LinkingPoolAllocatorVector::AllocationInfo LinkingPoolAllocatorVector::allocate() {
+	LinkingPoolAllocator* choosenAllocator = nullptr;
 
 	for (auto& allocator : allocators) {
 		if (!allocator.isFull()) {
@@ -56,7 +56,7 @@ PoolAllocatorVector::AllocationInfo PoolAllocatorVector::allocate() {
 	}
 
 	if (choosenAllocator == nullptr) {
-		PoolAllocator newAllocator;
+		LinkingPoolAllocator newAllocator;
 		newAllocator.init(heap, elementSize, elementsNum);
 		allocators.push_back(std::move(newAllocator));
 		choosenAllocator = &(*allocators.rbegin());
@@ -69,10 +69,10 @@ PoolAllocatorVector::AllocationInfo PoolAllocatorVector::allocate() {
 	return info;
 }
 
-void PoolAllocatorVector::deallocate(size_t allocatorIndex, void* address) {
+void LinkingPoolAllocatorVector::deallocate(size_t allocatorIndex, void* address) {
 	allocators[allocatorIndex].deallocate(address);
 }
 
-void PoolAllocatorVector::deallocate(const AllocationInfo& info) {
+void LinkingPoolAllocatorVector::deallocate(const AllocationInfo& info) {
 	allocators[info.allocatorIndex].deallocate(info.allocationAddress);
 }

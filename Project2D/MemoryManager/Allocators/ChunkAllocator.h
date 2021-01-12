@@ -2,7 +2,7 @@
 
 class Heap;
 
-class ChunkAllocator {
+class ChunkAllocator final {
 public:
 	struct SectorInfo final {
 		size_t chunksNum;
@@ -29,27 +29,27 @@ public:
 	ChunkAllocator();
 	ChunkAllocator(const ChunkAllocator&) = delete;
 	ChunkAllocator(ChunkAllocator&& allocator);
-	virtual ~ChunkAllocator() { ChunkAllocator::release(); }
+	~ChunkAllocator() { ChunkAllocator::release(); }
 
 	ChunkAllocator& operator=(const ChunkAllocator&) = delete;
 	ChunkAllocator& operator=(ChunkAllocator&& allocator);
 
-	virtual bool init(Heap* heap, size_t chunkSize, size_t chunksNum);
-	virtual void release();
+	bool init(Heap* heap, size_t chunkSize, size_t chunksNum);
+	void release();
 
-	virtual void* allocate(size_t size);
-	virtual void deallocate(void* sector);
+	void* allocate(size_t size);
+	void deallocate(void* sector);
 
-	virtual void clean();
+	void clean();
 
-	virtual Heap* getHeap() { return heap; }
+	Heap* getHeap() { return heap; }
 
-	virtual size_t size() const { return usingChunksNum; }
-	virtual size_t getUsingSectorsNum() const { return usingSectorsNum; }
+	size_t size() const { return usingChunksNum; }
+	size_t getUsingSectorsNum() const { return usingSectorsNum; }
 
-	virtual size_t getChunkSize() const { return chunkSize; }
-	virtual size_t getChunkNum() const { return chunksNum; }
+	size_t getChunkSize() const { return chunkSize; }
+	size_t getChunkNum() const { return chunksNum; }
 
-	virtual bool isFull() const { return usingChunksNum == chunksNum; }
-	virtual bool isInit() const { return chunks; }
+	bool isFull() const { return usingChunksNum == chunksNum; }
+	bool isInit() const { return chunks; }
 };

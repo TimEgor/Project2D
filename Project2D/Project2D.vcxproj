@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -108,6 +108,7 @@
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D CPP_LOGIC="logic.dll" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,6 +125,7 @@
       <ConformanceMode>true</ConformanceMode>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D CPP_LOGIC="logic.dll" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,6 +141,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D CPP_LOGIC="logic.dll" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,6 +157,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D CPP_LOGIC="logic.dll" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,6 +167,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EntityManager\Entity.cpp" />
+    <ClCompile Include="EntityManager\EntityComponent.cpp" />
+    <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
+    <ClCompile Include="EntityManager\EntityManager.cpp" />
+    <ClCompile Include="LogicManager\CPP_Logic.cpp" />
+    <ClCompile Include="LogicManager\LogicManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MemoryManager\Allocators\AllocatorsUtilities.cpp" />
     <ClCompile Include="MemoryManager\Allocators\ChunkAllocator.cpp" />
@@ -185,6 +195,15 @@
     <ClCompile Include="Utilities\WildcardMatch\WildcardMatch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EntityManager\Entity.h" />
+    <ClInclude Include="EntityManager\EntityComponent.h" />
+    <ClInclude Include="EntityManager\EntityComponentHandler.h" />
+    <ClInclude Include="EntityManager\EntityComponentManager.h" />
+    <ClInclude Include="EntityManager\EntityComponentType.h" />
+    <ClInclude Include="EntityManager\EntityHandler.h" />
+    <ClInclude Include="EntityManager\EntityManager.h" />
+    <ClInclude Include="LogicManager\CPP_Logic.h" />
+    <ClInclude Include="LogicManager\LogicManager.h" />
     <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h" />
     <ClInclude Include="MemoryManager\Allocators\ChunkAllocator.h" />
     <ClInclude Include="MemoryManager\Allocators\LinkingPoolAllocator.h" />

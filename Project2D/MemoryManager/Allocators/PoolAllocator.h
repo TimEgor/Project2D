@@ -2,13 +2,12 @@
 
 class Heap;
 
-class PoolAllocator {
-protected:
+class PoolAllocator final {
 	struct FreeBucketInfo final {
 		FreeBucketInfo* nextFree;
 	};
 
-protected:
+private:
 	Heap* heap;
 
 	void* buckets;
@@ -23,26 +22,26 @@ public:
 	PoolAllocator();
 	PoolAllocator(const PoolAllocator&) = delete;
 	PoolAllocator(PoolAllocator&& allocator);
-	virtual ~PoolAllocator() { PoolAllocator::release(); }
+	~PoolAllocator() { release(); }
 
 	PoolAllocator& operator=(const PoolAllocator&) = delete;
 	PoolAllocator& operator=(PoolAllocator&& allocator);
 
-	virtual bool init(Heap *heap, size_t bucketSize, size_t bucketsNum);
-	virtual void release();
+	bool init(Heap *heap, size_t bucketSize, size_t bucketsNum);
+	void release();
 
-	virtual void* allocate();
-	virtual void deallocate(void* bucket);
+	void* allocate();
+	void deallocate(void* bucket);
 
-	virtual void clear();
+	void clear();
 
-	virtual Heap* getHeap() { return heap; }
+	Heap* getHeap() { return heap; }
 
-	virtual size_t size() const { return usingBucketsNum; }
+	size_t size() const { return usingBucketsNum; }
 
-	virtual size_t getBucketSize() const { return bucketSize; }
-	virtual size_t getBucketsNum() const { return bucketsNum; }
+	size_t getBucketSize() const { return bucketSize; }
+	size_t getBucketsNum() const { return bucketsNum; }
 
-	virtual bool isFull() const { return usingBucketsNum == bucketsNum; }
-	virtual bool isInit() const { return buckets; }
+	bool isFull() const { return usingBucketsNum == bucketsNum; }
+	bool isInit() const { return buckets; }
 };

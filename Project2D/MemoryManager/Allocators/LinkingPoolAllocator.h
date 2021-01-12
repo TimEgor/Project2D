@@ -1,30 +1,54 @@
 #pragma once
 
-#include <MemoryManager/Allocators/PoolAllocator.h>
-
 class Heap;
 
-class LinkingPoolAllocator : public PoolAllocator {
-protected:
+class LinkingPoolAllocator {
+private:
+	struct FreeBucketInfo final {
+		FreeBucketInfo* nextFree;
+	};
+
 	struct UsingBucketInfo final {
 		UsingBucketInfo* nextBucket;
 		UsingBucketInfo* prevBucket;
 	};
 
-	UsingBucketInfo* lastBucketInfo;
+	Heap* heap;
 
+	void* buckets;
+
+	FreeBucketInfo* firstFreeBucket;
+	size_t usingBucketsNum;
+
+	size_t bucketSize;
+	size_t bucketsNum;
+
+	UsingBucketInfo* lastBucketInfo;
 	UsingBucketInfo* firstUsingBucketInfo;
 
 public:
 	LinkingPoolAllocator() : lastBucketInfo(nullptr), firstUsingBucketInfo(nullptr) {}
-	virtual ~LinkingPoolAllocator() { LinkingPoolAllocator::release(); }
+	~LinkingPoolAllocator() { release(); }
 
-	virtual bool init(Heap* heap, size_t bucketSize, size_t bucketsNum) override;
+	bool init(Heap* heap, size_t bucketSize, size_t bucketsNum);
 
-	virtual void clear() override;
+	void clear();
+	void release();
 
-	virtual void* allocate() override;
-	virtual void deallocate(void* bucket) override;
+	void* allocate();
+	void deallocate(void* bucket);
+
+	void clear();
+
+	Heap* getHeap() { return heap; }
+
+	size_t size() const { return usingBucketsNum; }
+
+	size_t getBucketSize() const { return bucketSize; }
+	size_t getBucketsNum() const { return bucketsNum; }
+
+	bool isFull() const { return usingBucketsNum == bucketsNum; }
+	bool isInit() const { return buckets; }
 
 	const UsingBucketInfo* getFirstUsingBucketInfo() { return firstUsingBucketInfo; }
 };

@@ -31,7 +31,30 @@ bool LinkingPoolAllocator::init(Heap* _heap, size_t _bucketSize, size_t _buckets
 void LinkingPoolAllocator::clear() {
     firstUsingBucketInfo = nullptr;
 
-    PoolAllocator::clear();
+    firstFreeBucket = (FreeBucketInfo*)buckets;
+
+    FreeBucketInfo* iterSectorInfo = firstFreeBucket;
+    for (size_t i = 0; i < bucketsNum; ++i) {
+        iterSectorInfo->nextFree = (FreeBucketInfo*)((uint8_t*)firstFreeBucket + (bucketSize * i));
+        iterSectorInfo = iterSectorInfo->nextFree;
+    }
+    iterSectorInfo->nextFree = nullptr;
+
+    usingBucketsNum = 0;
+}
+
+void LinkingPoolAllocator::release() {
+    if (buckets) {
+        heap->deallocate(buckets);
+        buckets = nullptr;
+    }
+
+    heap = nullptr;
+    firstFreeBucket = nullptr;
+
+    usingBucketsNum = 0;
+    bucketSize = 0;
+    bucketsNum = 0;
 }
 
 void* LinkingPoolAllocator::allocate() {
@@ -88,5 +111,10 @@ void LinkingPoolAllocator::deallocate(void* bucket) {
         firstUsingBucketInfo = firstUsingBucketInfo->nextBucket;
     }
 
-    PoolAllocator::deallocate(bucket);
+    FreeBucketInfo* nextFreeBucket = (FreeBucketInfo*)bucket;
+    nextFreeBucket->nextFree = firstFreeBucket;
+
+    firstFreeBucket = nextFreeBucket;
+
+    --usingBucketsNum;
 }

@@ -25,6 +25,15 @@
     <Filter Include="Utilities\WildcardMatch">
       <UniqueIdentifier>{5be5df5c-b00a-43e2-a441-3d0442d31225}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LogicManager">
+      <UniqueIdentifier>{71eaddb4-cd05-4a2e-bb2d-9bec796e6724}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EntityManager">
+      <UniqueIdentifier>{7b44534f-33a4-4d41-806b-7756092f0206}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EntityManager\EntityComponents">
+      <UniqueIdentifier>{42098e19-a325-4e34-b10c-0a55493e580b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MemoryManager\Heap.cpp">
@@ -85,6 +94,22 @@
     <ClCompile Include="Utilities\WildcardMatch\WildcardMatch.cpp">
       <Filter>Utilities\WildcardMatch</Filter>
     </ClCompile>
+    <ClCompile Include="LogicManager\LogicManager.cpp">
+      <Filter>LogicManager</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicManager\CPP_Logic.cpp">
+      <Filter>LogicManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\Entity.cpp">
+      <Filter>EntityManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponent.cpp">
+      <Filter>EntityManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityManager.cpp">
+      <Filter>EntityManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -161,6 +186,33 @@
     </ClInclude>
     <ClInclude Include="Utilities\WildcardMatch\WildcardMatch.h">
       <Filter>Utilities\WildcardMatch</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicManager\LogicManager.h">
+      <Filter>LogicManager</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicManager\CPP_Logic.h">
+      <Filter>LogicManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\Entity.h">
+      <Filter>EntityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponent.h">
+      <Filter>EntityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponentManager.h">
+      <Filter>EntityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponentType.h">
+      <Filter>EntityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityManager.h">
+      <Filter>EntityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponentHandler.h">
+      <Filter>EntityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityHandler.h">
+      <Filter>EntityManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
