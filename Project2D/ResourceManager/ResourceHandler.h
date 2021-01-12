@@ -12,10 +12,7 @@ private:
 public:
 	ResourceHandler() : resource(nullptr), refCounter(0) {}
 	ResourceHandler(const ResourceHandler&) = delete;
-	ResourceHandler(ResourceHandler&& handler) : resource(handler.resource.load()), refCounter(handler.refCounter.load()) {
-		handler.resource = nullptr;
-		handler.refCounter = 0;
-	}
+	ResourceHandler(ResourceHandler&& handler) = delete;
 
 	Resource* getResource() { return resource.load(); }
 	void setResource(Resource* newResource) { resource = newResource; }

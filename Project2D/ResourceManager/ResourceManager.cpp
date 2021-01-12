@@ -79,16 +79,14 @@ ResourceCreator& ResourceManager::chooseResourceCreator(const ResourceName &reso
 }
 
 ResourceHandler& ResourceManager::createNewHandler(ResourceID resourceID) {
-    ResourceHandler handler;
-    auto newHandlerIter = resources.insert(std::make_pair(resourceID, std::move(handler)));
-    return newHandlerIter.first->second;
+    return resources[resourceID];
 }
 
 ResourceReference ResourceManager::loadNewResourceFromArchive(ResourceHandler& handler, const ResourceName& resourceName, ResourceID resourceID) {
     ResourceCreator& creator = chooseResourceCreator(resourceName);
     creator.createResourceFromZipFileSystem(handler, resourceID, *zipFileSystem);
 
-    return handler;
+    return &handler;
 }
 
 ResourceReference ResourceManager::getResourceFromArchive(const ResourceName& resourceName) {
@@ -104,7 +102,7 @@ ResourceReference ResourceManager::getResourceFromArchive(const ResourceName& re
         return loadNewResourceFromArchive(newHandler, resourceName, resourceID);
     }
 
-    return findHandlerIter->second;
+    return &(findHandlerIter->second);
 }
 
 ResourceReference ResourceManager::getResourceFromArchive(ResourceID resourceID) {
@@ -120,7 +118,7 @@ ResourceReference ResourceManager::getResourceFromArchive(ResourceID resourceID)
         return loadNewResourceFromArchive(newHandler, resourceName, resourceID);
     }
 
-    return findHandlerIter->second;
+    return &(findHandlerIter->second);
 }
 
 ResourceReference ResourceManager::getResourceAsyncFromArchive(const ResourceName& resourceName) {
@@ -135,10 +133,10 @@ ResourceReference ResourceManager::getResourceAsyncFromArchive(const ResourceNam
 
         resourceAsyncLoader->loadResource(resourceID, newHandler);
 
-        return newHandler;
+        return &newHandler;
     }
 
-    return findHandlerIter->second;
+    return &(findHandlerIter->second);
 }
 
 ResourceReference ResourceManager::getResourceAsyncFromArchive(ResourceID resourceID) {
@@ -151,10 +149,10 @@ ResourceReference ResourceManager::getResourceAsyncFromArchive(ResourceID resour
 
         resourceAsyncLoader->loadResource(resourceID, newHandler);
 
-        return newHandler;
+        return &newHandler;
     }
 
-    return findHandlerIter->second;
+    return &(findHandlerIter->second);
 }
 
 void* ResourceManager::getRawResourceFromArchive(const ResourceName& resourceName, size_t& resourceSize) {
