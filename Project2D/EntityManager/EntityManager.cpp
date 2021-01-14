@@ -24,7 +24,7 @@ Entity* EntityManager::createEntity() {
         entities.reserve(newAllocatorCount * ENTITIES_ALLOCATOR_SIZE);
     }
 
-    entities.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityID), std::forward_as_tuple(nextEntityID, &newEntity, this, allocationInfo.allocatorIndex));
+    entities.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityID), std::forward_as_tuple(nextEntityID, *newEntity, *this, allocationInfo.allocatorIndex));
 
     ++nextEntityID;
 

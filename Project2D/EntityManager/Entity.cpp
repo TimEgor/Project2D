@@ -24,7 +24,7 @@ void Entity::removeComponent(EntityComponentID id) {
 	if (findIter != components.end()) {
 		EntityComponent* component = (*findIter);
 		component->parent = nullptr;
-		component->getHandler()->getManager()->deleteComponent(component);
+		component->getHandler()->getManager().deleteEntityComponent(component);
 
 		std::iter_swap(findIter, components.rbegin());
 		components.pop_back();
@@ -47,7 +47,7 @@ void Entity::removeComponentWithoutDestruction(EntityComponentID id) {
 
 void Entity::removeAllComponents() {
 	for (auto* component : components) {
-		component->getHandler()->getManager()->deleteComponent(component);
+		component->getHandler()->getManager().deleteEntityComponent(component);
 	}
 
 	components.clear();
