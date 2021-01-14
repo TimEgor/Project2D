@@ -51,5 +51,6 @@ public:
 	size_t getChunkNum() const { return chunksNum; }
 
 	bool isFull() const { return usingChunksNum == chunksNum; }
+	bool isEmpty() const { return usingChunksNum == 0; }
 	bool isInit() const { return chunks; }
 };

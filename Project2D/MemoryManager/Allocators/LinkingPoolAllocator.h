@@ -31,8 +31,6 @@ public:
 	~LinkingPoolAllocator() { release(); }
 
 	bool init(Heap* heap, size_t bucketSize, size_t bucketsNum);
-
-	void clear();
 	void release();
 
 	void* allocate();
@@ -48,6 +46,7 @@ public:
 	size_t getBucketsNum() const { return bucketsNum; }
 
 	bool isFull() const { return usingBucketsNum == bucketsNum; }
+	bool isEmpty() const { return usingBucketsNum == 0; }
 	bool isInit() const { return buckets; }
 
 	const UsingBucketInfo* getFirstUsingBucketInfo() { return firstUsingBucketInfo; }
