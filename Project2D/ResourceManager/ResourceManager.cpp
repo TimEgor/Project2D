@@ -21,10 +21,12 @@ bool ResourceManager::init() {
     resourceAsyncLoader = new ResourceAsyncLoader();
 
     if (!nativeFileSystem || !resourceAsyncLoader) {
+        release();
         return false;
     }
 
     if (!initResourceCreators()) {
+        release();
         return false;
     }
 

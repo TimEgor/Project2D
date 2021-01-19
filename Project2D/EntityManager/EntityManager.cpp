@@ -1,7 +1,6 @@
 #include "EntityManager.h"
 
 #include <MemoryManager/MemoryManager.h>
-#include <EntityManager/EntityHandler.h>
 
 bool EntityManager::init() {
     entities.reserve(ENTITIES_ALLOCATOR_SIZE);
@@ -24,7 +23,7 @@ Entity* EntityManager::createEntity() {
         entities.reserve(newAllocatorCount * ENTITIES_ALLOCATOR_SIZE);
     }
 
-    entities.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityID), std::forward_as_tuple(nextEntityID, *newEntity, *this, allocationInfo.allocatorIndex));
+    entities.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityID), std::forward_as_tuple(nextEntityID, *newEntity, allocationInfo.allocatorIndex));
 
     ++nextEntityID;
 

@@ -20,8 +20,8 @@ public:
 	Entity() : handler(nullptr) {}
 
 	void addComponent(EntityComponent* component);
-	void removeComponent(EntityComponentID id);
-	void removeComponentWithoutDestruction(EntityComponentID id);
+	void removeComponent(EntityComponentID id, bool withDeleting = true);
+	void removeComponent(EntityComponent* component, bool withDeleting = true);
 	void removeAllComponents();
 
 	EntityHandler* getHandler() const { return handler; }
@@ -29,5 +29,6 @@ public:
 
 	EntityComponent* getComponent(EntityComponentID id);
 
+	const std::vector<EntityComponent*>& getComponents();
 	void getComponents(std::vector<EntityComponent*>& container);
 };

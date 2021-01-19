@@ -25,14 +25,17 @@
     <Filter Include="Utilities\WildcardMatch">
       <UniqueIdentifier>{5be5df5c-b00a-43e2-a441-3d0442d31225}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LogicManager">
-      <UniqueIdentifier>{71eaddb4-cd05-4a2e-bb2d-9bec796e6724}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EntityManager">
       <UniqueIdentifier>{7b44534f-33a4-4d41-806b-7756092f0206}</UniqueIdentifier>
     </Filter>
     <Filter Include="EntityManager\EntityComponents">
       <UniqueIdentifier>{42098e19-a325-4e34-b10c-0a55493e580b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{da0af92a-49bb-46f9-9a8c-fcc4ac78d98c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseGameLogic">
+      <UniqueIdentifier>{a2a49a0c-0062-4ea2-b778-a6210a627016}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,12 +97,6 @@
     <ClCompile Include="Utilities\WildcardMatch\WildcardMatch.cpp">
       <Filter>Utilities\WildcardMatch</Filter>
     </ClCompile>
-    <ClCompile Include="LogicManager\LogicManager.cpp">
-      <Filter>LogicManager</Filter>
-    </ClCompile>
-    <ClCompile Include="LogicManager\CPP_Logic.cpp">
-      <Filter>LogicManager</Filter>
-    </ClCompile>
     <ClCompile Include="EntityManager\Entity.cpp">
       <Filter>EntityManager</Filter>
     </ClCompile>
@@ -114,6 +111,15 @@
     </ClCompile>
     <ClCompile Include="MemoryManager\Allocators\LinkingPoolAllocatorVector.cpp">
       <Filter>MemoryManager\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGameLogic\Level.cpp">
+      <Filter>BaseGameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGameLogic\LevelManager.cpp">
+      <Filter>BaseGameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Node.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,12 +198,6 @@
     <ClInclude Include="Utilities\WildcardMatch\WildcardMatch.h">
       <Filter>Utilities\WildcardMatch</Filter>
     </ClInclude>
-    <ClInclude Include="LogicManager\LogicManager.h">
-      <Filter>LogicManager</Filter>
-    </ClInclude>
-    <ClInclude Include="LogicManager\CPP_Logic.h">
-      <Filter>LogicManager</Filter>
-    </ClInclude>
     <ClInclude Include="EntityManager\Entity.h">
       <Filter>EntityManager</Filter>
     </ClInclude>
@@ -221,6 +221,24 @@
     </ClInclude>
     <ClInclude Include="MemoryManager\Allocators\LinkingPoolAllocatorVector.h">
       <Filter>MemoryManager\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Node.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Scene.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Transform.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGameLogic\Level.h">
+      <Filter>BaseGameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGameLogic\LevelManager.h">
+      <Filter>BaseGameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\NodeHandler.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

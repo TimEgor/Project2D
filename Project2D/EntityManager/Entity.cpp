@@ -1,8 +1,8 @@
 #include "Entity.h"
 
 #include <EntityManager/EntityHandler.h>
-#include <EntityManager/EntityComponentHandler.h>
 #include <EntityManager/EntityComponentManager.h>
+#include <BaseGameLogic/LevelManager.h>
 
 #include <cassert>
 
@@ -13,7 +13,7 @@ void Entity::addComponent(EntityComponent* component) {
 	components.push_back(component);
 }
 
-void Entity::removeComponent(EntityComponentID id) {
+void Entity::removeComponent(EntityComponentID id, bool withDeleting) {
 	assert(id != 0);
 
 	auto findIter = std::find_if(components.begin(), components.end(),
@@ -24,21 +24,27 @@ void Entity::removeComponent(EntityComponentID id) {
 	if (findIter != components.end()) {
 		EntityComponent* component = (*findIter);
 		component->parent = nullptr;
-		component->getHandler()->getManager().deleteEntityComponent(component);
+
+		if (component->getHandler() && withDeleting) {
+			LevelManager::get().getCurrentLevel().getEntityComponentManager().deleteEntityComponent(component);
+		}
 
 		std::iter_swap(findIter, components.rbegin());
 		components.pop_back();
 	}
 }
 
-void Entity::removeComponentWithoutDestruction(EntityComponentID id) {
-	auto findIter = std::find_if(components.begin(), components.end(),
-		[id](const EntityComponent* component) -> bool {
-			return component->getID() == id;
-		});
+void Entity::removeComponent(EntityComponent* component, bool withDeleting) {
+	assert(component);
+
+	auto findIter = std::find(components.begin(), components.end(), component);
 
 	if (findIter != components.end()) {
-		(*findIter)->parent = nullptr;
+		component->parent = nullptr;
+
+		if (component->getHandler() && withDeleting) {
+			LevelManager::get().getCurrentLevel().getEntityComponentManager().deleteEntityComponent(component);
+		}
 
 		std::iter_swap(findIter, components.rbegin());
 		components.pop_back();
@@ -47,10 +53,11 @@ void Entity::removeComponentWithoutDestruction(EntityComponentID id) {
 
 void Entity::removeAllComponents() {
 	for (auto* component : components) {
-		component->getHandler()->getManager().deleteEntityComponent(component);
+		if (component->getHandler()) {
+			LevelManager::get().getCurrentLevel().getEntityComponentManager().deleteEntityComponent(component);
+		}
 	}
 
-	components.clear();
 	components = std::vector<EntityComponent*>();
 }
 
@@ -73,6 +80,10 @@ EntityComponent* Entity::getComponent(EntityComponentID id) {
 	}
 
 	return *findIter;
+}
+
+const std::vector<EntityComponent*>& Entity::getComponents() {
+	return components;
 }
 
 void Entity::getComponents(std::vector<EntityComponent*>& container) {

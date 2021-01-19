@@ -167,12 +167,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseGameLogic\Level.cpp" />
+    <ClCompile Include="BaseGameLogic\LevelManager.cpp" />
     <ClCompile Include="EntityManager\Entity.cpp" />
     <ClCompile Include="EntityManager\EntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
-    <ClCompile Include="LogicManager\CPP_Logic.cpp" />
-    <ClCompile Include="LogicManager\LogicManager.cpp" />
+    <ClCompile Include="Graphics\Node.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MemoryManager\Allocators\AllocatorsUtilities.cpp" />
     <ClCompile Include="MemoryManager\Allocators\ChunkAllocator.cpp" />
@@ -196,6 +197,8 @@
     <ClCompile Include="Utilities\WildcardMatch\WildcardMatch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseGameLogic\Level.h" />
+    <ClInclude Include="BaseGameLogic\LevelManager.h" />
     <ClInclude Include="EntityManager\Entity.h" />
     <ClInclude Include="EntityManager\EntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentHandler.h" />
@@ -203,8 +206,10 @@
     <ClInclude Include="EntityManager\EntityComponentType.h" />
     <ClInclude Include="EntityManager\EntityHandler.h" />
     <ClInclude Include="EntityManager\EntityManager.h" />
-    <ClInclude Include="LogicManager\CPP_Logic.h" />
-    <ClInclude Include="LogicManager\LogicManager.h" />
+    <ClInclude Include="Graphics\Node.h" />
+    <ClInclude Include="Graphics\NodeHandler.h" />
+    <ClInclude Include="Graphics\Scene.h" />
+    <ClInclude Include="Graphics\Transform.h" />
     <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h" />
     <ClInclude Include="MemoryManager\Allocators\ChunkAllocator.h" />
     <ClInclude Include="MemoryManager\Allocators\LinkingPoolAllocator.h" />

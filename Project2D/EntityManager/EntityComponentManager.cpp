@@ -13,7 +13,7 @@ LinkingPoolAllocatorVector::AllocationInfo EntityComponentManager::allocateCompo
     }
 
     components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
-        std::forward_as_tuple(nextEntityComponentID, *((EntityComponent*)(info.allocationAddress)), *this, info.allocatorIndex));
+        std::forward_as_tuple(nextEntityComponentID, *((EntityComponent*)(info.allocationAddress)), info.allocatorIndex));
 
     ++nextEntityComponentID;
 
