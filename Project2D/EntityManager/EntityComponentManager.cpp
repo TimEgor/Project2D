@@ -43,13 +43,7 @@ void EntityComponentManager::deleteEntityComponent(EntityComponentID id) {
 }
 
 void EntityComponentManager::deleteEntityComponent(EntityComponent* component) {
-    auto findIter = components.find(component->getID());
-    if (findIter != components.end()) {
-        EntityComponentHandler& handler = findIter->second;
-        allocators[component->getEntityComponentType()].deallocate(handler.getComponentAllocatorIndex(), component);
-
-        components.erase(findIter);
-    }
+    deleteEntityComponent(component->getID());
 }
 
 EntityComponent* EntityComponentManager::getEntityComponent(EntityComponentID id) {

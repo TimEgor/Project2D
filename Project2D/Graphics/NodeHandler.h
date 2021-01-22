@@ -10,7 +10,9 @@ private:
 
 public:
 	NodeHandler(NodeID id, Node& node, size_t nodeAllocatorIndex)
-		: id(id), node(node), nodeAllocatorIndex(nodeAllocatorIndex) {}
+		: id(id), node(node), nodeAllocatorIndex(nodeAllocatorIndex) {
+		node.handler = this;
+	}
 
 	NodeHandler(const NodeHandler&) = delete;
 	NodeHandler(NodeHandler&&) = delete;

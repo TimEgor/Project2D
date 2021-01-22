@@ -43,14 +43,7 @@ void EntityManager::deleteEntity(EntityID id) {
 }
 
 void EntityManager::deleteEntity(Entity* entity) {
-    auto findIter = entities.find(entity->getID());
-    if (findIter != entities.end()) {
-        EntityHandler& handler = findIter->second;
-        entity->removeAllComponents();
-        allocators.deallocate(handler.getEntityAllocatorIndex(), entity);
-
-        entities.erase(findIter);
-    }
+    deleteEntity(entity->getID());
 }
 
 Entity* EntityManager::getEntity(EntityID id) {

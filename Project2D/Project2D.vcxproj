@@ -174,6 +174,7 @@
     <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
+    <ClCompile Include="Graphics\Scene.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MemoryManager\Allocators\AllocatorsUtilities.cpp" />
     <ClCompile Include="MemoryManager\Allocators\ChunkAllocator.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Graphics\NodeHandler.h" />
     <ClInclude Include="Graphics\Scene.h" />
     <ClInclude Include="Graphics\Transform.h" />
+    <ClInclude Include="Graphics\TransformHandler.h" />
     <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h" />
     <ClInclude Include="MemoryManager\Allocators\ChunkAllocator.h" />
     <ClInclude Include="MemoryManager\Allocators\LinkingPoolAllocator.h" />
