@@ -4,7 +4,10 @@
 
 bool EntityManager::init() {
     entities.reserve(ENTITIES_ALLOCATOR_SIZE);
-    return allocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Entity), ENTITIES_ALLOCATOR_SIZE);
+    if (!allocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Entity), ENTITIES_ALLOCATOR_SIZE)) {
+        release();
+        return false;
+    }
 }
 
 void EntityManager::release() {

@@ -4,7 +4,10 @@
 
 bool Scene::init() {
     nodes.reserve(NODES_ALLOCATOR_SIZE);
-    return nodeAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Node), NODES_ALLOCATOR_SIZE);
+    if (!nodeAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Node), NODES_ALLOCATOR_SIZE)) {
+        release();
+        return false;
+    }
 }
 
 void Scene::release() {
