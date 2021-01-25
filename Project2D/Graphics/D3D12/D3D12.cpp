@@ -64,8 +64,6 @@ bool D3D12::init() {
         swapChainBuffers[i] = nullptr;
     }
 
-    depthStencilBuffer = nullptr;
-
     resize();
 
     return true;
@@ -117,12 +115,12 @@ bool D3D12::initDescriptorHeaps() {
         return false;
     }
 
-    descViewDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+   /* descViewDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
     descViewDesc.NumDescriptors = 1;
     result = device->CreateDescriptorHeap(&descViewDesc, __uuidof(dsvDescHeap), (void**)(&dsvDescHeap));
     if (FAILED(result)) {
         return false;
-    }
+    }*/
 
     return true;
 }
@@ -168,11 +166,6 @@ void D3D12::release() {
         rtvDescHeap = nullptr;
     }
 
-    if (dsvDescHeap) {
-        dsvDescHeap->Release();
-        dsvDescHeap = nullptr;
-    }
-
     rtvDescSize = 0;
     dsvDescSize = 0;
     cbv_srv_uavDescSize = 0;
@@ -182,11 +175,6 @@ void D3D12::release() {
             swapChainBuffers[i]->Release();
             swapChainBuffers[i] = nullptr;
         }
-    }
-
-    if (depthStencilBuffer) {
-        depthStencilBuffer->Release();
-        depthStencilBuffer = nullptr;
     }
 
     currentSwapChainBufferIndex = 0;
@@ -204,11 +192,6 @@ void D3D12::resize() {
             swapChainBuffers[i]->Release();
             swapChainBuffers[i] = nullptr;
         }
-    }
-
-    if (depthStencilBuffer) {
-        depthStencilBuffer->Release();
-        depthStencilBuffer = nullptr;
     }
 
     swapChain->ResizeBuffers(SWAP_CHAIN_BUFFER_COUNT, 800, 800, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
@@ -241,7 +224,7 @@ void D3D12::resize() {
 
     D3D12_HEAP_PROPERTIES heapProperties = device->GetCustomHeapProperties(0, D3D12_HEAP_TYPE_DEFAULT);
 
-    device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE,
+    /*device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE,
         &dsvBufferDesc, D3D12_RESOURCE_STATE_COMMON, &clearVal, __uuidof(depthStencilBuffer), (void**)(&depthStencilBuffer));
 
     device->CreateDepthStencilView(depthStencilBuffer, nullptr, dsvDescHeap->GetCPUDescriptorHandleForHeapStart());
@@ -254,7 +237,7 @@ void D3D12::resize() {
     dsBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
     dsBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 
-    commandList->ResourceBarrier(1, &dsBarrier);
+    commandList->ResourceBarrier(1, &dsBarrier);*/
 
     D3D12_VIEWPORT viewPort;
     viewPort.Width = 800.0f;
@@ -285,4 +268,12 @@ void D3D12::flushCommandQueue() {
         WaitForSingleObject(waitEvent, INFINITE);
         CloseHandle(waitEvent);
     }
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE D3D12::getCurrentBackBufferRTVDescriptor() {
+    return D3D12_CPU_DESCRIPTOR_HANDLE{rtvDescHeap->GetCPUDescriptorHandleForHeapStart().ptr + currentSwapChainBufferIndex * rtvDescSize};
+}
+
+void D3D12::increaseCurrentBackBufferIndex() {
+    currentSwapChainBufferIndex = (currentSwapChainBufferIndex + 1) % SWAP_CHAIN_BUFFER_COUNT;
 }

@@ -136,6 +136,9 @@
     <ClCompile Include="UserInterfaces\UserInterfaces.cpp">
       <Filter>UserInterfaces</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\D3D12\D3D12Renderer.cpp">
+      <Filter>Graphics\D3D12</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -263,6 +266,9 @@
     </ClInclude>
     <ClInclude Include="UserInterfaces\UserInterfaces.h">
       <Filter>UserInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D12\D3D12Renderer.h">
+      <Filter>Graphics\D3D12</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
