@@ -30,27 +30,27 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -173,6 +173,7 @@
     <ClCompile Include="EntityManager\EntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
+    <ClCompile Include="Graphics\D3D12\D3D12.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
     <ClCompile Include="Graphics\Scene.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="ResourceManager\ResourceReference.cpp" />
     <ClCompile Include="ResourceManager\Zip\ZipFile.cpp" />
     <ClCompile Include="ResourceManager\Zip\ZipFileSystem.cpp" />
+    <ClCompile Include="UserInterfaces\UserInterfaces.cpp" />
     <ClCompile Include="Utilities\HashFunction\CRC32.cpp" />
     <ClCompile Include="Utilities\HashFunction\SpookyV2.cpp" />
     <ClCompile Include="Utilities\WildcardMatch\WildcardMatch.cpp" />
@@ -207,6 +209,7 @@
     <ClInclude Include="EntityManager\EntityComponentType.h" />
     <ClInclude Include="EntityManager\EntityHandler.h" />
     <ClInclude Include="EntityManager\EntityManager.h" />
+    <ClInclude Include="Graphics\D3D12\D3D12.h" />
     <ClInclude Include="Graphics\Node.h" />
     <ClInclude Include="Graphics\NodeHandler.h" />
     <ClInclude Include="Graphics\Scene.h" />
@@ -235,6 +238,7 @@
     <ClInclude Include="ResourceManager\ResourceType.h" />
     <ClInclude Include="ResourceManager\Zip\ZipFile.h" />
     <ClInclude Include="ResourceManager\Zip\ZipFileSystem.h" />
+    <ClInclude Include="UserInterfaces\UserInterfaces.h" />
     <ClInclude Include="Utilities\HashFunction\CRC32.h" />
     <ClInclude Include="Utilities\HashFunction\SpookyV2.h" />
     <ClInclude Include="Utilities\WildcardMatch\WildcardMatch.h" />

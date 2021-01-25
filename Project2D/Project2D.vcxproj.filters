@@ -37,6 +37,12 @@
     <Filter Include="BaseGameLogic">
       <UniqueIdentifier>{a2a49a0c-0062-4ea2-b778-a6210a627016}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\D3D12">
+      <UniqueIdentifier>{74c8b2a6-e3ba-4253-8baf-83080b53078f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterfaces">
+      <UniqueIdentifier>{4c04422e-4e6f-4796-b51a-042c054847e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MemoryManager\Heap.cpp">
@@ -123,6 +129,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\Scene.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D12\D3D12.cpp">
+      <Filter>Graphics\D3D12</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterfaces\UserInterfaces.cpp">
+      <Filter>UserInterfaces</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +257,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\TransformHandler.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D12\D3D12.h">
+      <Filter>Graphics\D3D12</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterfaces\UserInterfaces.h">
+      <Filter>UserInterfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

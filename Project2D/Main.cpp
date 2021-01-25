@@ -1,19 +1,16 @@
 #include <ResourceManager/ResourceManager.h>
-
-#include <EntityManager/EntityManager.h>
+#include <UserInterfaces/UserInterfaces.h>
+#include <Graphics/D3D12/D3D12.h>
 
 int main() {
 	ResourceManager& resourceManager = ResourceManager::get();
 	resourceManager.init();
 
-	EntityManager entityManager;
-	entityManager.init();
+	UserInterfaces& userInterfaces = UserInterfaces::get();
+	userInterfaces.init();
 
-	Entity* entity1 = entityManager.createEntity();
-	Entity* entity2 = entityManager.createEntity();
-	Entity* entity3 = entityManager.createEntity();
-
-	entityManager.deleteEntity(entity2);
+	D3D12& d3d12 = D3D12::get();
+	d3d12.init();
 
 	return 0;
 }
