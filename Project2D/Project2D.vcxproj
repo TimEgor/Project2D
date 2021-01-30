@@ -175,6 +175,8 @@
     <ClCompile Include="EntityManager\EntityManager.cpp" />
     <ClCompile Include="Graphics\D3D12\D3D12.cpp" />
     <ClCompile Include="Graphics\D3D12\D3D12Renderer.cpp" />
+    <ClCompile Include="Graphics\D3D12\D3D12Sprite.cpp" />
+    <ClCompile Include="Graphics\D3D12\D3D12Verteces.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
     <ClCompile Include="Graphics\Scene.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -212,6 +214,8 @@
     <ClInclude Include="EntityManager\EntityManager.h" />
     <ClInclude Include="Graphics\D3D12\D3D12.h" />
     <ClInclude Include="Graphics\D3D12\D3D12Renderer.h" />
+    <ClInclude Include="Graphics\D3D12\D3D12Sprite.h" />
+    <ClInclude Include="Graphics\D3D12\D3D12Verteces.h" />
     <ClInclude Include="Graphics\Node.h" />
     <ClInclude Include="Graphics\NodeHandler.h" />
     <ClInclude Include="Graphics\Scene.h" />

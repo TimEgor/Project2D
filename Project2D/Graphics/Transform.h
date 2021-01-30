@@ -9,9 +9,12 @@ private:
 	float posX, posY;
 	float scaleX, scaleY;
 	float rotation;
+	float depth;
 
 public:
-	Transform() : posX(0.0f), posY(0.0f), scaleX(1.0f), scaleY(1.0f), rotation(0.0f) {}
+	Transform() : posX(0.0f), posY(0.0f),
+		scaleX(1.0f), scaleY(1.0f),
+		rotation(0.0f), depth(0.0f) {}
 
 	float getPositionX() const { return posX; }
 	float getPositionY() const { return posY; }
@@ -25,4 +28,7 @@ public:
 
 	float getRotation() const { return rotation; }
 	void setRotation(float rot) { rotation = rot; }
+
+	float getDepth() const { return depth; }
+	void setDepth(float dph) { depth = dph; }
 };
