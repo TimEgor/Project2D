@@ -6,6 +6,9 @@
 #include <ResourceManager/ResourceAsyncLoader.h>
 #include <Utilities/WildcardMatch/WildcardMatch.h>
 
+#include <Graphics/D3D11/Resources/D3D11MaterialResourceCreator.h>
+#include <Graphics/D3D11/Resources/D3D11ShaderResourceCreator.h>
+
 ResourceManager& ResourceManager::get() {
     static ResourceManager uniqueResourceManager;
     return uniqueResourceManager;
@@ -65,6 +68,10 @@ void ResourceManager::release() {
 bool ResourceManager::initResourceCreators() {
     defaultResourceCreator = new DefaultResourceCreator();
 
+    resourceCreators.insert(std::make_pair(D3D11PixelShaderResourceType, new D3D11PixelShaderResourceCreator()));
+    resourceCreators.insert(std::make_pair(D3D11VertexShaderResourceType, new D3D11VertexShaderResourceCreator()));
+    resourceCreators.insert(std::make_pair(D3D11MaterialResourceType, new D3D11MaterialResourceCreator()));
+
     return defaultResourceCreator;
 }
 
@@ -81,7 +88,8 @@ ResourceCreator& ResourceManager::chooseResourceCreator(const ResourceName &reso
 }
 
 ResourceHandler& ResourceManager::createNewHandler(ResourceID resourceID) {
-    return resources[resourceID];
+    auto newValPair = resources.emplace(resourceID, resourceID);
+    return newValPair.first->second;
 }
 
 ResourceReference ResourceManager::loadNewResourceFromArchive(ResourceHandler& handler, const ResourceName& resourceName, ResourceID resourceID) {
@@ -91,13 +99,28 @@ ResourceReference ResourceManager::loadNewResourceFromArchive(ResourceHandler& h
     return &handler;
 }
 
+void ResourceManager::unloadResource(ResourceHandler& handler) {
+    std::unique_lock<std::mutex> locker(resMutex);
+
+    if (handler.getRefCounter() == 0) {
+        Resource* resource = handler.getResource();
+        resources.erase(handler.getResourceID());
+
+        locker.unlock();
+
+        if (resource) {
+            delete resource;
+        }
+    }
+}
+
 ResourceReference ResourceManager::getResourceFromArchive(const ResourceName& resourceName) {
     ResourceID resourceID = resourceName.hash();
 
     std::unique_lock<std::mutex> locker(resMutex);
 
     auto findHandlerIter = resources.find(resourceID);
-    if (findHandlerIter == resources.end()) {
+    if (findHandlerIter == resources.end() || (findHandlerIter->second.getRefCounter() == 0)) {
         ResourceHandler& newHandler = createNewHandler(resourceID);
         locker.unlock();
 

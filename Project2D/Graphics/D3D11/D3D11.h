@@ -1,10 +1,16 @@
 #pragma once
 
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "D3dcompiler.lib")
 #pragma comment(lib, "dxgi.lib")
 
 #include <d3d11.h>
+#include <d3d11shader.h>
+#include <d3dcompiler.h>
 #include <dxgi.h>
+
+#include <DirectXMath.h>
+#include <DirectXPackedVector.h>
 
 #define D3D11ObjectRelease(object) \
 	if (object) { \
@@ -22,6 +28,8 @@ private:
 	D3D11();
 
 public:
+	~D3D11() { release(); }
+
 	static D3D11& get();
 
 	bool init();

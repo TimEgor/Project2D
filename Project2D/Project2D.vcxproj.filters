@@ -43,6 +43,15 @@
     <Filter Include="Graphics\D3D11">
       <UniqueIdentifier>{7cef37f2-033d-41d5-87f8-2afae44ae55e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\D3D11\Resources">
+      <UniqueIdentifier>{5b264a7a-dc2e-45d6-9e80-dc2283608c29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\PugiXML">
+      <UniqueIdentifier>{836252e0-8ef5-46c2-aaca-8210bd05b299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\XML_TypeReader">
+      <UniqueIdentifier>{ddbe4ee7-afd6-44a2-bd18-21e89518aadb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MemoryManager\Heap.cpp">
@@ -138,6 +147,33 @@
     </ClCompile>
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp">
       <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\D3D11Verteces.cpp">
+      <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\D3D11Sprite.cpp">
+      <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderMaterialProperties.cpp">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderResource.cpp">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderResourceCreator.cpp">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResource.cpp">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\PugiXML\pugixml.cpp">
+      <Filter>Utilities\PugiXML</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\XML_TypesReader\XML_TypesReader.cpp">
+      <Filter>Utilities\XML_TypeReader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.cpp">
+      <Filter>Graphics\D3D11\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +305,36 @@
     </ClInclude>
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h">
       <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11Sprite.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11Verteces.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderMaterialProperties.h">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderResource.h">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderResourceCreator.h">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResource.h">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\PugiXML\pugiconfig.hpp">
+      <Filter>Utilities\PugiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\PugiXML\pugixml.hpp">
+      <Filter>Utilities\PugiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\XML_TypesReader\XML_TypesReader.h">
+      <Filter>Utilities\XML_TypeReader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.h">
+      <Filter>Graphics\D3D11\Resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

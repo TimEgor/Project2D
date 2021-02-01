@@ -16,6 +16,8 @@ int main() {
 	D3D11Renderer& d3d11Renderer = D3D11Renderer::get();
 	d3d11Renderer.init();
 
+	auto ref = ResourceManager::get().getResourceFromArchive("generic/default.material");
+
 	MSG msg{0};
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, userInterfaces.getMainWindow(), 0, 0, PM_REMOVE)) {

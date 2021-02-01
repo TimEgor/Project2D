@@ -6,6 +6,8 @@ class ResourceReference final {
 private:
 	ResourceHandler* handler;
 
+	void unloadResource();
+
 public:
 	ResourceReference() : handler(nullptr) {}
 	ResourceReference(ResourceHandler* handler);
@@ -15,6 +17,7 @@ public:
 	ResourceReference& operator=(const ResourceReference& reference);
 
 	bool isValid() const { return handler; }
+	bool isResourceReady() const { return handler->getResource(); }
 
 	template <typename T>
 	T& getResource();

@@ -21,6 +21,12 @@ public:
 	DefaultResource(void* data, size_t size)
 		: data(data), dataSize(size) {}
 
+	~DefaultResource() {
+		if (data) {
+			delete[] data;
+		}
+	}
+
 	void* getData() { return data; }
 	size_t getDataSize() { return dataSize; }
 

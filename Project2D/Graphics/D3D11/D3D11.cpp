@@ -20,7 +20,7 @@ bool D3D11::init() {
     HRESULT result;
 
     D3D_FEATURE_LEVEL featureLevel;
-    result = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, 0, nullptr, 0, D3D11_SDK_VERSION, &device, &featureLevel, &deviceContext);
+    result = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, D3D11_CREATE_DEVICE_DEBUG, nullptr, 0, D3D11_SDK_VERSION, &device, &featureLevel, &deviceContext);
     CheckResult(result);
 
     result = CreateDXGIFactory(__uuidof(dxgiFactory), (void**)(&dxgiFactory));

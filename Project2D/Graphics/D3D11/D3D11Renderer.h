@@ -10,6 +10,8 @@ private:
 	D3D11Renderer();
 
 public:
+	~D3D11Renderer() { release(); }
+
 	static D3D11Renderer& get();
 
 	bool init();

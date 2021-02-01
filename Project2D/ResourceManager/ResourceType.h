@@ -1,5 +1,8 @@
 #pragma once
 
 enum ResourceType {
-	DefaultResourceType
+	DefaultResourceType,
+	D3D11PixelShaderResourceType,
+	D3D11VertexShaderResourceType,
+	D3D11MaterialResourceType
 };

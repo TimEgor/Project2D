@@ -1,4 +1,11 @@
 #include "ResourceReference.h"
+#include <ResourceManager/ResourceManager.h>
+
+void ResourceReference::unloadResource() {
+	if (handler->getRefCounter() == 0) {
+		ResourceManager::get().unloadResource(*handler);
+	}
+}
 
 ResourceReference::ResourceReference(ResourceHandler* handler) : handler(handler) {
 	if (handler) {
@@ -15,6 +22,7 @@ ResourceReference::ResourceReference(const ResourceReference& reference) : handl
 ResourceReference::~ResourceReference() {
 	if (handler) {
 		handler->decrementRefCounter();
+		unloadResource();
 	}
 }
 
@@ -25,6 +33,7 @@ ResourceReference& ResourceReference::operator=(const ResourceReference& referen
 	
 	if (handler) {
 		handler->decrementRefCounter();
+		unloadResource();
 	}
 	
 	handler = reference.handler;

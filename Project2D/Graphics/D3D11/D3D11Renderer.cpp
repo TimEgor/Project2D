@@ -1,5 +1,11 @@
 #include "D3D11Renderer.h"
 
+#include <Graphics/D3D11/D3D11Sprite.h>
+#include <Graphics/D3D11/Resources/D3D11MaterialResource.h>
+#include <Graphics/D3D11/Resources/D3D11ShaderResource.h>
+#include <Graphics/D3D11/D3D11Verteces.h>
+#include <ResourceManager/ResourceManager.h>
+
 D3D11Renderer::D3D11Renderer() : rtv(nullptr) {}
 
 D3D11Renderer& D3D11Renderer::get() {
@@ -15,8 +21,9 @@ bool D3D11Renderer::init() {
 
     ID3D11Texture2D* backBuffer = nullptr;
     swapChain->GetBuffer(0, __uuidof(backBuffer), (void**)(&backBuffer));
-
     device->CreateRenderTargetView(backBuffer, nullptr, &rtv);
+
+    D3D11Sprite::get().init();
 
     return true;
 }

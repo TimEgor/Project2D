@@ -15,6 +15,7 @@ class NativeFileSystem;
 
 class ResourceManager final {
 	friend ResourceAsyncLoader;
+	friend ResourceReference;
 
 private:
 	std::unordered_map<ResourceID, ResourceHandler> resources;
@@ -36,6 +37,8 @@ private:
 	ResourceHandler& createNewHandler(ResourceID resourceID);
 
 	ResourceReference loadNewResourceFromArchive(ResourceHandler& handler, const ResourceName& resourceName, ResourceID resourceID);
+
+	void unloadResource(ResourceHandler& handler);
 
 public:
 	static ResourceManager& get();
