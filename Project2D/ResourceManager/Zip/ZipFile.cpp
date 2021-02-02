@@ -2,6 +2,8 @@
 
 #include <MemoryManager/MemoryManager.h>
 
+#include <zlib.h>
+
 #include <cassert>
 
 bool ZipFile::init(const ResourceName& archiveName) {
@@ -115,14 +117,45 @@ bool ZipFile::readFileData(ResourceID fileNameHash, void* data, size_t fileSize)
 
     fseek(zipFile, fileHeader.fnameLen + fileHeader.xtraLen, SEEK_CUR);
 
-    if (fileHeader.compression != 0) {
-        assert(false && "Zip archive must not be compressed. Sorry :^(");
-        return false;
+    if (fileHeader.compression == Z_NO_COMPRESSION) {
+        fread(data, fileHeader.cSize, 1, zipFile);
+        return true;
     }
     
-    fread(data, fileHeader.cSize, 1, zipFile);
+    if (fileHeader.compression == Z_DEFLATED) {
+        size_t compressedSize = fileHeader.cSize;
 
-    return true;
+        Heap* defHeap = MemoryManager::get().getDefaultHeap();
+        uint8_t* compressedData = (uint8_t*)(defHeap->allocate(compressedSize));
+        assert(compressedData);
+
+        fread(compressedData, compressedSize, 1, zipFile);
+
+        z_stream uncompressingStream;
+        int uncompressingResult;
+
+        uncompressingStream.next_in = compressedData;
+        uncompressingStream.avail_in = compressedSize;
+        uncompressingStream.next_out = (uint8_t*)(data);
+        uncompressingStream.avail_out = fileSize;
+        uncompressingStream.zalloc = (alloc_func)(nullptr);
+        uncompressingStream.zfree = (free_func)(nullptr);
+
+        uncompressingResult = inflateInit2(&uncompressingStream, -MAX_WBITS);
+        if (uncompressingResult == Z_OK) {
+            uncompressingResult = inflate(&uncompressingStream, Z_FINISH);
+            inflateEnd(&uncompressingStream);
+            if (uncompressingResult == Z_STREAM_END)
+                uncompressingResult = Z_OK;
+            inflateEnd(&uncompressingStream);
+        }
+        assert(uncompressingResult == Z_OK);
+
+        defHeap->deallocate(compressedData);
+        return true;
+    }
+
+    return false;
 }
 
 bool ZipFile::getFileDataSize(ResourceID fileNameHash, size_t& fileSize) {
