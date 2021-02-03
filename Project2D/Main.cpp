@@ -1,7 +1,7 @@
 #include <ResourceManager/ResourceManager.h>
 #include <UserInterfaces/UserInterfaces.h>
 #include <Graphics/D3D11/D3D11.h>
-#include <Graphics/D3D11/D3D11Renderer.h>
+#include <Graphics/D3D11/D3D11TestRenderer.h>
 
 int main() {
 	ResourceManager& resourceManager = ResourceManager::get();
@@ -13,10 +13,10 @@ int main() {
 	D3D11& d3d11 = D3D11::get();
 	d3d11.init();
 
-	D3D11Renderer& d3d11Renderer = D3D11Renderer::get();
-	d3d11Renderer.init();
+	D3D11TestRenderer& d3d11TestRenderer = D3D11TestRenderer::get();
+	d3d11TestRenderer.init();
 
-	auto materialRef = ResourceManager::get().getResourceFromArchive("generic/default.material");
+	auto materialRef = ResourceManager::get().getResourceFromArchive("generic/DefaultMaterial.material");
 	auto testRef = ResourceManager::get().getResourceFromArchive("test");
 
 	MSG msg{0};
@@ -27,7 +27,7 @@ int main() {
 		}
 
 		//Logic
-		d3d11Renderer.testDraw();
+		d3d11TestRenderer.render();
 	}
 
 	return 0;

@@ -16,6 +16,4 @@ public:
 
 	bool init();
 	void release();
-
-	void testDraw();
 };

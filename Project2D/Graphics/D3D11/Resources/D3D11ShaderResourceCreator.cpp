@@ -7,6 +7,11 @@
 
 #include <cassert>
 
+void outputShaderCompilingError(ID3D10Blob* error) {
+	OutputDebugStringA((char*)error->GetBufferPointer());
+	D3D11ObjectRelease(error);
+}
+
 void loadResourceFromZipFileSystem(ResourceID resourceID, ZipFileSystem& zipFileSystem, void** data, size_t& size) {
 	size = 0;
 	bool checker = false;
@@ -35,6 +40,7 @@ void D3D11PixelShaderResourceCreator::createResourceFromMemory(ResourceHandler& 
 
 	//PS
 	if (FAILED(D3DCompile(data, dataSize, NULL, NULL, NULL, "PS", "ps_5_0", NULL, NULL, &shaderBlob, &errorBlob))) {
+		outputShaderCompilingError(errorBlob);
 		assert(false && "Pixel shader hasn't been compiled !!!");
 	}
 
@@ -63,6 +69,7 @@ void D3D11VertexShaderResourceCreator::createResourceFromMemory(ResourceHandler&
 
 	//VS
 	if (FAILED(D3DCompile(data, dataSize, NULL, NULL, NULL, "VS", "vs_5_0", NULL, NULL, &shaderBlob, &errorBlob))) {
+		outputShaderCompilingError(errorBlob);
 		assert(false && "Vertex shader hasn't been compiled !!!");
 	}
 

@@ -187,6 +187,7 @@
     <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Sprite.cpp" />
+    <ClCompile Include="Graphics\D3D11\D3D11TestRenderer.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Verteces.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResource.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Sprite.h" />
+    <ClInclude Include="Graphics\D3D11\D3D11TestRenderer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Verteces.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResource.h" />

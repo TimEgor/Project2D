@@ -31,16 +31,3 @@ bool D3D11Renderer::init() {
 void D3D11Renderer::release() {
     D3D11ObjectRelease(rtv);
 }
-
-void D3D11Renderer::testDraw() {
-    D3D11& d3d11 = D3D11::get();
-
-    ID3D11Device* device = d3d11.getDevice();
-    ID3D11DeviceContext* deviceContext = d3d11.getDeviceContext();
-    IDXGISwapChain* swapChain = d3d11.getSwapChain();
-
-    float clearVal[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
-    deviceContext->ClearRenderTargetView(rtv, clearVal);
-
-    swapChain->Present(0, 0);
-}
