@@ -17,10 +17,9 @@ private:
 	NodeHandler* handler;
 
 	Transform& transform;
-	Transform& graphicTransform;
 
 public:
-	Node(Transform &transform, Transform& graphicTransform) : parentNode(nullptr), handler(nullptr), transform(transform), graphicTransform(graphicTransform) {}
+	Node(Transform &transform) : parentNode(nullptr), handler(nullptr), transform(transform) {}
 
 	NodeID getID() const;
 
@@ -34,7 +33,6 @@ public:
 	Node* getChild(NodeID id);
 
 	Transform& getTransform() { return transform; }
-	Transform& getGraphicTransform() { return graphicTransform; }
 
 	const std::vector<Node*>& getChildren();
 	void getChildren(std::vector<Node*> container);

@@ -3,6 +3,7 @@
 #include <Graphics/D3D11/D3D11Sprite.h>
 #include <Graphics/D3D11/Resources/D3D11MaterialResource.h>
 #include <Graphics/D3D11/Resources/D3D11ShaderResource.h>
+#include <Graphics/D3D11/Resources/D3D11TextureResource.h>
 #include <Graphics/D3D11/D3D11Verteces.h>
 #include <ResourceManager/ResourceManager.h>
 
@@ -39,8 +40,20 @@ bool D3D11TestRenderer::init() {
 
     D3D11Sprite::get().init();
 
-    pixelShader = ResourceManager::get().getResourceFromArchive("Generic/TestSpriteDefaultPixelShader.pshader");
-    vertexShader = ResourceManager::get().getResourceFromArchive("Generic/TetsSpriteDefaultVertexShader.vshader");
+    ResourceManager& resourceManager = ResourceManager::get();
+    pixelShader = resourceManager.getResourceFromArchive("Generic/TestSpriteDefaultPixelShader.pshader");
+    vertexShader = resourceManager.getResourceFromArchive("Generic/TestSpriteDefaultVertexShader.vshader");
+    sprite = resourceManager.getResourceFromArchive("testtexture.png");
+
+    D3D11_BUFFER_DESC perObjectTransformMappedBufferDesc;
+    perObjectTransformMappedBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+    perObjectTransformMappedBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    perObjectTransformMappedBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    perObjectTransformMappedBufferDesc.MiscFlags = NULL;
+    perObjectTransformMappedBufferDesc.StructureByteStride = NULL;
+    perObjectTransformMappedBufferDesc.ByteWidth = sizeof(PerObjectTransforms);
+
+    device->CreateBuffer(&perObjectTransformMappedBufferDesc, nullptr, &perObjectTransformBuffer);
 
     return true;
 }
@@ -48,6 +61,26 @@ bool D3D11TestRenderer::init() {
 void D3D11TestRenderer::release() {
     D3D11ObjectRelease(rtv);
     D3D11ObjectRelease(rastState);
+
+    D3D11ObjectRelease(perObjectTransformBuffer);
+}
+
+void D3D11TestRenderer::prepareViewTransformMatrix(DirectX::XMMATRIX& viewTransform) {
+    DirectX::XMVECTOR position{ 0.0f, 0.0f, -5.0f };
+    DirectX::XMVECTOR direction{ 0.0f, 0.0f, 1.0f };
+    DirectX::XMVECTOR up{ 0.0f, 1.0f, 0.0f };
+    viewTransform = DirectX::XMMatrixLookToLH(position, direction, up);
+}
+
+void D3D11TestRenderer::prepareProjTransformMatrix(DirectX::XMMATRIX& projTransform) {
+    float ratio = atanf(45.0f / 2.0f) * 2.0f;
+    float aspect = 1.0f;
+    float z = 1.0f;
+
+    float x = ratio * z;
+    float y = ratio * z * aspect;
+
+    projTransform = DirectX::XMMatrixOrthographicOffCenterLH(-x, x, -y, y, 0.0f, 1000.0f);
 }
 
 void D3D11TestRenderer::render() {
@@ -61,6 +94,11 @@ void D3D11TestRenderer::render() {
     deviceContext->ClearRenderTargetView(rtv, clearVal);
 
     D3D11Sprite& d3d11Sprite = D3D11Sprite::get();
+
+    DirectX::XMMATRIX viewTransform;
+    prepareViewTransformMatrix(viewTransform);
+    DirectX::XMMATRIX projTransform;
+    prepareProjTransformMatrix(projTransform);
 
     ID3D11Buffer* vertecesBuffer = d3d11Sprite.getVertecesBuffer();
     UINT strides = sizeof(D3D11SpriteVertex);
@@ -83,7 +121,45 @@ void D3D11TestRenderer::render() {
 
     deviceContext->OMSetRenderTargets(1, &rtv, nullptr);
 
-    deviceContext->DrawIndexed(6, 0, 0);
+    deviceContext->VSSetConstantBuffers(1, 1, &perObjectTransformBuffer);
+
+    ID3D11ShaderResourceView* spriteSRV = sprite.getResource<D3D11TextureResource>().getShaderResoruceView();
+    deviceContext->PSSetShaderResources(0, 1, &spriteSRV);
+
+    //
+
+    DirectX::XMMATRIX worldTransform = DirectX::XMMatrixTranslation(0.1f, 0.1f, 0.0f);
+    DirectX::XMMATRIX scaleTransform = DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f);
+    worldTransform = DirectX::XMMatrixMultiply(scaleTransform, worldTransform);
+
+    PerObjectTransforms* mappedTransforms;
+    D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
+    deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+
+    mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
+    mappedTransforms->worldTransformMatrix = DirectX::XMMatrixTranspose(worldTransform);
+    mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransform);
+    mappedTransforms->projTransformMatrix= DirectX::XMMatrixTranspose(projTransform);
+
+    deviceContext->Unmap(perObjectTransformBuffer, 0);
+
+    deviceContext->DrawIndexed(d3d11Sprite.getIndecesNum(), 0, 0);
+
+    //
+
+    worldTransform = DirectX::XMMatrixTranslation(-0.1f, -0.1f, -1.0f);
+    worldTransform = DirectX::XMMatrixMultiply(scaleTransform, worldTransform);
+
+    deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+
+    mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
+    mappedTransforms->worldTransformMatrix = DirectX::XMMatrixTranspose(worldTransform);
+    mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransform);
+    mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransform);
+
+    deviceContext->Unmap(perObjectTransformBuffer, 0);
+
+    deviceContext->DrawIndexed(d3d11Sprite.getIndecesNum(), 0, 0);
 
     swapChain->Present(0, 0);
 }

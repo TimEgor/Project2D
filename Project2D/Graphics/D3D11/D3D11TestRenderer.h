@@ -4,17 +4,28 @@
 #include <ResourceManager/ResourceReference.h>
 
 class D3D11TestRenderer final {
-private:
+	struct alignas(16) PerObjectTransforms final {
+		DirectX::XMMATRIX worldTransformMatrix;
+		DirectX::XMMATRIX viewTransformMatrix;
+		DirectX::XMMATRIX projTransformMatrix;
+	};
 
+private:
 	D3D11_VIEWPORT viewport;
 
 	ID3D11RenderTargetView* rtv;
 	ID3D11RasterizerState* rastState;
 
+	ID3D11Buffer* perObjectTransformBuffer;
+
 	ResourceReference pixelShader;
 	ResourceReference vertexShader;
+	ResourceReference sprite;
 
 	D3D11TestRenderer();
+
+	void prepareViewTransformMatrix(DirectX::XMMATRIX& viewTransform);
+	void prepareProjTransformMatrix(DirectX::XMMATRIX& projTransform);
 
 public:
 	~D3D11TestRenderer() { release(); }

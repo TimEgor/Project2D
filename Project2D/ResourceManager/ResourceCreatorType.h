@@ -1,0 +1,11 @@
+#pragma once
+
+enum ResourceCreatorType {
+	DefaultResourceCreatorType,
+	D3D11VertexShaderResourceCreatorType,
+	D3D11BinaryVertexShaderResourceCreatorType,
+	D3D11PixelShaderResourceCreatorType,
+	D3D11BinaryPixelShaderResourceCreatorType,
+	D3D11_PNG_TextureResourceCreatorType,
+	D3D11MaterialResourceCreatorType
+};

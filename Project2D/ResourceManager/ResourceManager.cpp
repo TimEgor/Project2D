@@ -8,6 +8,7 @@
 
 #include <Graphics/D3D11/Resources/D3D11MaterialResourceCreator.h>
 #include <Graphics/D3D11/Resources/D3D11ShaderResourceCreator.h>
+#include <Graphics/D3D11/Resources/D3D11TextureResourceCreator.h>
 
 ResourceManager& ResourceManager::get() {
     static ResourceManager uniqueResourceManager;
@@ -62,15 +63,16 @@ void ResourceManager::release() {
     for (auto& creator : resourceCreators) {
         delete creator.second;
     }
-    resourceCreators = std::unordered_map<ResourceType, ResourceCreator*>();
+    resourceCreators = std::unordered_map<ResourceCreatorType, ResourceCreator*>();
 }
 
 bool ResourceManager::initResourceCreators() {
     defaultResourceCreator = new DefaultResourceCreator();
 
-    resourceCreators.insert(std::make_pair(D3D11PixelShaderResourceType, new D3D11PixelShaderResourceCreator()));
-    resourceCreators.insert(std::make_pair(D3D11VertexShaderResourceType, new D3D11VertexShaderResourceCreator()));
-    resourceCreators.insert(std::make_pair(D3D11MaterialResourceType, new D3D11MaterialResourceCreator()));
+    resourceCreators.insert(std::make_pair(D3D11PixelShaderResourceCreatorType, new D3D11PixelShaderResourceCreator()));
+    resourceCreators.insert(std::make_pair(D3D11VertexShaderResourceCreatorType, new D3D11VertexShaderResourceCreator()));
+    resourceCreators.insert(std::make_pair(D3D11MaterialResourceCreatorType, new D3D11MaterialResourceCreator()));
+    resourceCreators.insert(std::make_pair(D3D11_PNG_TextureResourceCreatorType, new D3D11_PNG_TextureResourceCreator()));
 
     return defaultResourceCreator;
 }

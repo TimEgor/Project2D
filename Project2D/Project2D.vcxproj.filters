@@ -178,6 +178,15 @@
     <ClCompile Include="Graphics\D3D11\D3D11TestRenderer.cpp">
       <Filter>Graphics\D3D11</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\D3D11\WICTextureLoader11.cpp">
+      <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResource.cpp">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.cpp">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -341,6 +350,18 @@
     </ClInclude>
     <ClInclude Include="Graphics\D3D11\D3D11TestRenderer.h">
       <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.h">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResource.h">
+      <Filter>Graphics\D3D11\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\WICTextureLoader11.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceCreatorType.h">
+      <Filter>ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

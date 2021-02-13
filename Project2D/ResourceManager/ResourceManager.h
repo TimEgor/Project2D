@@ -3,6 +3,7 @@
 #include <ResourceManager/ResourceName.h>
 #include <ResourceManager/ResourceHandler.h>
 #include <ResourceManager/ResourceReference.h>
+#include <ResourceManager/ResourceCreatorType.h>
 
 #include <unordered_map>
 #include <mutex>
@@ -19,7 +20,7 @@ class ResourceManager final {
 
 private:
 	std::unordered_map<ResourceID, ResourceHandler> resources;
-	std::unordered_map<ResourceType, ResourceCreator*> resourceCreators;
+	std::unordered_map<ResourceCreatorType, ResourceCreator*> resourceCreators;
 	std::mutex resMutex;
 
 	ResourceAsyncLoader* resourceAsyncLoader;

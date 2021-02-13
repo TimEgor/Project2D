@@ -16,8 +16,7 @@ int main() {
 	D3D11TestRenderer& d3d11TestRenderer = D3D11TestRenderer::get();
 	d3d11TestRenderer.init();
 
-	auto materialRef = ResourceManager::get().getResourceFromArchive("generic/DefaultMaterial.material");
-	auto testRef = ResourceManager::get().getResourceFromArchive("test");
+	auto testTextureRef = ResourceManager::get().getResourceFromArchive("testtexture.png");
 
 	MSG msg{0};
 	while (msg.message != WM_QUIT) {

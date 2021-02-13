@@ -7,6 +7,17 @@
 
 #include <cassert>
 
+void loadResourceFromZipFileSystem(ResourceID resourceID, ZipFileSystem& zipFileSystem, void** data, size_t& size) {
+	size = 0;
+	bool checker = false;
+	checker = zipFileSystem.getResourceSize(resourceID, size);
+	assert(checker);
+
+	*data = new uint8_t[size];
+	checker = zipFileSystem.getResourceData(resourceID, *data, size);
+	assert(checker);
+}
+
 void DefaultResourceCreator::createResourceFromZipFileSystem(ResourceHandler& handler, ResourceID resourceID, ZipFileSystem& zipFileSystem) {
 	size_t resourceSize = 0;
 	bool checker = false;

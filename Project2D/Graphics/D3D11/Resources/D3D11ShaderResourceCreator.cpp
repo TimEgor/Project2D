@@ -12,17 +12,6 @@ void outputShaderCompilingError(ID3D10Blob* error) {
 	D3D11ObjectRelease(error);
 }
 
-void loadResourceFromZipFileSystem(ResourceID resourceID, ZipFileSystem& zipFileSystem, void** data, size_t& size) {
-	size = 0;
-	bool checker = false;
-	checker = zipFileSystem.getResourceSize(resourceID, size);
-	assert(checker);
-
-	*data = new uint8_t[size];
-	checker = zipFileSystem.getResourceData(resourceID, *data, size);
-	assert(checker);
-}
-
 void D3D11PixelShaderResourceCreator::createResourceFromZipFileSystem(ResourceHandler& handler, ResourceID resourceID, ZipFileSystem& zipFileSystem) {
 	void* data;
 	size_t dataSize;

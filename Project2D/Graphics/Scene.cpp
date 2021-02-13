@@ -31,22 +31,6 @@ Transform& Scene::createTransform(NodeID id) {
     return *newTransform;
 }
 
-TransformHandler& Scene::createGraphicTransform(NodeID id) {
-    size_t oldAllocatorCount = graphicTransformAllocators.size();
-
-    PoolAllocatorVector::AllocationInfo allocationInfo = graphicTransformAllocators.allocate();
-    Transform* newTransform = new (allocationInfo.allocationAddress) Transform();
-
-    size_t newAllocatorCount = graphicTransformAllocators.size();
-    if (oldAllocatorCount < newAllocatorCount) {
-        graphicTransforms.reserve(newAllocatorCount * NODES_ALLOCATOR_SIZE);
-    }
-
-    auto newHandlerVal = graphicTransforms.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, *newTransform, allocationInfo.allocatorIndex));
-
-    return newHandlerVal.first->second;
-}
-
 void Scene::deleteTransform(TransformID id) {
     auto findIter = transforms.find(id);
     if (findIter != transforms.end()) {
@@ -57,34 +41,14 @@ void Scene::deleteTransform(TransformID id) {
     }
 }
 
-void Scene::deleteGraphicalTransform(TransformID id) {
-    graphicMtx.lock();
-
-    auto findIter = graphicTransforms.find(id);
-    if (findIter != graphicTransforms.end()) {
-        TransformHandler& handler = findIter->second;
-        
-        handler.decrementCounter();
-        if (handler.getCounter() == 0) {
-            graphicTransformAllocators.deallocate(handler.getTransformAllocatorIndex(), &handler.getTransform());
-
-            graphicTransforms.erase(findIter);
-        }
-    }
-
-    graphicMtx.unlock();
-}
-
 Node* Scene::createNode(NodeID id) {
     size_t oldAllocatorCount = nodeAllocators.size();
 
     PoolAllocatorVector::AllocationInfo allocationInfo = nodeAllocators.allocate();
 
     Transform& transform = createTransform(id);
-    TransformHandler& graphicTransformHandler = createGraphicTransform(id);
-    graphicTransformHandler.incrementCounter();
 
-    Node* newNode = new (allocationInfo.allocationAddress) Node(transform, graphicTransformHandler.getTransform());
+    Node* newNode = new (allocationInfo.allocationAddress) Node(transform);
 
     size_t newAllocatorCount = nodeAllocators.size();
     if (oldAllocatorCount < newAllocatorCount) {
@@ -103,7 +67,6 @@ void Scene::deleteNode(NodeID id) {
         Node* node = &handler.getNode();
 
         deleteTransform(id);
-        deleteGraphicalTransform(id);
 
         nodeAllocators.deallocate(handler.getNodeAllocatorIndex(), node);
 

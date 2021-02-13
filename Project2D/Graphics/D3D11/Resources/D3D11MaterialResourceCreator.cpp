@@ -86,13 +86,9 @@ void fillMaterialData(const pugi::xml_node& node, uint8_t* data, D3D11ShaderMate
 
 void D3D11MaterialResourceCreator::createResourceFromZipFileSystem(ResourceHandler& handler, ResourceID resourceID, ZipFileSystem& zipFileSystem) {
 	size_t dataSize = 0;
-	bool checker = false;
-	checker = zipFileSystem.getResourceSize(resourceID, dataSize);
-	assert(checker);
+	void* data = nullptr;
 
-	void* data = new uint8_t[dataSize];
-	checker = zipFileSystem.getResourceData(resourceID, data, dataSize);
-	assert(checker);
+	loadResourceFromZipFileSystem(resourceID, zipFileSystem, &data, dataSize);
 
 	createResourceFromMemory(handler, data, dataSize);
 

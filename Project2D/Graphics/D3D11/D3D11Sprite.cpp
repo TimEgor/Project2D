@@ -53,6 +53,9 @@ bool D3D11Sprite::init() {
 
     device->CreateBuffer(&bufferDesc, &subresourcesData, &indecesBuffer);
 
+    vertecesNum = 4;
+    indecesNum = 6;
+
     return true;
 }
 

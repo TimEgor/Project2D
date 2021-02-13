@@ -194,6 +194,9 @@
     <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderResource.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderMaterialProperties.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderResourceCreator.cpp" />
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResource.cpp" />
+    <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.cpp" />
+    <ClCompile Include="Graphics\D3D11\WICTextureLoader11.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
     <ClCompile Include="Graphics\Scene.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -241,6 +244,9 @@
     <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderResource.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderMaterialProperties.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderResourceCreator.h" />
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResource.h" />
+    <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.h" />
+    <ClInclude Include="Graphics\D3D11\WICTextureLoader11.h" />
     <ClInclude Include="Graphics\Node.h" />
     <ClInclude Include="Graphics\NodeHandler.h" />
     <ClInclude Include="Graphics\Scene.h" />
@@ -262,6 +268,7 @@
     <ClInclude Include="ResourceManager\Resource.h" />
     <ClInclude Include="ResourceManager\ResourceAsyncLoader.h" />
     <ClInclude Include="ResourceManager\ResourceCreator.h" />
+    <ClInclude Include="ResourceManager\ResourceCreatorType.h" />
     <ClInclude Include="ResourceManager\ResourceHandler.h" />
     <ClInclude Include="ResourceManager\ResourceManager.h" />
     <ClInclude Include="ResourceManager\ResourceName.h" />
