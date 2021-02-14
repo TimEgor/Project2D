@@ -7,7 +7,8 @@
 #include <Graphics/D3D11/D3D11Verteces.h>
 #include <ResourceManager/ResourceManager.h>
 
-D3D11TestRenderer::D3D11TestRenderer() : rtv(nullptr) {}
+D3D11TestRenderer::D3D11TestRenderer() : rtv(nullptr), rastState(nullptr),
+    spriteSamplerState(nullptr), perObjectTransformBuffer(nullptr) {}
 
 D3D11TestRenderer& D3D11TestRenderer::get() {
     static D3D11TestRenderer uniqueD3D11Renderer;
@@ -40,6 +41,19 @@ bool D3D11TestRenderer::init() {
 
     D3D11Sprite::get().init();
 
+    D3D11_SAMPLER_DESC spriteSamplerDesc{};
+    spriteSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    spriteSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    spriteSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    spriteSamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    spriteSamplerDesc.MipLODBias = 0.0f;
+    spriteSamplerDesc.MaxAnisotropy = 1;
+    spriteSamplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    spriteSamplerDesc.MinLOD = -FLT_MAX;
+    spriteSamplerDesc.MaxLOD = FLT_MAX;
+
+    device->CreateSamplerState(&spriteSamplerDesc, &spriteSamplerState);
+
     ResourceManager& resourceManager = ResourceManager::get();
     pixelShader = resourceManager.getResourceFromArchive("Generic/TestSpriteDefaultPixelShader.pshader");
     vertexShader = resourceManager.getResourceFromArchive("Generic/TestSpriteDefaultVertexShader.vshader");
@@ -61,6 +75,8 @@ bool D3D11TestRenderer::init() {
 void D3D11TestRenderer::release() {
     D3D11ObjectRelease(rtv);
     D3D11ObjectRelease(rastState);
+
+    D3D11ObjectRelease(spriteSamplerState);
 
     D3D11ObjectRelease(perObjectTransformBuffer);
 }
@@ -125,6 +141,7 @@ void D3D11TestRenderer::render() {
 
     ID3D11ShaderResourceView* spriteSRV = sprite.getResource<D3D11TextureResource>().getShaderResoruceView();
     deviceContext->PSSetShaderResources(0, 1, &spriteSRV);
+    deviceContext->PSSetSamplers(0, 1, &spriteSamplerState);
 
     //
 

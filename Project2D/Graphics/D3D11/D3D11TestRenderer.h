@@ -16,6 +16,8 @@ private:
 	ID3D11RenderTargetView* rtv;
 	ID3D11RasterizerState* rastState;
 
+	ID3D11SamplerState* spriteSamplerState;
+
 	ID3D11Buffer* perObjectTransformBuffer;
 
 	ResourceReference pixelShader;
