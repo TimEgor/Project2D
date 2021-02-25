@@ -2,12 +2,14 @@
 
 #include <MemoryManager/MemoryManager.h>
 
-bool EntityManager::init() {
+bool EntityManager::init(Level* currentLevel) {
     entities.reserve(ENTITIES_ALLOCATOR_SIZE);
     if (!allocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Entity), ENTITIES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
+
+    level = currentLevel;
 }
 
 void EntityManager::release() {
@@ -18,7 +20,7 @@ void EntityManager::release() {
 Entity* EntityManager::createEntity() {
     size_t oldAllocatorCount = allocators.size();
 
-    PoolAllocatorVector::AllocationInfo allocationInfo = allocators.allocate();
+    Allocators::AllocationInfo allocationInfo = allocators.allocate();
     Entity* newEntity = new (allocationInfo.allocationAddress) Entity();
 
     size_t newAllocatorCount = allocators.size();
@@ -26,7 +28,8 @@ Entity* EntityManager::createEntity() {
         entities.reserve(newAllocatorCount * ENTITIES_ALLOCATOR_SIZE);
     }
 
-    entities.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityID), std::forward_as_tuple(nextEntityID, *newEntity, allocationInfo.allocatorIndex));
+    entities.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityID),
+        std::forward_as_tuple(nextEntityID, newEntity, allocationInfo.allocatorID, level));
 
     ++nextEntityID;
 
@@ -37,9 +40,9 @@ void EntityManager::deleteEntity(EntityID id) {
     auto findIter = entities.find(id);
     if (findIter != entities.end()) {
         EntityHandler& handler = findIter->second;
-        Entity* entity = &handler.getEntity();
+        Entity* entity = handler.getEntity();
         entity->removeAllComponents();
-        allocators.deallocate(handler.getEntityAllocatorIndex(), entity);
+        allocators.deallocate(handler.getEntityAllocatorID(), entity);
 
         entities.erase(findIter);
     }
@@ -55,5 +58,5 @@ Entity* EntityManager::getEntity(EntityID id) {
         return nullptr;
     }
 
-    return &(findIter->second.getEntity());
+    return findIter->second.getEntity();
 }

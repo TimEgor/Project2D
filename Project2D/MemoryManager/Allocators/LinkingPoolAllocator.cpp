@@ -25,6 +25,8 @@ bool LinkingPoolAllocator::init(Heap* _heap, size_t _bucketSize, size_t _buckets
 
     lastBucketInfo = (UsingBucketInfo*)((uint8_t*)buckets + bucketsNum * (bucketSize + sizeof(UsingBucketInfo)) - sizeof(UsingBucketInfo));
 
+    clear();
+
     return true;
 }
 

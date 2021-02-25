@@ -72,9 +72,6 @@
     <ClCompile Include="MemoryManager\Allocators\PoolAllocator.cpp">
       <Filter>MemoryManager\Allocators</Filter>
     </ClCompile>
-    <ClCompile Include="MemoryManager\Allocators\PoolAllocatorVector.cpp">
-      <Filter>MemoryManager\Allocators</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities\HashFunction\CRC32.cpp">
       <Filter>Utilities\HashFunction</Filter>
     </ClCompile>
@@ -123,9 +120,6 @@
     </ClCompile>
     <ClCompile Include="EntityManager\EntityComponentManager.cpp">
       <Filter>EntityManager</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManager\Allocators\LinkingPoolAllocatorVector.cpp">
-      <Filter>MemoryManager\Allocators</Filter>
     </ClCompile>
     <ClCompile Include="BaseGameLogic\Level.cpp">
       <Filter>BaseGameLogic</Filter>
@@ -186,6 +180,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.cpp">
       <Filter>Graphics\D3D11\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp">
+      <Filter>EntityManager\EntityComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager\Allocators\ArrayPoolAllocator.cpp">
+      <Filter>MemoryManager\Allocators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,9 +285,6 @@
     <ClInclude Include="EntityManager\EntityHandler.h">
       <Filter>EntityManager</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryManager\Allocators\LinkingPoolAllocatorVector.h">
-      <Filter>MemoryManager\Allocators</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Node.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -362,6 +359,15 @@
     </ClInclude>
     <ClInclude Include="ResourceManager\ResourceCreatorType.h">
       <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.h">
+      <Filter>EntityManager\EntityComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\Allocators\ArrayPoolAllocator.h">
+      <Filter>MemoryManager\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityManagerTypes.h">
+      <Filter>EntityManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

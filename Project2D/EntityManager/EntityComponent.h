@@ -1,29 +1,25 @@
 #pragma once
 
 #include <EntityManager/EntityComponentType.h>
-
-#include <cstdint>
-
-typedef uint32_t EntityComponentID;
+#include <EntityManager/EntityManagerTypes.h>
 
 class Entity;
 class EntityComponentHandler;
 
 class EntityComponent {
-	friend Entity;
 	friend EntityComponentHandler;
 
 protected:
-	Entity* parent;
+	EntityID parentID;
 	EntityComponentHandler *handler;
 
 public:
-	EntityComponent() : parent(nullptr), handler(nullptr) {}
-	virtual ~EntityComponent() = 0;
+	EntityComponent() : parentID(0), handler(nullptr) {}
+	virtual ~EntityComponent() {}
 
 	EntityComponentHandler* getHandler() const { return handler; }
 	EntityComponentID getID() const;
-	Entity* getParent() const { return parent; }
+	EntityID getParentID() const { return parentID; }
 
-	virtual EntityComponentType getEntityComponentType() = 0;
+	virtual EntityComponentType getEntityComponentType() const = 0;
 };

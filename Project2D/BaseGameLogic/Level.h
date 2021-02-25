@@ -1,5 +1,8 @@
 #pragma once
 
+#include <EntityManager/EntityManagerTypes.h>
+#include <EntityManager/EntityComponentType.h>
+
 #include <cstdint>
 
 class EntityManager;
@@ -26,7 +29,16 @@ public:
 
 	LevelID getID() const { return levelID; }
 
-	EntityManager& getEntityManager() { return *entityManager; }
-	EntityComponentManager& getEntityComponentManager() { return *entityComponentManager; }
-	Scene& getScene() { return *scene; }
+	Entity* createEntity();
+	void deleteEntity(Entity* entity);
+	void deleteEntity(EntityID id);
+
+	EntityComponent* createEntityComponent(EntityComponentType type, Entity* parent);
+	EntityComponent* createEntityComponent(EntityComponentType type, EntityID parentID);
+	void deleteEntityComponent(EntityComponent* component);
+	void deleteEntityComponent(EntityComponentID id);
+
+	EntityManager* getEntityManager() { return entityManager; }
+	EntityComponentManager* getEntityComponentManager() { return entityComponentManager; }
+	Scene* getScene() { return scene; }
 };

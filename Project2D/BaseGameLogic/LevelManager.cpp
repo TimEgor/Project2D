@@ -7,20 +7,23 @@ LevelManager& LevelManager::get() {
     return uniqueLevelManager;
 }
 
-Level& LevelManager::getCurrentLevel() {
+Level* LevelManager::getCurrentLevel() {
     assert(currentLevel && "CurrentLevel is empty !!!");
-    return *currentLevel;
+    return currentLevel;
 }
 
-Level& LevelManager::createLevel() {
+Level* LevelManager::createLevel() {
     auto newValPair = levels.emplace(std::piecewise_construct, std::forward_as_tuple(nextLevelID), std::forward_as_tuple(nextLevelID));
     ++nextLevelID;
 
+    Level* newLevel = &(newValPair.first->second);
+    newLevel->init();
+
     if (!currentLevel) {
-        currentLevel = &newValPair.first->second;
+        currentLevel = newLevel;
     }
 
-    return newValPair.first->second;
+    return newLevel;
 }
 
 //Level& LevelManager::loadLevel(const ResourceName& levelName) {
@@ -28,7 +31,15 @@ Level& LevelManager::createLevel() {
 //}
 
 void LevelManager::changeCurrentLevel(LevelID levelID) {
+    auto findLevelIter = levels.find(levelID);
+    if (findLevelIter != levels.end()) {
+        currentLevel = &(findLevelIter->second);
+    }
+    else {
+        assert(false && "The given LevelID isn't valid.");
+    }
 }
 
-void LevelManager::changeCurrentLevel(const Level& level) {
+void LevelManager::changeCurrentLevel(Level* level) {
+    currentLevel = level;
 }

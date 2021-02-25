@@ -24,8 +24,8 @@ public:
 	NodeID getID() const;
 
 	void addChild(Node* node);
-	void removeChild(NodeID id, bool withDeleting = true);
-	void removeChild(Node* node, bool withDeleting = true);
+	void removeChild(NodeID id);
+	void removeChild(Node* node);
 	void removeAllChildren();
 
 	Node* getParent() { return parentNode; }
