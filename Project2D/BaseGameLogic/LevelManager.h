@@ -17,11 +17,11 @@ private:
 public:
 	static LevelManager& get();
 
-	Level& getCurrentLevel();
+	Level* getCurrentLevel();
 
-	Level& createLevel();
+	Level* createLevel();
 	//Level& loadLevel(const ResourceName& levelName);
 
 	void changeCurrentLevel(LevelID levelID);
-	void changeCurrentLevel(const Level& level);
+	void changeCurrentLevel(Level* level);
 };

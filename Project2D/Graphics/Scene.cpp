@@ -8,6 +8,11 @@ bool Scene::init() {
         release();
         return false;
     }
+
+    if (!transformAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Transform), NODES_ALLOCATOR_SIZE)) {
+        release();
+        return false;
+    }
 }
 
 void Scene::release() {
@@ -18,7 +23,7 @@ void Scene::release() {
 Transform& Scene::createTransform(NodeID id) {
     size_t oldAllocatorCount = transformAllocators.size();
 
-    PoolAllocatorVector::AllocationInfo allocationInfo = transformAllocators.allocate();
+    Allocators::AllocationInfo allocationInfo = transformAllocators.allocate();
     Transform* newTransform = new (allocationInfo.allocationAddress) Transform();
 
     size_t newAllocatorCount = transformAllocators.size();
@@ -26,7 +31,7 @@ Transform& Scene::createTransform(NodeID id) {
         transforms.reserve(newAllocatorCount * NODES_ALLOCATOR_SIZE);
     }
 
-    transforms.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, *newTransform, allocationInfo.allocatorIndex));
+    transforms.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, *newTransform, allocationInfo.allocatorID));
 
     return *newTransform;
 }
@@ -35,7 +40,7 @@ void Scene::deleteTransform(TransformID id) {
     auto findIter = transforms.find(id);
     if (findIter != transforms.end()) {
         TransformHandler& handler = findIter->second;
-        transformAllocators.deallocate(handler.getTransformAllocatorIndex(), &handler.getTransform());
+        transformAllocators.deallocate(handler.getTransformAllocatorID(), &handler.getTransform());
 
         transforms.erase(findIter);
     }
@@ -44,7 +49,7 @@ void Scene::deleteTransform(TransformID id) {
 Node* Scene::createNode(NodeID id) {
     size_t oldAllocatorCount = nodeAllocators.size();
 
-    PoolAllocatorVector::AllocationInfo allocationInfo = nodeAllocators.allocate();
+    Allocators::AllocationInfo allocationInfo = nodeAllocators.allocate();
 
     Transform& transform = createTransform(id);
 
@@ -55,7 +60,7 @@ Node* Scene::createNode(NodeID id) {
         nodes.reserve(newAllocatorCount * NODES_ALLOCATOR_SIZE);
     }
 
-    nodes.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, *newNode, allocationInfo.allocatorIndex));
+    nodes.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, *newNode, allocationInfo.allocatorID));
 
     return newNode;
 }
@@ -68,7 +73,7 @@ void Scene::deleteNode(NodeID id) {
 
         deleteTransform(id);
 
-        nodeAllocators.deallocate(handler.getNodeAllocatorIndex(), node);
+        nodeAllocators.deallocate(handler.getNodeAllocatorID(), node);
 
         nodes.erase(findIter);
     }

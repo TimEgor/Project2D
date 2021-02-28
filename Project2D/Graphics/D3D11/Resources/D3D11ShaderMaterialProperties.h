@@ -16,8 +16,7 @@ enum HLSL_Type {
 	HLSL_Float4x4
 };
 
-const std::unordered_map<std::string, HLSL_Type> hlslTypes =
-{
+const std::unordered_map<std::string, HLSL_Type> hlslTypes = {
 	{ "bool", HLSL_Bool },
 	{ "int", HLSL_Int },
 	{ "uint", HLSL_UInt },

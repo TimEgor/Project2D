@@ -6,59 +6,34 @@
 
 #include <cassert>
 
-void Entity::addComponent(EntityComponent* component) {
-	assert(component->parent == nullptr);
-	component->parent = this;
-
-	components.push_back(component);
+void Entity::addComponent(EntityComponentID id) {
+	assert(id != 0);
+	componentsIDs.push_back(id);
 }
 
-void Entity::removeComponent(EntityComponentID id, bool withDeleting) {
+void Entity::removeComponent(EntityComponentID id) {
 	assert(id != 0);
 
-	auto findIter = std::find_if(components.begin(), components.end(),
-		[id](const EntityComponent* component) -> bool {
-			return component->getID() == id;
-		});
+	auto findIter = std::find(componentsIDs.begin(), componentsIDs.end(), id);
 
-	if (findIter != components.end()) {
-		EntityComponent* component = (*findIter);
-		component->parent = nullptr;
-
-		if (component->getHandler() && withDeleting) {
-			LevelManager::get().getCurrentLevel().getEntityComponentManager().deleteEntityComponent(component);
-		}
-
-		std::iter_swap(findIter, components.rbegin());
-		components.pop_back();
-	}
-}
-
-void Entity::removeComponent(EntityComponent* component, bool withDeleting) {
-	assert(component);
-
-	auto findIter = std::find(components.begin(), components.end(), component);
-
-	if (findIter != components.end()) {
-		component->parent = nullptr;
-
-		if (component->getHandler() && withDeleting) {
-			LevelManager::get().getCurrentLevel().getEntityComponentManager().deleteEntityComponent(component);
-		}
-
-		std::iter_swap(findIter, components.rbegin());
-		components.pop_back();
+	if (findIter != componentsIDs.end()) {
+		std::iter_swap(findIter, componentsIDs.rbegin());
+		componentsIDs.pop_back();
 	}
 }
 
 void Entity::removeAllComponents() {
-	for (auto* component : components) {
-		if (component->getHandler()) {
-			LevelManager::get().getCurrentLevel().getEntityComponentManager().deleteEntityComponent(component);
-		}
+	componentsIDs = std::vector<EntityComponentID>();
+}
+
+bool Entity::isComponentContained(EntityComponentID id) {
+	auto findIter = std::find(componentsIDs.begin(), componentsIDs.end(), id);
+
+	if (findIter != componentsIDs.end()) {
+		return true;
 	}
 
-	components = std::vector<EntityComponent*>();
+	return false;
 }
 
 EntityID Entity::getID() const {
@@ -69,24 +44,11 @@ EntityID Entity::getID() const {
 	return 0;
 }
 
-EntityComponent* Entity::getComponent(EntityComponentID id) {
-	auto findIter = std::find_if(components.begin(), components.end(),
-		[id](const EntityComponent* reference) -> bool {
-			return reference->getID() == id;
-		});
-
-	if (findIter == components.end()) {
-		return nullptr;
-	}
-
-	return *findIter;
+const std::vector<EntityComponentID>& Entity::getComponents() {
+	return componentsIDs;
 }
 
-const std::vector<EntityComponent*>& Entity::getComponents() {
-	return components;
-}
-
-void Entity::getComponents(std::vector<EntityComponent*>& container) {
+void Entity::getComponents(std::vector<EntityComponentID>& container) {
 	container.resize(container.size());
-	std::copy(components.begin(), components.end(), container.begin());
+	std::copy(componentsIDs.begin(), componentsIDs.end(), container.begin());
 }

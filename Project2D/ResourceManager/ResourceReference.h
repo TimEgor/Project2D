@@ -16,7 +16,7 @@ public:
 
 	ResourceReference& operator=(const ResourceReference& reference);
 
-	bool isValid() const { return handler; }
+	bool isNull() const { return handler; }
 	bool isResourceReady() const { return handler->getResource(); }
 
 	template <typename T>

@@ -1,26 +1,29 @@
 #include "EntityComponentManager.h"
 
 #include <MemoryManager/MemoryManager.h>
+#include <EntityManager/Entity.h>
+#include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 
-LinkingPoolAllocatorVector::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
-    LinkingPoolAllocatorVector& allocatorVec = allocators.at(type);
+#include <cassert>
+
+EntityComponentManager::Allocators::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
+    Allocators& allocatorVec = allocators.at(type);
     size_t oldSize = allocatorVec.size();
-    LinkingPoolAllocatorVector::AllocationInfo info = allocatorVec.allocate();
+    Allocators::AllocationInfo info = allocatorVec.allocate();
     size_t newSize = allocatorVec.size();
 
     if (oldSize < newSize) {
         components.reserve(components.bucket_count() + ENTITIES_COMPONENTS_ALLOCATOR_SIZE * (newSize - oldSize));
     }
 
-    components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
-        std::forward_as_tuple(nextEntityComponentID, *((EntityComponent*)(info.allocationAddress)), info.allocatorIndex));
-
-    ++nextEntityComponentID;
-
     return info;
 }
 
-bool EntityComponentManager::init() {
+bool EntityComponentManager::init(Level* level) {
+    Heap* defaultHeap = MemoryManager::get().getDefaultHeap();
+
+    allocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+
     return true;
 }
 
@@ -31,12 +34,35 @@ void EntityComponentManager::release() {
     }
 }
 
+SpriteRendererEntityComponent* EntityComponentManager::createSpriteRendererEntityComponent() {
+    Allocators::AllocationInfo allocationInfo = allocateComponent(SpriteRendererEntityComponentType);
+    SpriteRendererEntityComponent* newComponent = new (allocationInfo.allocationAddress) SpriteRendererEntityComponent();
+
+    components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
+        std::forward_as_tuple(nextEntityComponentID, newComponent, allocationInfo.allocatorID, level));
+
+    ++nextEntityComponentID;
+
+    return newComponent;
+}
+
 void EntityComponentManager::deleteEntityComponent(EntityComponentID id) {
     auto findIter = components.find(id);
     if (findIter != components.end()) {
         EntityComponentHandler& handler = findIter->second;
-        EntityComponent* component = &handler.getComponent();
-        allocators[component->getEntityComponentType()].deallocate(handler.getComponentAllocatorIndex(), component);
+        EntityComponent* component = handler.getComponent();
+
+        Allocators& allocatorVec = allocators[component->getEntityComponentType()];
+        size_t allocatorIndex = allocatorVec.getAllocatorIndexByID(handler.getComponentAllocatorID());
+
+        ArrayPoolAllocator& allocator = allocatorVec[allocatorIndex];
+        allocator.deallocate(component);
+        if (allocator.size()) {
+            EntityComponentHandler* reallocatingComponentHandler = component->getHandler();
+            if (reallocatingComponentHandler) {
+                reallocatingComponentHandler->setComponent(component);
+            }
+        }
 
         components.erase(findIter);
     }
@@ -52,5 +78,5 @@ EntityComponent* EntityComponentManager::getEntityComponent(EntityComponentID id
         return nullptr;
     }
 
-    return &(findIter->second.getComponent());
+    return findIter->second.getComponent();
 }

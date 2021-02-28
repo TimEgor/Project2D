@@ -13,7 +13,7 @@ void Node::addChild(Node* node) {
 	children.push_back(node);
 }
 
-void Node::removeChild(NodeID id, bool withDeleting) {
+void Node::removeChild(NodeID id) {
 	assert(id != 0);
 
 	auto findIter = std::find_if(children.begin(), children.end(),
@@ -25,16 +25,12 @@ void Node::removeChild(NodeID id, bool withDeleting) {
 		Node* node = (*findIter);
 		node->parentNode = nullptr;
 
-		if (node->handler && withDeleting) {
-			LevelManager::get().getCurrentLevel().getScene().deleteNode(node);
-		}
-
 		std::iter_swap(findIter, children.rbegin());
 		children.pop_back();
 	}
 }
 
-void Node::removeChild(Node* node, bool withDeleting) {
+void Node::removeChild(Node* node) {
 	assert(node);
 
 	auto findIter = std::find(children.begin(), children.end(), node);
@@ -42,22 +38,12 @@ void Node::removeChild(Node* node, bool withDeleting) {
 	if (findIter != children.end()) {
 		node->parentNode = nullptr;
 
-		if (node->handler && withDeleting) {
-			LevelManager::get().getCurrentLevel().getScene().deleteNode(node);
-		}
-
 		std::iter_swap(findIter, children.rbegin());
 		children.pop_back();
 	}
 }
 
 void Node::removeAllChildren() {
-	for (auto* child : children) {
-		if (child->handler) {
-			LevelManager::get().getCurrentLevel().getScene().deleteNode(child);
-		}
-	}
-
 	children = std::vector<Node*>();
 }
 

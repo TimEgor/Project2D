@@ -3,9 +3,6 @@
 #include <EntityManager/EntityComponent.h>
 
 #include <vector>
-#include <cstdint>
-
-typedef uint32_t EntityID;
 
 class EntityHandler;
 
@@ -13,22 +10,21 @@ class Entity final {
 	friend EntityHandler;
 
 private:
-	std::vector<EntityComponent*> components;
+	std::vector<EntityComponentID> componentsIDs;
 	EntityHandler* handler;
 
 public:
 	Entity() : handler(nullptr) {}
 
-	void addComponent(EntityComponent* component);
-	void removeComponent(EntityComponentID id, bool withDeleting = true);
-	void removeComponent(EntityComponent* component, bool withDeleting = true);
+	void addComponent(EntityComponentID id);
+	void removeComponent(EntityComponentID id);
 	void removeAllComponents();
+
+	bool isComponentContained(EntityComponentID id);
 
 	EntityHandler* getHandler() const { return handler; }
 	EntityID getID() const;
 
-	EntityComponent* getComponent(EntityComponentID id);
-
-	const std::vector<EntityComponent*>& getComponents();
-	void getComponents(std::vector<EntityComponent*>& container);
+	const std::vector<EntityComponentID>& getComponents();
+	void getComponents(std::vector<EntityComponentID>& container);
 };

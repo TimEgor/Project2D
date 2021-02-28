@@ -8,6 +8,7 @@
 #include <ResourceManager/ResourceManager.h>
 
 D3D11TestRenderer::D3D11TestRenderer() : rtv(nullptr), rastState(nullptr),
+    dsv(nullptr), dsBuffer(nullptr),
     spriteSamplerState(nullptr), perObjectTransformBuffer(nullptr) {}
 
 D3D11TestRenderer& D3D11TestRenderer::get() {
@@ -40,6 +41,23 @@ bool D3D11TestRenderer::init() {
     viewport.MaxDepth = 1.0f;
 
     D3D11Sprite::get().init();
+
+    D3D11_TEXTURE2D_DESC dsBufferDesc{};
+    dsBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    dsBufferDesc.Width = 800;
+    dsBufferDesc.Height = 800;
+    dsBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    dsBufferDesc.MiscFlags = 0;
+    dsBufferDesc.ArraySize = 1;
+    dsBufferDesc.CPUAccessFlags = 0;
+    dsBufferDesc.MipLevels = 1;
+    dsBufferDesc.SampleDesc.Count = 1;
+    dsBufferDesc.SampleDesc.Quality = 0;
+    dsBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    
+    device->CreateTexture2D(&dsBufferDesc, nullptr, &dsBuffer);
+
+    device->CreateDepthStencilView(dsBuffer, nullptr, &dsv);
 
     D3D11_SAMPLER_DESC spriteSamplerDesc{};
     spriteSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -108,6 +126,7 @@ void D3D11TestRenderer::render() {
 
     float clearVal[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
     deviceContext->ClearRenderTargetView(rtv, clearVal);
+    deviceContext->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     D3D11Sprite& d3d11Sprite = D3D11Sprite::get();
 
@@ -135,7 +154,7 @@ void D3D11TestRenderer::render() {
     deviceContext->RSSetState(rastState);
     deviceContext->RSSetViewports(1, &viewport);
 
-    deviceContext->OMSetRenderTargets(1, &rtv, nullptr);
+    deviceContext->OMSetRenderTargets(1, &rtv, dsv);
 
     deviceContext->VSSetConstantBuffers(1, 1, &perObjectTransformBuffer);
 
@@ -164,7 +183,7 @@ void D3D11TestRenderer::render() {
 
     //
 
-    worldTransform = DirectX::XMMatrixTranslation(-0.1f, -0.1f, -1.0f);
+    worldTransform = DirectX::XMMatrixTranslation(-0.1f, -0.1f, 0.0f);
     worldTransform = DirectX::XMMatrixMultiply(scaleTransform, worldTransform);
 
     deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
