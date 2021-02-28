@@ -65,6 +65,7 @@ void Level::deleteEntity(Entity* entity) {
     }
 
     scene->deleteNode(entity->getID());
+    entityManager->deleteEntity(entity);
 }
 
 void Level::deleteEntity(EntityID id) {

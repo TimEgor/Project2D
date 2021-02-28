@@ -1,20 +1,21 @@
 #pragma once
 
 #include <Graphics/Transform.h>
+#include <MemoryManager/Allocators/PoolAllocatorVector.h>
 
 class TransformHandler final {
 private:
 	Transform& transform;
-	size_t allocatorIndex;
+	AllocatorID allocatorID;
 	TransformID id;
 
 public:
-	TransformHandler(TransformID id, Transform& transform, size_t allocatorIndex) : transform(transform), allocatorIndex(allocatorIndex), id(id) {}
+	TransformHandler(TransformID id, Transform& transform, AllocatorID allocatorID) : transform(transform), allocatorID(allocatorID), id(id) {}
 	TransformHandler(const TransformHandler&) = delete;
 	TransformHandler(TransformHandler&&) = delete;
 
 	Transform& getTransform() { return transform; }
 
 	TransformID getID() { return id; }
-	size_t getTransformAllocatorIndex() { return allocatorIndex; }
+	size_t getTransformAllocatorID() { return allocatorID; }
 };

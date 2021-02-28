@@ -18,7 +18,6 @@ private:
 	std::unordered_map<TransformID, TransformHandler> transforms;
 	Allocators nodeAllocators;
 	Allocators transformAllocators;
-	Allocators graphicTransformAllocators;
 
 	Transform& createTransform(NodeID id);
 	void deleteTransform(TransformID id);

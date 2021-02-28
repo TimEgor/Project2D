@@ -8,6 +8,11 @@ bool Scene::init() {
         release();
         return false;
     }
+
+    if (!transformAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Transform), NODES_ALLOCATOR_SIZE)) {
+        release();
+        return false;
+    }
 }
 
 void Scene::release() {
@@ -35,7 +40,7 @@ void Scene::deleteTransform(TransformID id) {
     auto findIter = transforms.find(id);
     if (findIter != transforms.end()) {
         TransformHandler& handler = findIter->second;
-        transformAllocators.deallocate(handler.getTransformAllocatorIndex(), &handler.getTransform());
+        transformAllocators.deallocate(handler.getTransformAllocatorID(), &handler.getTransform());
 
         transforms.erase(findIter);
     }
