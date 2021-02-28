@@ -1,9 +1,6 @@
 #include <ResourceManager/ResourceManager.h>
 #include <UserInterfaces/UserInterfaces.h>
 #include <BaseGameLogic/LevelManager.h>
-#include <EntityManager/EntityManager.h>
-#include <EntityManager/EntityComponentManager.h>
-#include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/D3D11/D3D11TestRenderer.h>
 
@@ -16,6 +13,15 @@ int main() {
 
 	LevelManager& levelManager = LevelManager::get();
 	Level* level = levelManager.createLevel();
+
+	Entity* entity1 = level->createEntity();
+	Entity* entity2 = level->createEntity();
+	Entity* entity3 = level->createEntity();
+
+	level->createEntityComponent(SpriteRendererEntityComponentType, entity1);
+	level->createEntityComponent(SpriteRendererEntityComponentType, entity2);
+
+	level->deleteEntity(entity1);
 
 	D3D11& d3d11 = D3D11::get();
 	d3d11.init();
