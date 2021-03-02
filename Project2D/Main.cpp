@@ -1,6 +1,7 @@
 #include <ResourceManager/ResourceManager.h>
 #include <UserInterfaces/UserInterfaces.h>
 #include <BaseGameLogic/LevelManager.h>
+#include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/D3D11/D3D11TestRenderer.h>
 
@@ -11,6 +12,12 @@ int main() {
 	UserInterfaces& userInterfaces = UserInterfaces::get();
 	userInterfaces.init();
 
+	D3D11& d3d11 = D3D11::get();
+	d3d11.init();
+
+	D3D11TestRenderer& d3d11TestRenderer = D3D11TestRenderer::get();
+	d3d11TestRenderer.init();
+
 	LevelManager& levelManager = LevelManager::get();
 	Level* level = levelManager.createLevel();
 
@@ -18,16 +25,13 @@ int main() {
 	Entity* entity2 = level->createEntity();
 	Entity* entity3 = level->createEntity();
 
-	level->createEntityComponent(SpriteRendererEntityComponentType, entity1);
-	level->createEntityComponent(SpriteRendererEntityComponentType, entity2);
+	ResourceReference spriteResourceRef = resourceManager.getResourceFromArchive("testtexture.png");
 
-	level->deleteEntity(entity1);
+	SpriteRendererEntityComponent* spriteComponent1 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity1));
+	spriteComponent1->setSpriteResource(spriteResourceRef);
 
-	D3D11& d3d11 = D3D11::get();
-	d3d11.init();
-
-	D3D11TestRenderer& d3d11TestRenderer = D3D11TestRenderer::get();
-	d3d11TestRenderer.init();
+	SpriteRendererEntityComponent* spriteComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity2));
+	spriteComponent2->setSpriteResource(spriteResourceRef);
 
 	MSG msg{0};
 	while (msg.message != WM_QUIT) {

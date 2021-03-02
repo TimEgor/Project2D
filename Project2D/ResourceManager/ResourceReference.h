@@ -19,6 +19,8 @@ public:
 	bool isNull() const { return handler; }
 	bool isResourceReady() const { return handler->getResource(); }
 
+	ResourceID getResourceID() const { handler->getResourceID(); }
+
 	template <typename T>
 	T& getResource();
 };
