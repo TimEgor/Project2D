@@ -16,10 +16,10 @@ public:
 
 	ResourceReference& operator=(const ResourceReference& reference);
 
-	bool isNull() const { return handler; }
+	bool isNull() const { return handler == nullptr; }
 	bool isResourceReady() const { return handler->getResource(); }
 
-	ResourceID getResourceID() const { handler->getResourceID(); }
+	ResourceID getResourceID() const { return handler->getResourceID(); }
 
 	template <typename T>
 	T& getResource();

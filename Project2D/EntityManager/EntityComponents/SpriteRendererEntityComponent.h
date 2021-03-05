@@ -68,9 +68,9 @@ public:
 	SpriteRendererEntityComponent();
 	SpriteRendererEntityComponent(ResourceReference spriteResource, ResourceReference materialResource = nullptr);
 
-	ResourceReference getSpriteResource() { return sprite; }
+	ResourceReference getSpriteResource() const { return sprite; }
 	void setSpriteResource(ResourceReference newSpriteResource) { sprite = newSpriteResource; }
-	ResourceReference getMaterialResource() { return material; }
+	ResourceReference getMaterialResource() const { return material; }
 	void setMaterialResource(ResourceReference newMaterialResource);
 
 	virtual EntityComponentType getEntityComponentType() const override { return SpriteRendererEntityComponentType; };

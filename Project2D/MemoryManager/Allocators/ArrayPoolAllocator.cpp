@@ -43,6 +43,10 @@ ArrayPoolAllocator& ArrayPoolAllocator::operator=(ArrayPoolAllocator&& allocator
     return *this;
 }
 
+void* ArrayPoolAllocator::operator[](size_t index) {
+    return (uint8_t*)(buckets) + index * bucketSize;
+}
+
 bool ArrayPoolAllocator::init(Heap* _heap, size_t _bucketSize, size_t _bucketsNum) {
     size_t requiredSize = _bucketSize * _bucketsNum;
     buckets = _heap->allocate(requiredSize);

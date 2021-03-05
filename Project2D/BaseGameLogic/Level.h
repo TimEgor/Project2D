@@ -2,6 +2,7 @@
 
 #include <EntityManager/EntityManagerTypes.h>
 #include <EntityManager/EntityComponentType.h>
+#include <Graphics/RenderingData.h>
 
 #include <cstdint>
 
@@ -17,7 +18,11 @@ private:
 	EntityComponentManager* entityComponentManager;
 	Scene* scene;
 
+	RenderingOrder* renderingOrder;
+
 	LevelID levelID;
+
+	void deleteEntityComponentsFromEntity(Entity* entity);
 
 public:
 	Level(LevelID levelID) : entityManager(nullptr), entityComponentManager(nullptr), scene(nullptr), levelID(levelID) {}
@@ -37,6 +42,14 @@ public:
 	EntityComponent* createEntityComponent(EntityComponentType type, EntityID parentID);
 	void deleteEntityComponent(EntityComponent* component);
 	void deleteEntityComponent(EntityComponentID id);
+	void removeEntityComponentsFromEntity(Entity* entity);
+	void removeEntityComponentsFromEntity(EntityID id);
+
+	//using for deleting children nodes
+	void deleteEntityWithoutNode(Entity* entity);
+	void deleteEntityWithoutNode(EntityID id);
+
+	RenderingData getRenderingData();
 
 	EntityManager* getEntityManager() { return entityManager; }
 	EntityComponentManager* getEntityComponentManager() { return entityComponentManager; }

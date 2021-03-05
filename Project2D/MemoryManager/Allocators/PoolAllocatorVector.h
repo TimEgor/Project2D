@@ -144,6 +144,10 @@ public:
 		return allocators[index].allocator;
 	}
 
+	const AllocatorType& operator[](size_t index) const {
+		return allocators[index].allocator;
+	}
+
 	bool init(Heap* allocatorHeap, size_t allocatorElementSize, size_t allocatorElementsNum, size_t maxEmptyStoringAllocatorsNum = 1, size_t preInitAllocatorNum = 1) {
 		heap = allocatorHeap;
 		elementSize = allocatorElementSize;

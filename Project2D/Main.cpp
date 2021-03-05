@@ -15,8 +15,8 @@ int main() {
 	D3D11& d3d11 = D3D11::get();
 	d3d11.init();
 
-	D3D11TestRenderer& d3d11TestRenderer = D3D11TestRenderer::get();
-	d3d11TestRenderer.init();
+	D3D11Renderer& d3d11Renderer = D3D11Renderer::get();
+	d3d11Renderer.init();
 
 	LevelManager& levelManager = LevelManager::get();
 	Level* level = levelManager.createLevel();
@@ -30,8 +30,8 @@ int main() {
 	SpriteRendererEntityComponent* spriteComponent1 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity1));
 	spriteComponent1->setSpriteResource(spriteResourceRef);
 
-	SpriteRendererEntityComponent* spriteComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity2));
-	spriteComponent2->setSpriteResource(spriteResourceRef);
+	//SpriteRendererEntityComponent* spriteComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity2));
+	//spriteComponent2->setSpriteResource(spriteResourceRef);
 
 	MSG msg{0};
 	while (msg.message != WM_QUIT) {
@@ -41,7 +41,10 @@ int main() {
 		}
 
 		//Logic
-		d3d11TestRenderer.render();
+
+		//Rendering
+		RenderingData renderingData = level->getRenderingData();
+		d3d11Renderer.draw(renderingData);
 	}
 
 	return 0;

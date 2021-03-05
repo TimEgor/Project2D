@@ -26,7 +26,8 @@ public:
 	~RenderingOrder() { release(); }
 
 	RenderingOrder& operator=(const RenderingOrder&) = delete;
-	const RenderingOrderNode& operator[](size_t index);
+	RenderingOrderNode& operator[](size_t index);
+	const RenderingOrderNode& operator[](size_t index) const;
 
 	bool init(Heap* heap);
 	void release();
@@ -35,7 +36,8 @@ public:
 
 	void preReSize(size_t size);
 	void pushNode(const RenderingOrderNode& node);
-	void pushNode(RenderingOrderNode&& node);
+
+	void sort();
 
 	size_t size() const { return currentNodeSize; }
 	size_t capacity() const { return allocatedNodesSize; }

@@ -1,15 +1,11 @@
 #pragma once
 
 #include <Graphics/D3D11/D3D11.h>
+#include <Graphics/D3D11/D3D11Renderer.h>
 #include <ResourceManager/ResourceReference.h>
 
-class D3D11TestRenderer final {
-	struct alignas(16) PerObjectTransforms final {
-		DirectX::XMMATRIX worldTransformMatrix;
-		DirectX::XMMATRIX viewTransformMatrix;
-		DirectX::XMMATRIX projTransformMatrix;
-	};
 
+class D3D11TestRenderer final {
 private:
 	D3D11_VIEWPORT viewport;
 
@@ -40,5 +36,5 @@ public:
 	bool init();
 	void release();
 
-	void render();
+	void draw();
 };

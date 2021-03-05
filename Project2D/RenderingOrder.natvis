@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name ="RenderingOrder">
+    <DisplayString>{{ size={currentNodeSize} }}</DisplayString>
+  <Expand>
+    <ArrayItems>
+      <Size>currentNodeSize</Size>
+      <ValuePointer>nodes</ValuePointer>
+    </ArrayItems>
+  </Expand>
+  </Type>
+</AutoVisualizer>

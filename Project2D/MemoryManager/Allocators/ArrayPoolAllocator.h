@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 class Heap;
 
 class ArrayPoolAllocator final {
@@ -21,6 +23,17 @@ public:
 
 	ArrayPoolAllocator& operator=(const ArrayPoolAllocator&) = delete;
 	ArrayPoolAllocator& operator=(ArrayPoolAllocator&& allocator);
+	void* operator[](size_t index);
+
+	template <typename T>
+	T& getElement(size_t index) {
+		return *(T*)((uint8_t*)(buckets) + index * bucketSize);
+	}
+
+	template <typename T>
+	const T& getElement(size_t index) const {
+		return *(T*)((uint8_t*)(buckets) + index * bucketSize);
+	}
 
 	bool init(Heap* heap, size_t bucketSize, size_t bucketsNum);
 	void release();

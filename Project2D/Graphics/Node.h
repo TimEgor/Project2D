@@ -21,6 +21,7 @@ private:
 public:
 	Node(Transform &transform) : parentNode(nullptr), handler(nullptr), transform(transform) {}
 
+	NodeHandler* getHandler() { return handler; }
 	NodeID getID() const;
 
 	void addChild(Node* node);

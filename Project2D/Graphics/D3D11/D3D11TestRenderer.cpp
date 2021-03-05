@@ -117,7 +117,7 @@ void D3D11TestRenderer::prepareProjTransformMatrix(DirectX::XMMATRIX& projTransf
     projTransform = DirectX::XMMatrixOrthographicOffCenterLH(-x, x, -y, y, 0.0f, 1000.0f);
 }
 
-void D3D11TestRenderer::render() {
+void D3D11TestRenderer::draw() {
     D3D11& d3d11 = D3D11::get();
 
     ID3D11Device* device = d3d11.getDevice();

@@ -10,6 +10,8 @@
 
 #define NODES_ALLOCATOR_SIZE 4096
 
+class Level;
+
 class Scene final {
 	typedef PoolAllocatorVector<PoolAllocator> Allocators;
 
@@ -19,14 +21,18 @@ private:
 	Allocators nodeAllocators;
 	Allocators transformAllocators;
 
+	Level* level;
+
 	Transform& createTransform(NodeID id);
 	void deleteTransform(TransformID id);
+
+	void deleteChildrenNodes(Node* node);
 
 public:
 	Scene() = default;
 	~Scene() { release(); }
 
-	bool init();
+	bool init(Level* level);
 	void release();
 
 	Node* createNode(NodeID id);
@@ -34,4 +40,5 @@ public:
 	void deleteNode(Node* node);
 
 	Node* getNode(NodeID id);
+	Transform* getTransform(TransformID id);
 };

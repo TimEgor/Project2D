@@ -187,6 +187,9 @@
     <ClCompile Include="MemoryManager\Allocators\ArrayPoolAllocator.cpp">
       <Filter>MemoryManager\Allocators</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\RenderingOrder.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -369,5 +372,16 @@
     <ClInclude Include="EntityManager\EntityManagerTypes.h">
       <Filter>EntityManager</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\RenderingOrder.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderingData.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="RenderingOrder.natvis">
+      <Filter>Graphics</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>

@@ -42,6 +42,7 @@ SpriteRendererEntityComponent* EntityComponentManager::createSpriteRendererEntit
         std::forward_as_tuple(nextEntityComponentID, newComponent, allocationInfo.allocatorID, level));
 
     ++nextEntityComponentID;
+    ++counters[SpriteRendererEntityComponentType];
 
     return newComponent;
 }
@@ -79,4 +80,22 @@ EntityComponent* EntityComponentManager::getEntityComponent(EntityComponentID id
     }
 
     return findIter->second.getComponent();
+}
+
+const EntityComponentManager::Allocators* EntityComponentManager::getEntityComponents(EntityComponentType type) const {
+    auto allocatorTypeIter = allocators.find(type);
+    if (allocatorTypeIter != allocators.end()) {
+        return &allocatorTypeIter->second;
+    }
+
+    return nullptr;
+}
+
+size_t EntityComponentManager::getEntityComponentsNum(EntityComponentType type) const {
+    auto counterTypeIter = counters.find(type);
+    if (counterTypeIter != counters.end()) {
+        return counterTypeIter->second;
+    }
+
+    return 0;
 }

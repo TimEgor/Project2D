@@ -18,6 +18,7 @@ class EntityComponentManager final {
 private:
 	std::unordered_map<EntityComponentID, EntityComponentHandler> components;
 	std::unordered_map<EntityComponentType, Allocators> allocators;
+	std::unordered_map<EntityComponentType, size_t> counters;
 
 	Level* level;
 
@@ -38,4 +39,7 @@ public:
 	void deleteEntityComponent(EntityComponent* component);
 
 	EntityComponent* getEntityComponent(EntityComponentID id);
+	const Allocators* getEntityComponents(EntityComponentType type) const;
+
+	size_t getEntityComponentsNum(EntityComponentType type) const;
 };

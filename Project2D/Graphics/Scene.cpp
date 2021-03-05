@@ -1,8 +1,9 @@
 #include "Scene.h"
 
 #include <MemoryManager/MemoryManager.h>
+#include <BaseGameLogic/Level.h>
 
-bool Scene::init() {
+bool Scene::init(Level* level) {
     nodes.reserve(NODES_ALLOCATOR_SIZE);
     if (!nodeAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Node), NODES_ALLOCATOR_SIZE)) {
         release();
@@ -46,6 +47,15 @@ void Scene::deleteTransform(TransformID id) {
     }
 }
 
+void Scene::deleteChildrenNodes(Node* node) {
+    auto childrens = node->getChildren();
+    for (auto child : childrens) {
+        NodeID childID = child->getID();
+        level->deleteEntityWithoutNode(childID);
+        deleteNode(childID);
+    }
+}
+
 Node* Scene::createNode(NodeID id) {
     size_t oldAllocatorCount = nodeAllocators.size();
 
@@ -66,16 +76,17 @@ Node* Scene::createNode(NodeID id) {
 }
 
 void Scene::deleteNode(NodeID id) {
-    auto findIter = nodes.find(id);
-    if (findIter != nodes.end()) {
-        NodeHandler& handler = findIter->second;
+    auto nodeIter = nodes.find(id);
+    if (nodeIter != nodes.end()) {
+        NodeHandler& handler = nodeIter->second;
         Node* node = &handler.getNode();
 
-        deleteTransform(id);
+        deleteTransform(nodeIter->first);
+        deleteChildrenNodes(node);
 
         nodeAllocators.deallocate(handler.getNodeAllocatorID(), node);
 
-        nodes.erase(findIter);
+        nodes.erase(nodeIter);
     }
 }
 
@@ -90,4 +101,13 @@ Node* Scene::getNode(NodeID id) {
     }
 
     return &(findIter->second.getNode());
+}
+
+Transform* Scene::getTransform(TransformID id) {
+    auto findIter = transforms.find(id);
+    if (findIter == transforms.end()) {
+        return nullptr;
+    }
+
+    return &(findIter->second.getTransform());
 }
