@@ -10,6 +10,8 @@ bool EntityManager::init(Level* currentLevel) {
     }
 
     level = currentLevel;
+
+    return true;
 }
 
 void EntityManager::release() {

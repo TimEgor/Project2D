@@ -218,6 +218,7 @@
     <ClCompile Include="ResourceManager\ResourceReference.cpp" />
     <ClCompile Include="ResourceManager\Zip\ZipFile.cpp" />
     <ClCompile Include="ResourceManager\Zip\ZipFileSystem.cpp" />
+    <ClCompile Include="UserInterfaces\Input.cpp" />
     <ClCompile Include="UserInterfaces\UserInterfaces.cpp" />
     <ClCompile Include="Utilities\HashFunction\CRC32.cpp" />
     <ClCompile Include="Utilities\HashFunction\SpookyV2.cpp" />
@@ -281,6 +282,7 @@
     <ClInclude Include="ResourceManager\ResourceType.h" />
     <ClInclude Include="ResourceManager\Zip\ZipFile.h" />
     <ClInclude Include="ResourceManager\Zip\ZipFileSystem.h" />
+    <ClInclude Include="UserInterfaces\Input.h" />
     <ClInclude Include="UserInterfaces\UserInterfaces.h" />
     <ClInclude Include="Utilities\HashFunction\CRC32.h" />
     <ClInclude Include="Utilities\HashFunction\SpookyV2.h" />

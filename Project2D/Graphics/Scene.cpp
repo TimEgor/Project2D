@@ -14,6 +14,8 @@ bool Scene::init(Level* level) {
         release();
         return false;
     }
+
+    return true;
 }
 
 void Scene::release() {

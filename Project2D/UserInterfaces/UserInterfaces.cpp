@@ -1,11 +1,44 @@
 #include "UserInterfaces.h"
 
+#include <UserInterfaces/Input.h>
+
+UserInterfaces::UserInterfaces() :
+    mainWindow(0), input(nullptr) {}
+
 UserInterfaces& UserInterfaces::get() {
     static UserInterfaces uniqueUserInterfaces;
     return uniqueUserInterfaces;
 }
 
 bool UserInterfaces::init() {
+    if (!initMainWindow()) {
+        release();
+        return false;
+    }
+
+    input = new Input();
+    if (!input->init()) {
+        release();
+        return false;
+    }
+
+    return true;
+}
+
+void UserInterfaces::release() {
+    if (mainWindow) {
+        DestroyWindow(mainWindow);
+        mainWindow = NULL;
+    }
+
+    if (input) {
+        input->release();
+        delete input;
+        input = nullptr;
+    }
+}
+
+bool UserInterfaces::initMainWindow() {
     HINSTANCE instance = GetModuleHandle(0);
 
     WNDCLASS wndClass;
@@ -31,13 +64,6 @@ bool UserInterfaces::init() {
     UpdateWindow(mainWindow);
 
     return true;
-}
-
-void UserInterfaces::release() {
-    if (mainWindow) {
-        DestroyWindow(mainWindow);
-        mainWindow = NULL;
-    }
 }
 
 LRESULT UserInterfaces::wndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {

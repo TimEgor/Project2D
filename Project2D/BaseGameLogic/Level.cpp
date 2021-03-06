@@ -45,21 +45,25 @@ bool Level::init() {
 
 void Level::release() {
     if (entityManager) {
+        entityManager->release();
         delete entityManager;
         entityManager = nullptr;
     }
 
     if (entityComponentManager) {
+        entityComponentManager->release();
         delete entityComponentManager;
         entityComponentManager = nullptr;
     }
 
     if (scene) {
+        scene->release();
         delete scene;
         scene = nullptr;
     }
 
     if (renderingOrder) {
+        renderingOrder->release();
         delete renderingOrder;
         renderingOrder = nullptr;
     }
@@ -81,7 +85,7 @@ void Level::deleteEntity(Entity* entity) {
 
 void Level::deleteEntity(EntityID id) {
     Entity* entity = entityManager->getEntity(id);
-    deleteEntity(id);
+    deleteEntity(entity);
 }
 
 EntityComponent* Level::createEntityComponent(EntityComponentType type, Entity* parent) {
