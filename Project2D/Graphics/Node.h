@@ -18,8 +18,10 @@ private:
 
 	Transform& transform;
 
+	void notifyTransformChildren();
+
 public:
-	Node(Transform &transform) : parentNode(nullptr), handler(nullptr), transform(transform) {}
+	Node(Transform& transform);
 
 	NodeHandler* getHandler() { return handler; }
 	NodeID getID() const;
@@ -32,6 +34,27 @@ public:
 	Node* getParent() { return parentNode; }
 
 	Node* getChild(NodeID id);
+
+	float getPositionX() const;
+	float getPositionY() const;
+	void setPositionX(float X);
+	void setPositionY(float Y);
+
+	float getScaleX() const;
+	float getScaleY() const;
+	void setScaleX(float X);
+	void setScaleY(float Y);
+
+	float getRotation() const;
+	void setRotation(float rot);
+
+	uint16_t getDepth() const;
+	void setDepth(uint16_t dph);
+
+	bool isTransformDirty() const;
+	void markTransformDirty();
+
+	void updateTransform();
 
 	Transform& getTransform() { return transform; }
 

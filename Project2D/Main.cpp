@@ -55,7 +55,9 @@ int main() {
 	std::chrono::duration<float> deltaClockTime;
 	float deltaTime;
 
-	MSG msg{0};
+	float time = 0.0f;
+
+	MSG msg{ 0 };
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, userInterfaces.getMainWindow(), 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
@@ -68,15 +70,19 @@ int main() {
 
 		input->update();
 
+		entity1Transform->setPositionX(2.0f * std::sinf(time));
+		entity1Transform->setPositionY(2.0f * std::cosf(time));
+		time += deltaTime;
+
 		//Logic
 
-		if (input->isKeyDown(KeysMap::RightArrow)) {
-			entity1Transform->setPositionX(entity1Transform->getPositionX() + 0.5f * deltaTime);
-		}
+		//if (input->isKeyDown(KeysMap::RightArrow)) {
+		//	entity1Transform->setPositionX(entity1Transform->getPositionX() + 0.5f * deltaTime);
+		//}
 
-		if (input->isKeyDown(KeysMap::LeftArrow)) {
-			entity1Transform->setPositionX(entity1Transform->getPositionX() - 0.5f * deltaTime);
-		}
+		//if (input->isKeyDown(KeysMap::LeftArrow)) {
+		//	entity1Transform->setPositionX(entity1Transform->getPositionX() - 0.5f * deltaTime);
+		//}
 
 		//Rendering
 		RenderingData renderingData = level->getRenderingData();

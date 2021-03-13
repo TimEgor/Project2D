@@ -17,6 +17,11 @@ void RenderingOrder::release() {
         nodes = nullptr;
     }
 
+    if (transforms) {
+        heap->deallocate(transforms);
+        transforms = nullptr;
+    }
+
     currentNodeSize = 0;
     allocatedNodesSize = 0;
 }
@@ -42,18 +47,35 @@ const RenderingOrderNode& RenderingOrder::operator[](size_t index) const {
 void RenderingOrder::preReSize(size_t size) {
     if (!nodes) {
         nodes = (RenderingOrderNode*)(heap->allocate(size * sizeof(RenderingOrderNode)));
-        allocatedNodesSize = size;
     }
     else {
         if (allocatedNodesSize < size) {
             heap->reallocate(nodes, size * sizeof(RenderingOrderNode));
-            allocatedNodesSize = size;
         }
+    }
+
+    if (!transforms) {
+        transforms = (TransformMatrix*)(heap->allocate(size * sizeof(TransformMatrix)));
+    }
+    else {
+        if (allocatedNodesSize < size) {
+            heap->reallocate(transforms, size * sizeof(TransformMatrix));
+        }
+    }
+
+    if (allocatedNodesSize < size) {
+        allocatedNodesSize = size;
     }
 }
 
-void RenderingOrder::pushNode(const RenderingOrderNode& node) {
-    memcpy_s(nodes + currentNodeSize, sizeof(RenderingOrderNode), &node, sizeof(RenderingOrderNode));
+void RenderingOrder::pushNode(EntityID entityID, ResourceReference materialResource, ResourceReference spriteResource, const TransformMatrix* transform) {
+    RenderingOrderNode* node = new (nodes + currentNodeSize) RenderingOrderNode();
+    node->entityID = entityID;
+    node->materialResource = materialResource;
+    node->spriteResource = spriteResource;
+    node->transform = transforms + currentNodeSize;
+
+    memcpy_s(transforms + currentNodeSize, sizeof(TransformMatrix), transform, sizeof(TransformMatrix));
     ++currentNodeSize;
 }
 

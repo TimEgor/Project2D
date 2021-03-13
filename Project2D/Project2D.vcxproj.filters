@@ -193,6 +193,9 @@
     <ClCompile Include="UserInterfaces\Input.cpp">
       <Filter>UserInterfaces</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Transform.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">

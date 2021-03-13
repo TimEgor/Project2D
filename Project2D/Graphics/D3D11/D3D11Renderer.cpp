@@ -188,11 +188,7 @@ void D3D11Renderer::draw(RenderingData data) {
             changeSprite(node.spriteResource, deviceContext);
         }
 
-        Transform* transform = scene->getTransform(node.entityID);
-
-        DirectX::XMMATRIX worldTransform = DirectX::XMMatrixTranslation(transform->getPositionX(), transform->getPositionY(), transform->getDepth());
-        DirectX::XMMATRIX scaleTransform = DirectX::XMMatrixScaling(transform->getScaleX(), transform->getScaleY(), 1.0f);
-        worldTransform = DirectX::XMMatrixMultiply(scaleTransform, worldTransform);
+        TransformMatrix worldTransform = *node.transform;
 
         PerObjectTransforms* mappedTransforms;
         D3D11_MAPPED_SUBRESOURCE mappedSubresource{};

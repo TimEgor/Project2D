@@ -35,6 +35,8 @@ public:
 	LevelID getID() const { return levelID; }
 
 	Entity* createEntity();
+	void createEntity(Entity* parent);
+	void createEntity(EntityID parentID);
 	void deleteEntity(Entity* entity);
 	void deleteEntity(EntityID id);
 

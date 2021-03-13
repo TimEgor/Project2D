@@ -20,6 +20,7 @@ private:
 	std::unordered_map<TransformID, TransformHandler> transforms;
 	Allocators nodeAllocators;
 	Allocators transformAllocators;
+	Allocators worldTransformsMatrixAllocators;
 
 	Level* level;
 

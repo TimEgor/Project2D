@@ -2,18 +2,24 @@
 
 #include <ResourceManager/ResourceReference.h>
 #include <EntityManager/EntityManagerTypes.h>
+#include <Graphics/Transform.h>
 
 #include <MemoryManager/Heap.h>
 
 struct RenderingOrderNode final {
 	ResourceReference materialResource;
 	ResourceReference spriteResource;
+	TransformMatrix* transform;
 	EntityID entityID;
+
+	RenderingOrderNode() : materialResource(nullptr), spriteResource(nullptr),
+		transform(nullptr), entityID(0) {}
 };
 
 class RenderingOrder final {
 private:
 	RenderingOrderNode* nodes;
+	TransformMatrix* transforms;
 
 	Heap* heap;
 
@@ -35,7 +41,7 @@ public:
 	void clear();
 
 	void preReSize(size_t size);
-	void pushNode(const RenderingOrderNode& node);
+	void pushNode(EntityID entityID, ResourceReference materialResource, ResourceReference spriteResource, const TransformMatrix* transform);
 
 	void sort();
 

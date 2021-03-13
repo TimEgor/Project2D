@@ -173,13 +173,16 @@ RenderingData Level::getRenderingData() {
                 for (size_t componentIndex = 0; componentIndex < allocatorSize; ++componentIndex) {
                     const SpriteRendererEntityComponent& component = allocator.getElement<SpriteRendererEntityComponent>(componentIndex);
 
-                    RenderingOrderNode node;
-                    node.entityID = component.getParentID();
-                    node.materialResource = component.getMaterialResource();
-                    node.spriteResource = component.getSpriteResource();
+                    ResourceReference spriteResource = component.getSpriteResource();
+                    if (!spriteResource.isNull()) {
+                        EntityID id = component.getParentID();
 
-                    if (!node.spriteResource.isNull()) {
-                        renderingOrder->pushNode(node);
+                        Node* node = scene->getNode(id);
+                        node->updateTransform();
+
+                        TransformMatrix* worldTransform = node->getTransform().getWorldTransformMatrix();
+
+                        renderingOrder->pushNode(id, component.getMaterialResource(), spriteResource, worldTransform);
                     }
                 }
             }
