@@ -96,10 +96,12 @@ float Node::getPositionY() const {
 
 void Node::setPositionX(float X) {
 	transform.setPositionX(X);
+	notifyTransformChildren();
 }
 
 void Node::setPositionY(float Y) {
 	transform.setPositionY(Y);
+	notifyTransformChildren();
 }
 
 float Node::getScaleX() const {
@@ -112,10 +114,12 @@ float Node::getScaleY() const {
 
 void Node::setScaleX(float X) {
 	transform.setScaleX(X);
+	notifyTransformChildren();
 }
 
 void Node::setScaleY(float Y) {
 	transform.setScaleY(Y);
+	notifyTransformChildren();
 }
 
 float Node::getRotation() const {
@@ -124,6 +128,7 @@ float Node::getRotation() const {
 
 void Node::setRotation(float rot) {
 	transform.setRotation(rot);
+	notifyTransformChildren();
 }
 
 uint16_t Node::getDepth() const {

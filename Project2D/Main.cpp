@@ -30,9 +30,10 @@ int main() {
 
 	LevelManager& levelManager = LevelManager::get();
 	Level* level = levelManager.createLevel();
+	Scene* scene = level->getScene();
 
 	Entity* entity1 = level->createEntity();
-	Entity* entity2 = level->createEntity();
+	Entity* entity2 = level->createEntity(entity1);
 	Entity* entity3 = level->createEntity();
 
 	ResourceReference spriteResourceRef = resourceManager.getResourceFromArchive("testTexture.png");
@@ -40,10 +41,12 @@ int main() {
 	SpriteRendererEntityComponent* spriteComponent1 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity1));
 	spriteComponent1->setSpriteResource(spriteResourceRef);
 
-	//SpriteRendererEntityComponent* spriteComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity2));
-	//spriteComponent2->setSpriteResource(spriteResourceRef);
+	SpriteRendererEntityComponent* spriteComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity2));
+	spriteComponent2->setSpriteResource(spriteResourceRef);
 
-	Transform* entity1Transform = level->getScene()->getTransform(entity1->getID());
+	Node* node1 = scene->getNode(entity1->getID());
+	Node* node2 = scene->getNode(entity2->getID());
+	node2->setPositionX(1.0f);
 
 	Input* input = userInterfaces.getInput();
 	//
@@ -70,8 +73,11 @@ int main() {
 
 		input->update();
 
-		entity1Transform->setPositionX(2.0f * std::sinf(time));
-		entity1Transform->setPositionY(2.0f * std::cosf(time));
+		node1->setPositionX(2.0f * std::sinf(time));
+		node1->setPositionY(2.0f * std::cosf(time));
+
+		node1->setRotation(node1->getRotation() + 10.0f * deltaTime);
+
 		time += deltaTime;
 
 		//Logic

@@ -76,6 +76,17 @@ Entity* Level::createEntity() {
     return entity;
 }
 
+Entity* Level::createEntity(Entity* parent) {
+    return createEntity(parent->getID());
+}
+
+Entity* Level::createEntity(EntityID parentID) {
+    Entity* entity = entityManager->createEntity();
+    scene->createNode(entity->getID(), parentID);
+
+    return entity;
+}
+
 void Level::deleteEntity(Entity* entity) {
     deleteEntityComponentsFromEntity(entity);
 

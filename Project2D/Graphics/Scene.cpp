@@ -87,6 +87,26 @@ Node* Scene::createNode(NodeID id) {
     return newNode;
 }
 
+Node* Scene::createNode(NodeID id, NodeID parentID) {
+    Node* newNode = nullptr;
+
+    auto nodeIter = nodes.find(parentID);
+    if (nodeIter != nodes.end()) {
+        NodeHandler& handler = nodeIter->second;
+        Node* parentNode = handler.getNode();
+
+        newNode = createNode(id);
+
+        parentNode->addChild(newNode);
+    }
+
+    return newNode;
+}
+
+Node* Scene::createNode(NodeID id, Node* parent) {
+    return createNode(id, parent->getID());
+}
+
 void Scene::deleteNode(NodeID id) {
     auto nodeIter = nodes.find(id);
     if (nodeIter != nodes.end()) {

@@ -40,24 +40,24 @@ void Transform::updateWorldTransformMatrix(const TransformMatrix* parentTransfor
 	assert(parentTransform);
 
 	TransformMatrix translatingMatrix = DirectX::XMMatrixTranslation(posX, posY, (float)(depth));
-	TransformMatrix rotationMatrix = DirectX::XMMatrixRotationZ(rotation);
+	TransformMatrix rotationMatrix = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(rotation));
 	TransformMatrix scalingMatrix = DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f);
 
 	rotationMatrix = DirectX::XMMatrixMultiply(scalingMatrix, rotationMatrix);
 	translatingMatrix = DirectX::XMMatrixMultiply(rotationMatrix, translatingMatrix);
 
-	*worldTransformation = DirectX::XMMatrixMultiply(*parentTransform, translatingMatrix);
+	*worldTransformation = DirectX::XMMatrixMultiply(translatingMatrix, *parentTransform);
 
 	isDirty = false;
 }
 
 void Transform::updateWorldTransformMatrix() {
-	*worldTransformation = DirectX::XMMatrixTranslation(posX, posY, (float)(depth));
-	TransformMatrix rotationMatrix = DirectX::XMMatrixRotationZ(rotation);
+	TransformMatrix translatingMatrix = DirectX::XMMatrixTranslation(posX, posY, (float)(depth));
+	TransformMatrix rotationMatrix = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(rotation));
 	TransformMatrix scalingMatrix = DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f);
 
 	rotationMatrix = DirectX::XMMatrixMultiply(scalingMatrix, rotationMatrix);
-	*worldTransformation = DirectX::XMMatrixMultiply(rotationMatrix, *worldTransformation);
+	*worldTransformation = DirectX::XMMatrixMultiply(rotationMatrix, translatingMatrix);
 
 	isDirty = false;
 }

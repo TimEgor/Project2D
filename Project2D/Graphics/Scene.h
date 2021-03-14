@@ -37,6 +37,8 @@ public:
 	void release();
 
 	Node* createNode(NodeID id);
+	Node* createNode(NodeID id, NodeID parentID);
+	Node* createNode(NodeID id, Node* parent);
 	void deleteNode(NodeID id);
 	void deleteNode(Node* node);
 
