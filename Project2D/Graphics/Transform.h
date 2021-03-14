@@ -2,10 +2,9 @@
 
 #include <DirectXMath.h>
 
-typedef DirectX::XMMATRIX TransformMatrix;
-
 #include <cstdint>
 
+typedef DirectX::XMFLOAT4X4 TransformMatrix;
 typedef uint32_t TransformID;
 
 class Transform final {
@@ -18,6 +17,8 @@ private:
 	uint16_t depth;
 
 	bool isDirty;
+
+	void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix);
 
 public:
 	Transform(TransformMatrix* worldTransformationMatrix) :

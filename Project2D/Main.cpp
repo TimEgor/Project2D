@@ -47,6 +47,8 @@ int main() {
 	Node* node1 = scene->getNode(entity1->getID());
 	Node* node2 = scene->getNode(entity2->getID());
 	node2->setPositionX(1.0f);
+	node2->setScaleX(0.5f);
+	node2->setScaleY(0.5f);
 
 	Input* input = userInterfaces.getInput();
 	//
@@ -77,6 +79,7 @@ int main() {
 		node1->setPositionY(2.0f * std::cosf(time));
 
 		node1->setRotation(node1->getRotation() + 10.0f * deltaTime);
+		node2->setRotation(node2->getRotation() + 15.0f * deltaTime);
 
 		time += deltaTime;
 

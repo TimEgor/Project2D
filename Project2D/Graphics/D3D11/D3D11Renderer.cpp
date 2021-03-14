@@ -164,10 +164,10 @@ void D3D11Renderer::draw(RenderingData data) {
 
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-    DirectX::XMMATRIX viewTransform;
-    prepareViewTransformMatrix(viewTransform);
-    DirectX::XMMATRIX projTransform;
-    prepareProjTransformMatrix(projTransform);
+    DirectX::XMMATRIX viewTransformMatrix;
+    prepareViewTransformMatrix(viewTransformMatrix);
+    DirectX::XMMATRIX projTransformMatrix;
+    prepareProjTransformMatrix(projTransformMatrix);
 
     float clearVal[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
     deviceContext->ClearRenderTargetView(renderTargetView, clearVal);
@@ -188,16 +188,16 @@ void D3D11Renderer::draw(RenderingData data) {
             changeSprite(node.spriteResource, deviceContext);
         }
 
-        TransformMatrix worldTransform = *node.transform;
+        DirectX::XMMATRIX worldTransformMatrix = DirectX::XMLoadFloat4x4(node.transform);
 
         PerObjectTransforms* mappedTransforms;
         D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
         deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
 
         mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
-        mappedTransforms->worldTransformMatrix = DirectX::XMMatrixTranspose(worldTransform);
-        mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransform);
-        mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransform);
+        mappedTransforms->worldTransformMatrix = DirectX::XMMatrixTranspose(worldTransformMatrix);
+        mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransformMatrix);
+        mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransformMatrix);
 
         deviceContext->Unmap(perObjectTransformBuffer, 0);
 

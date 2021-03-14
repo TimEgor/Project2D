@@ -1,7 +1,5 @@
 #include "Transform.h"
 
-#include <DirectXMath.h>
-
 void Transform::setPositionX(float X) {
 	posX = X;
 	isDirty = true;
@@ -36,28 +34,33 @@ void Transform::markDirty() {
 	isDirty = true;
 }
 
+void Transform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) {
+	DirectX::XMMATRIX translatingMatrix = DirectX::XMMatrixTranslation(posX, posY, (float)(depth));
+	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(rotation));
+	DirectX::XMMATRIX scalingMatrix = DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f);
+
+	rotationMatrix = DirectX::XMMatrixMultiply(scalingMatrix, rotationMatrix);
+	matrix = DirectX::XMMatrixMultiply(rotationMatrix, translatingMatrix);
+}
+
 void Transform::updateWorldTransformMatrix(const TransformMatrix* parentTransform) {
 	assert(parentTransform);
 
-	TransformMatrix translatingMatrix = DirectX::XMMatrixTranslation(posX, posY, (float)(depth));
-	TransformMatrix rotationMatrix = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(rotation));
-	TransformMatrix scalingMatrix = DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f);
+	DirectX::XMMATRIX transformMatrix;
+	calculateLocalTransfomMatrix(transformMatrix);
 
-	rotationMatrix = DirectX::XMMatrixMultiply(scalingMatrix, rotationMatrix);
-	translatingMatrix = DirectX::XMMatrixMultiply(rotationMatrix, translatingMatrix);
+	DirectX::XMMATRIX parent = DirectX::XMLoadFloat4x4(parentTransform);
 
-	*worldTransformation = DirectX::XMMatrixMultiply(translatingMatrix, *parentTransform);
+	transformMatrix = DirectX::XMMatrixMultiply(transformMatrix, parent);
+	DirectX::XMStoreFloat4x4(worldTransformation, transformMatrix);
 
 	isDirty = false;
 }
 
 void Transform::updateWorldTransformMatrix() {
-	TransformMatrix translatingMatrix = DirectX::XMMatrixTranslation(posX, posY, (float)(depth));
-	TransformMatrix rotationMatrix = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(rotation));
-	TransformMatrix scalingMatrix = DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f);
-
-	rotationMatrix = DirectX::XMMatrixMultiply(scalingMatrix, rotationMatrix);
-	*worldTransformation = DirectX::XMMatrixMultiply(rotationMatrix, translatingMatrix);
+	DirectX::XMMATRIX transformMatrix;
+	calculateLocalTransfomMatrix(transformMatrix);
+	DirectX::XMStoreFloat4x4(worldTransformation, transformMatrix);
 
 	isDirty = false;
 }
