@@ -42,5 +42,5 @@ public:
 	bool init();
 	void release();
 
-	void draw(RenderingData data);
+	void draw(SceneSpaceRenderingData data);
 };

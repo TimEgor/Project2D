@@ -5,7 +5,6 @@
 #include <Graphics/D3D11/Resources/D3D11ShaderResource.h>
 #include <Graphics/D3D11/Resources/D3D11TextureResource.h>
 #include <Graphics/D3D11/D3D11Verteces.h>
-#include <Graphics/Scene.h>
 #include <ResourceManager/ResourceManager.h>
 
 D3D11Renderer::D3D11Renderer() : renderTargetView(nullptr),
@@ -140,7 +139,7 @@ void D3D11Renderer::changeSprite(ResourceReference spriteResource, ID3D11DeviceC
     currentSpriteID = spriteResource.getResourceID();
 }
 
-void D3D11Renderer::draw(RenderingData data) {
+void D3D11Renderer::draw(SceneSpaceRenderingData data) {
     D3D11& d3d11 = D3D11::get();
 
     ID3D11Device* device = d3d11.getDevice();
@@ -172,8 +171,6 @@ void D3D11Renderer::draw(RenderingData data) {
     float clearVal[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
     deviceContext->ClearRenderTargetView(renderTargetView, clearVal);
     deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
-    Scene* scene = data.getScene();
 
     RenderingOrder* order = data.getRedneringOrder();
     size_t orderSize = order->size();

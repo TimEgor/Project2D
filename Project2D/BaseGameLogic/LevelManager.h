@@ -1,27 +1,27 @@
 #pragma once
 
-#include <BaseGameLogic/Level.h>
+#include <BaseGameLogic/GameSpace.h>
 #include <ResourceManager/ResourceName.h>
 
 #include <unordered_map>
 
 class LevelManager final {
 private:
-	std::unordered_map<LevelID, Level> levels;
+	std::unordered_map<GameSpaceID, SceneGameSpace> levels;
 
-	Level* currentLevel;
-	LevelID nextLevelID;
+	SceneGameSpace* currentLevel;
+	GameSpaceID nextLevelID;
 
 	LevelManager() : currentLevel(nullptr), nextLevelID(1) {}
 
 public:
 	static LevelManager& get();
 
-	Level* getCurrentLevel();
+	SceneGameSpace* getCurrentLevel();
 
-	Level* createLevel();
+	SceneGameSpace* createLevel();
 	//Level& loadLevel(const ResourceName& levelName);
 
-	void changeCurrentLevel(LevelID levelID);
-	void changeCurrentLevel(Level* level);
+	void changeCurrentLevel(GameSpaceID levelID);
+	void changeCurrentLevel(SceneGameSpace* level);
 };

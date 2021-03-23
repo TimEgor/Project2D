@@ -4,9 +4,9 @@
 #include <BaseGameLogic/LevelManager.h>
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
+#include <Graphics/NodeManager.h>
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/D3D11/D3D11TestRenderer.h>
-#include <Graphics/Scene.h>
 
 #include <chrono>
 
@@ -29,8 +29,8 @@ int main() {
 	//
 
 	LevelManager& levelManager = LevelManager::get();
-	Level* level = levelManager.createLevel();
-	Scene* scene = level->getScene();
+	SceneGameSpace* level = levelManager.createLevel();
+	SceneNodeManager* levelNodeManager = level->getNodeManager();
 
 	Entity* entity1 = level->createEntity();
 	Entity* entity2 = level->createEntity(entity1);
@@ -44,8 +44,8 @@ int main() {
 	SpriteRendererEntityComponent* spriteComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity2));
 	spriteComponent2->setSpriteResource(spriteResourceRef);
 
-	Node* node1 = scene->getNode(entity1->getID());
-	Node* node2 = scene->getNode(entity2->getID());
+	SceneNodeManager::NodeType* node1 = levelNodeManager->getNode(entity1->getID());
+	SceneNodeManager::NodeType* node2 = levelNodeManager->getNode(entity2->getID());
 	node2->setPositionX(1.0f);
 	node2->setScaleX(0.5f);
 	node2->setScaleY(0.5f);
@@ -83,18 +83,8 @@ int main() {
 
 		time += deltaTime;
 
-		//Logic
-
-		//if (input->isKeyDown(KeysMap::RightArrow)) {
-		//	entity1Transform->setPositionX(entity1Transform->getPositionX() + 0.5f * deltaTime);
-		//}
-
-		//if (input->isKeyDown(KeysMap::LeftArrow)) {
-		//	entity1Transform->setPositionX(entity1Transform->getPositionX() - 0.5f * deltaTime);
-		//}
-
 		//Rendering
-		RenderingData renderingData = level->getRenderingData();
+		SceneSpaceRenderingData renderingData = level->getRenderingData();
 		d3d11Renderer.draw(renderingData);
 
 		lastFrameStartTime = currentTime;

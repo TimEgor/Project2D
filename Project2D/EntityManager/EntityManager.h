@@ -8,7 +8,7 @@
 
 #define ENTITIES_ALLOCATOR_SIZE 4096
 
-class Level;
+class BaseGameSpace;
 
 class EntityManager final {
 	typedef PoolAllocatorVector<PoolAllocator> Allocators;
@@ -17,7 +17,7 @@ private:
 	std::unordered_map<EntityID, EntityHandler> entities;
 	Allocators allocators;
 
-	Level* level;
+	BaseGameSpace* level;
 
 	EntityID nextEntityID;
 
@@ -25,7 +25,7 @@ public:
 	EntityManager() : nextEntityID(1) {}
 	~EntityManager() { release(); }
 
-	bool init(Level* level);
+	bool init(BaseGameSpace* level);
 	void release();
 
 	Entity* createEntity();

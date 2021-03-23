@@ -5,6 +5,7 @@
 
 #include <atomic>
 
+#pragma region CustomProperties
 //
 //	CustomProperties
 //
@@ -53,6 +54,8 @@ public:
 	CustomShaderPropertiesReference getVertexShaderProperties() { return vertexShaderProperties; }
 	CustomShaderPropertiesReference getPixelShaderProperties() { return pixelShaderProperties; }
 };
+#pragma endregion
+
 
 //
 //	SpriteRenderer

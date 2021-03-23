@@ -8,17 +8,17 @@
 
 typedef uint32_t EntityID;
 
-class Level;
+class BaseGameSpace;
 
 class EntityHandler final {
 private:
 	Entity* entity;
-	Level* level;
+	BaseGameSpace* level;
 	AllocatorID allocatorID;
 	EntityID id;
 
 public:
-	EntityHandler(EntityID id, Entity* entity, size_t entityAllocatorID, Level* level)
+	EntityHandler(EntityID id, Entity* entity, size_t entityAllocatorID, BaseGameSpace* level)
 		: entity(entity), level(level), allocatorID(entityAllocatorID), id(id) {
 		entity->handler = this;
 	}

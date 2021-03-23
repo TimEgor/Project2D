@@ -2,7 +2,7 @@
 
 #include <MemoryManager/MemoryManager.h>
 
-bool EntityManager::init(Level* currentLevel) {
+bool EntityManager::init(BaseGameSpace* currentLevel) {
     entities.reserve(ENTITIES_ALLOCATOR_SIZE);
     if (!allocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Entity), ENTITIES_ALLOCATOR_SIZE)) {
         release();

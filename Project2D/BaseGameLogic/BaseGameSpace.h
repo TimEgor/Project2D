@@ -2,43 +2,40 @@
 
 #include <EntityManager/EntityManagerTypes.h>
 #include <EntityManager/EntityComponentType.h>
-#include <Graphics/RenderingData.h>
-
 #include <cstdint>
+
+typedef uint32_t GameSpaceID;
 
 class EntityManager;
 class EntityComponentManager;
-class Scene;
+class RenderingOrder;
 
-typedef uint32_t LevelID;
-
-class Level final {
-private:
+class BaseGameSpace {
+protected:
 	EntityManager* entityManager;
 	EntityComponentManager* entityComponentManager;
-	Scene* scene;
 
 	RenderingOrder* renderingOrder;
 
-	LevelID levelID;
+	GameSpaceID spaceID;
 
 	void deleteEntityComponentsFromEntity(Entity* entity);
 
 public:
-	Level(LevelID levelID) : entityManager(nullptr), entityComponentManager(nullptr), scene(nullptr), levelID(levelID) {}
-	Level(const Level&) = delete;
-	~Level() { release(); }
+	BaseGameSpace(GameSpaceID spaceID) : entityManager(nullptr), entityComponentManager(nullptr), renderingOrder(nullptr), spaceID(spaceID) {}
+	BaseGameSpace(const BaseGameSpace&) = delete;
+	virtual ~BaseGameSpace() {}
 
-	bool init();
-	void release();
+	virtual bool init();
+	virtual void release();
 
-	LevelID getID() const { return levelID; }
+	GameSpaceID getID() const { return spaceID; }
 
-	Entity* createEntity();
-	Entity* createEntity(Entity* parent);
-	Entity* createEntity(EntityID parentID);
-	void deleteEntity(Entity* entity);
-	void deleteEntity(EntityID id);
+	virtual Entity* createEntity() = 0;
+	virtual Entity* createEntity(Entity* parent) = 0;
+	virtual Entity* createEntity(EntityID parentID) = 0;
+	virtual void deleteEntity(Entity* entity) = 0;
+	virtual void deleteEntity(EntityID id) = 0;
 
 	EntityComponent* createEntityComponent(EntityComponentType type, Entity* parent);
 	EntityComponent* createEntityComponent(EntityComponentType type, EntityID parentID);
@@ -46,14 +43,11 @@ public:
 	void deleteEntityComponent(EntityComponentID id);
 	void removeEntityComponentsFromEntity(Entity* entity);
 	void removeEntityComponentsFromEntity(EntityID id);
-
+ 
 	//using for deleting children nodes
 	void deleteEntityWithoutNode(Entity* entity);
 	void deleteEntityWithoutNode(EntityID id);
 
-	RenderingData getRenderingData();
-
 	EntityManager* getEntityManager() { return entityManager; }
 	EntityComponentManager* getEntityComponentManager() { return entityComponentManager; }
-	Scene* getScene() { return scene; }
 };

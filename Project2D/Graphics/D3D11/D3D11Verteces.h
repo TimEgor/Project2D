@@ -8,3 +8,10 @@ struct D3D11SpriteVertex final {
 
 	static const D3D11_INPUT_ELEMENT_DESC desc[2];
 };
+
+struct D3D11FontSpriteVertex final {
+	float posX, posY;
+	uint16_t texX, texY;
+
+	static const D3D11_INPUT_ELEMENT_DESC desc[2];
+};

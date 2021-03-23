@@ -9,7 +9,7 @@
 
 #define ENTITIES_COMPONENTS_ALLOCATOR_SIZE 4096
 
-class Level;
+class BaseGameSpace;
 class SpriteRendererEntityComponent;
 
 class EntityComponentManager final {
@@ -20,7 +20,7 @@ private:
 	std::unordered_map<EntityComponentType, Allocators> allocators;
 	std::unordered_map<EntityComponentType, size_t> counters;
 
-	Level* level;
+	BaseGameSpace* level;
 
 	EntityComponentID nextEntityComponentID;
 
@@ -30,8 +30,11 @@ public:
 	EntityComponentManager() : nextEntityComponentID(1) {}
 	~EntityComponentManager() { release(); }
 
-	bool init(Level* level);
+	bool init(BaseGameSpace* level);
 	void release();
+
+	template <typename EntityType>
+	EntityType* createEntityComponent();
 
 	SpriteRendererEntityComponent* createSpriteRendererEntityComponent();
 
@@ -43,3 +46,13 @@ public:
 
 	size_t getEntityComponentsNum(EntityComponentType type) const;
 };
+
+template<typename EntityType>
+inline EntityType* EntityComponentManager::createEntityComponent() {
+	return nullptr;
+}
+
+template <>
+inline SpriteRendererEntityComponent* EntityComponentManager::createEntityComponent<SpriteRendererEntityComponent>() {
+	return createSpriteRendererEntityComponent();
+}

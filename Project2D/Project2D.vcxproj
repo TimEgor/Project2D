@@ -178,17 +178,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseGameLogic\Level.cpp" />
+    <ClCompile Include="BaseGameLogic\BaseGameSpace.cpp" />
     <ClCompile Include="BaseGameLogic\LevelManager.cpp" />
     <ClCompile Include="EntityManager\Entity.cpp" />
     <ClCompile Include="EntityManager\EntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
+    <ClCompile Include="Graphics\CanvasNode.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Sprite.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11TestRenderer.cpp" />
+    <ClCompile Include="Graphics\D3D11\D3D11TextRenderer.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Verteces.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResource.cpp" />
@@ -199,8 +201,10 @@
     <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\WICTextureLoader11.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
+    <ClCompile Include="Graphics\CanvasTransform.cpp" />
     <ClCompile Include="Graphics\RenderingOrder.cpp" />
-    <ClCompile Include="Graphics\Scene.cpp" />
+    <ClCompile Include="Graphics\SceneNode.cpp" />
+    <ClCompile Include="Graphics\SceneTransform.cpp" />
     <ClCompile Include="Graphics\Transform.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MemoryManager\Allocators\AllocatorsUtilities.cpp" />
@@ -228,7 +232,8 @@
     <ClCompile Include="Utilities\XML_TypesReader\XML_TypesReader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseGameLogic\Level.h" />
+    <ClInclude Include="BaseGameLogic\BaseGameSpace.h" />
+    <ClInclude Include="BaseGameLogic\GameSpace.h" />
     <ClInclude Include="BaseGameLogic\LevelManager.h" />
     <ClInclude Include="EntityManager\Entity.h" />
     <ClInclude Include="EntityManager\EntityComponent.h" />
@@ -239,10 +244,12 @@
     <ClInclude Include="EntityManager\EntityHandler.h" />
     <ClInclude Include="EntityManager\EntityManager.h" />
     <ClInclude Include="EntityManager\EntityManagerTypes.h" />
+    <ClInclude Include="Graphics\CanvasNode.h" />
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Sprite.h" />
     <ClInclude Include="Graphics\D3D11\D3D11TestRenderer.h" />
+    <ClInclude Include="Graphics\D3D11\D3D11TextRenderer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Verteces.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResource.h" />
@@ -254,9 +261,12 @@
     <ClInclude Include="Graphics\D3D11\WICTextureLoader11.h" />
     <ClInclude Include="Graphics\Node.h" />
     <ClInclude Include="Graphics\NodeHandler.h" />
+    <ClInclude Include="Graphics\CanvasTransform.h" />
     <ClInclude Include="Graphics\RenderingData.h" />
     <ClInclude Include="Graphics\RenderingOrder.h" />
-    <ClInclude Include="Graphics\Scene.h" />
+    <ClInclude Include="Graphics\NodeManager.h" />
+    <ClInclude Include="Graphics\SceneNode.h" />
+    <ClInclude Include="Graphics\SceneTransform.h" />
     <ClInclude Include="Graphics\Transform.h" />
     <ClInclude Include="Graphics\TransformHandler.h" />
     <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h" />

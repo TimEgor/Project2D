@@ -1,11 +1,13 @@
 #include "Node.h"
 
 #include <Graphics/NodeHandler.h>
-#include <Graphics/Scene.h>
+#include <Graphics/NodeManager.h>
 #include <Graphics/Transform.h>
 #include <BaseGameLogic/LevelManager.h>
 
 #include <cassert>
+
+Node::~Node() {}
 
 void Node::addChild(Node* node) {
 	assert(node->parentNode == nullptr);
@@ -60,9 +62,9 @@ void Node::notifyTransformChildren() {
 	}
 }
 
-Node::Node(Transform& transform)
+Node::Node(Transform* transform)
 	: parentNode(nullptr), handler(nullptr), transform(transform) {
-	transform.markDirty();
+	transform->markDirty();
 }
 
 NodeID Node::getID() const {
@@ -86,76 +88,23 @@ Node* Node::getChild(NodeID id) {
 	return *findIter;
 }
 
-float Node::getPositionX() const {
-	return transform.getPositionX();
-}
-
-float Node::getPositionY() const {
-	return transform.getPositionY();
-}
-
-void Node::setPositionX(float X) {
-	transform.setPositionX(X);
-	notifyTransformChildren();
-}
-
-void Node::setPositionY(float Y) {
-	transform.setPositionY(Y);
-	notifyTransformChildren();
-}
-
-float Node::getScaleX() const {
-	return transform.getScaleX();
-}
-
-float Node::getScaleY() const {
-	return transform.getScaleY();
-}
-
-void Node::setScaleX(float X) {
-	transform.setScaleX(X);
-	notifyTransformChildren();
-}
-
-void Node::setScaleY(float Y) {
-	transform.setScaleY(Y);
-	notifyTransformChildren();
-}
-
-float Node::getRotation() const {
-	return transform.getRotation();
-}
-
-void Node::setRotation(float rot) {
-	transform.setRotation(rot);
-	notifyTransformChildren();
-}
-
-uint16_t Node::getDepth() const {
-	return transform.getDepth();
-}
-
-void Node::setDepth(uint16_t dph) {
-	transform.setDepth(dph);
-}
-
 bool Node::isTransformDirty() const {
-	return transform.isMatrixDirty();
+	return transform->isMatrixDirty();
 }
 
 void Node::markTransformDirty() {
-	transform.markDirty();
+	transform->markDirty();
 	notifyTransformChildren();
 }
 
 void Node::updateTransform() {
-	if (transform.isMatrixDirty()) {
+	if (transform->isMatrixDirty()) {
 		if (parentNode) {
 			parentNode->updateTransform();
-			transform.updateWorldTransformMatrix(parentNode->transform.getWorldTransformMatrix());
+			transform->updateWorldTransformMatrix(parentNode->transform->getWorldTransformMatrix());
 		}
 		else {
-			transform.updateWorldTransformMatrix();
+			transform->updateWorldTransformMatrix();
 		}
 	}
 }

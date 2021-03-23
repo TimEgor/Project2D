@@ -121,16 +121,10 @@
     <ClCompile Include="EntityManager\EntityComponentManager.cpp">
       <Filter>EntityManager</Filter>
     </ClCompile>
-    <ClCompile Include="BaseGameLogic\Level.cpp">
-      <Filter>BaseGameLogic</Filter>
-    </ClCompile>
     <ClCompile Include="BaseGameLogic\LevelManager.cpp">
       <Filter>BaseGameLogic</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Node.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Scene.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="UserInterfaces\UserInterfaces.cpp">
@@ -194,6 +188,24 @@
       <Filter>UserInterfaces</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Transform.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\D3D11TextRenderer.cpp">
+      <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\SceneTransform.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\SceneNode.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\CanvasNode.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGameLogic\BaseGameSpace.cpp">
+      <Filter>BaseGameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\CanvasTransform.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -297,14 +309,8 @@
     <ClInclude Include="Graphics\Node.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Scene.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Transform.h">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseGameLogic\Level.h">
-      <Filter>BaseGameLogic</Filter>
     </ClInclude>
     <ClInclude Include="BaseGameLogic\LevelManager.h">
       <Filter>BaseGameLogic</Filter>
@@ -386,6 +392,30 @@
     </ClInclude>
     <ClInclude Include="UserInterfaces\Input.h">
       <Filter>UserInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11TextRenderer.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\CanvasNode.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SceneNode.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SceneTransform.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\NodeManager.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGameLogic\BaseGameSpace.h">
+      <Filter>BaseGameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGameLogic\GameSpace.h">
+      <Filter>BaseGameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\CanvasTransform.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

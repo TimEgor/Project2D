@@ -1,19 +1,22 @@
 #pragma once
 
 #include <Graphics/RenderingOrder.h>
+#include <Graphics/NodeManager.h>
 
-class Scene;
-
-class RenderingData final {
+template <typename NodeManagerType>
+class NodeManagerRenderingData final {
 private:
-	Scene* scene;
 	RenderingOrder* order;
+	NodeManagerType* nodeManager;
 
 public:
-	RenderingData() : scene(nullptr), order(nullptr) {}
-	
-	void setScene(Scene* renderingScene) { scene = renderingScene; }
-	Scene* getScene() { return scene; }
+	NodeManagerRenderingData() : nodeManager(nullptr) {}
+
 	void setRenderingOrder(RenderingOrder* renderingOrder) { order = renderingOrder; }
 	RenderingOrder* getRedneringOrder() { return order; }
+	NodeManagerType* getNodeManager() { return nodeManager; }
+	void setNodeManager(NodeManagerType* manager) { nodeManager = manager; }
 };
+
+typedef NodeManagerRenderingData<CanvasNodeManager> CanvasSpaceRenderingData;
+typedef NodeManagerRenderingData<SceneNodeManager> SceneSpaceRenderingData;

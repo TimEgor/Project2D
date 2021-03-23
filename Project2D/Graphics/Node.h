@@ -8,20 +8,21 @@ class Transform;
 
 typedef uint32_t NodeID;
 
-class Node final {
+class Node {
 	friend NodeHandler;
 
-private:
+protected:
 	std::vector<Node*> children;
 	Node* parentNode;
 	NodeHandler* handler;
 
-	Transform& transform;
+	Transform* transform;
 
 	void notifyTransformChildren();
 
 public:
-	Node(Transform& transform);
+	Node(Transform* transform);
+	virtual ~Node() = 0;
 
 	NodeHandler* getHandler() { return handler; }
 	NodeID getID() const;
@@ -35,28 +36,12 @@ public:
 
 	Node* getChild(NodeID id);
 
-	float getPositionX() const;
-	float getPositionY() const;
-	void setPositionX(float X);
-	void setPositionY(float Y);
-
-	float getScaleX() const;
-	float getScaleY() const;
-	void setScaleX(float X);
-	void setScaleY(float Y);
-
-	float getRotation() const;
-	void setRotation(float rot);
-
-	uint16_t getDepth() const;
-	void setDepth(uint16_t dph);
-
 	bool isTransformDirty() const;
 	void markTransformDirty();
 
 	void updateTransform();
 
-	Transform& getTransform() { return transform; }
+	Transform* getTransform() { return transform; }
 
 	const std::vector<Node*>& getChildren();
 	void getChildren(std::vector<Node*> container);

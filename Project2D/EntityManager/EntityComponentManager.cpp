@@ -19,7 +19,7 @@ EntityComponentManager::Allocators::AllocationInfo EntityComponentManager::alloc
     return info;
 }
 
-bool EntityComponentManager::init(Level* level) {
+bool EntityComponentManager::init(BaseGameSpace* level) {
     Heap* defaultHeap = MemoryManager::get().getDefaultHeap();
 
     allocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);

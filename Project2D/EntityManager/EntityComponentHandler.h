@@ -5,17 +5,17 @@
 
 class EntityComponent;
 class EntityComponentManager;
-class Level;
+class BaseGameSpace;
 
 class EntityComponentHandler final {
 private:
 	EntityComponent* component;
-	Level* level;
+	BaseGameSpace* level;
 	AllocatorID allocatorID;
 	EntityComponentID id;
 
 public:
-	EntityComponentHandler(EntityComponentID id, EntityComponent *component, size_t componentAllocatorID, Level* level)
+	EntityComponentHandler(EntityComponentID id, EntityComponent *component, size_t componentAllocatorID, BaseGameSpace* level)
 		: component(component), level(level), allocatorID(componentAllocatorID), id(id) {
 		component->handler = this;
 	}

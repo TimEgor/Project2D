@@ -7,16 +7,16 @@ LevelManager& LevelManager::get() {
     return uniqueLevelManager;
 }
 
-Level* LevelManager::getCurrentLevel() {
+SceneGameSpace* LevelManager::getCurrentLevel() {
     assert(currentLevel && "CurrentLevel is empty !!!");
     return currentLevel;
 }
 
-Level* LevelManager::createLevel() {
+SceneGameSpace* LevelManager::createLevel() {
     auto newValPair = levels.emplace(std::piecewise_construct, std::forward_as_tuple(nextLevelID), std::forward_as_tuple(nextLevelID));
     ++nextLevelID;
 
-    Level* newLevel = &(newValPair.first->second);
+    SceneGameSpace* newLevel = &(newValPair.first->second);
     newLevel->init();
 
     if (!currentLevel) {
@@ -30,16 +30,16 @@ Level* LevelManager::createLevel() {
 //    // TODO: вставьте здесь оператор return
 //}
 
-void LevelManager::changeCurrentLevel(LevelID levelID) {
+void LevelManager::changeCurrentLevel(GameSpaceID levelID) {
     auto findLevelIter = levels.find(levelID);
     if (findLevelIter != levels.end()) {
         currentLevel = &(findLevelIter->second);
     }
     else {
-        assert(false && "The given LevelID isn't valid.");
+        assert(false && "The given level ID isn't valid.");
     }
 }
 
-void LevelManager::changeCurrentLevel(Level* level) {
+void LevelManager::changeCurrentLevel(SceneGameSpace* level) {
     currentLevel = level;
 }
