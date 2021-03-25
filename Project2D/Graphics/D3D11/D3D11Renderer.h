@@ -29,7 +29,8 @@ private:
 	D3D11Renderer();
 
 	void prepareViewTransformMatrix(DirectX::XMMATRIX& matrix);
-	void prepareProjTransformMatrix(DirectX::XMMATRIX& matrix);
+	void prepareSceneProjTransformMatrix(DirectX::XMMATRIX& matrix);
+	void prepareCanvasProjTransformMatrix(DirectX::XMMATRIX& matrix);
 
 	void changeMaterial(ResourceReference materialResource, ID3D11DeviceContext* context);
 	void changeSprite(ResourceReference spriteResource, ID3D11DeviceContext* context);
@@ -43,4 +44,5 @@ public:
 	void release();
 
 	void draw(SceneSpaceRenderingData data);
+	void draw(CanvasSpaceRenderingData data);
 };

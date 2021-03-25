@@ -9,9 +9,11 @@ private:
 	float depth;
 	float pivotX, pivotY;
 	float anchorX, anchorY;
-	uint16_t posX, posY;
+	float posX, posY;
+	float width, height;
 
-	virtual void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix);
+	virtual void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const Transform* parentTransform) override;
+	virtual void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) override;
 
 public:
 	CanvasTransform(TransformMatrix* worldTransformationMatrix) : Transform(worldTransformationMatrix),
@@ -19,7 +21,8 @@ public:
 		rotation(0.0f), depth(0.0f),
 		pivotX(0.5f), pivotY(0.5f),
 		anchorX(0.5f), anchorY(0.5f),
-		posX(0), posY(0) {}
+		posX(0.0f), posY(0.0f),
+		width(100.0f), height(100.0f) {}
 
 	float getScaleX() const { return scaleX; }
 	float getScaleY() const { return scaleY; }
@@ -42,8 +45,13 @@ public:
 	void setAnchorX(float X);
 	void setAnchorY(float Y);
 
-	uint16_t getPositionX() const { return posX; }
-	uint16_t getPositionY() const { return posY; }
-	void setPositionX(uint16_t X);
-	void setPositionY(uint16_t Y);
+	float getPositionX() const { return posX; }
+	float getPositionY() const { return posY; }
+	void setPositionX(float X);
+	void setPositionY(float Y);
+
+	float getWidth() const { return width; }
+	float getHeight() const { return height; }
+	void setWidth(float width);
+	void setHeight(float height);
 };

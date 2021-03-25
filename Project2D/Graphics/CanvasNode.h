@@ -32,10 +32,15 @@ public:
 	void setAnchorX(float X);
 	void setAnchorY(float Y);
 
-	uint16_t getPositionX() const;
-	uint16_t getPositionY() const;
-	void setPositionX(uint16_t X);
-	void setPositionY(uint16_t Y);
+	float getPositionX() const;
+	float getPositionY() const;
+	void setPositionX(float X);
+	void setPositionY(float Y);
+
+	float getWidth() const;
+	float getHeight() const;
+	void setWidth(float width);
+	void setHeight(float height);
 
 	CanvasTransform* getTransform();
 };

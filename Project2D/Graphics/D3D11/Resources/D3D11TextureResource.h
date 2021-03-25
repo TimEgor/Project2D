@@ -7,6 +7,7 @@ class D3D11TextureResource final : public Resource {
 private:
 	ID3D11Texture2D* texture;
 	ID3D11ShaderResourceView* shaderResourceView;
+	size_t width, height;
 
 public:
 	D3D11TextureResource(void* data, size_t dataSize);

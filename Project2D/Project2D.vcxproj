@@ -180,6 +180,7 @@
   <ItemGroup>
     <ClCompile Include="BaseGameLogic\BaseGameSpace.cpp" />
     <ClCompile Include="BaseGameLogic\LevelManager.cpp" />
+    <ClCompile Include="BaseGameLogic\UICanvasManager.cpp" />
     <ClCompile Include="EntityManager\Entity.cpp" />
     <ClCompile Include="EntityManager\EntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="BaseGameLogic\BaseGameSpace.h" />
     <ClInclude Include="BaseGameLogic\GameSpace.h" />
     <ClInclude Include="BaseGameLogic\LevelManager.h" />
+    <ClInclude Include="BaseGameLogic\UICanvasManager.h" />
     <ClInclude Include="EntityManager\Entity.h" />
     <ClInclude Include="EntityManager\EntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentHandler.h" />

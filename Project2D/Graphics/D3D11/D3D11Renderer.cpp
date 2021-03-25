@@ -45,7 +45,7 @@ bool D3D11Renderer::init() {
     device->CreateDepthStencilView(depthStencilBuffer, nullptr, &depthStencilView);
 
     D3D11_RASTERIZER_DESC rasterizerDesc{};
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
+    rasterizerDesc.CullMode = D3D11_CULL_NONE;
     rasterizerDesc.FillMode = D3D11_FILL_SOLID;
     rasterizerDesc.FrontCounterClockwise = false;
 
@@ -102,13 +102,13 @@ void D3D11Renderer::release() {
 }
 
 void D3D11Renderer::prepareViewTransformMatrix(DirectX::XMMATRIX& matrix) {
-    DirectX::XMVECTOR position{ 0.0f, 0.0f, -5.0f };
+    DirectX::XMVECTOR position{ 0.0f, 0.0f, -1.0f };
     DirectX::XMVECTOR direction{ 0.0f, 0.0f, 1.0f };
     DirectX::XMVECTOR up{ 0.0f, 1.0f, 0.0f };
     matrix = DirectX::XMMatrixLookToLH(position, direction, up);
 }
 
-void D3D11Renderer::prepareProjTransformMatrix(DirectX::XMMATRIX& matrix) {
+void D3D11Renderer::prepareSceneProjTransformMatrix(DirectX::XMMATRIX& matrix) {
     float ratio = atanf(45.0f / 2.0f) * 2.0f;
     float aspect = 1.0f;
     float z = 1.0f;
@@ -117,6 +117,11 @@ void D3D11Renderer::prepareProjTransformMatrix(DirectX::XMMATRIX& matrix) {
     float y = ratio * z * aspect;
 
     matrix = DirectX::XMMatrixOrthographicOffCenterLH(-x, x, -y, y, 0.0f, 1000.0f);
+}
+
+void D3D11Renderer::prepareCanvasProjTransformMatrix(DirectX::XMMATRIX& matrix) {
+    matrix = DirectX::XMMatrixOrthographicOffCenterLH(0.0f, 800.0f, -800.0f, 0.0f, 0.0f, 1000.0f);
+    //matrix = DirectX::XMMatrixOrthographicLH(800.0f, 800.0f, 0.0f, 1000.0f);
 }
 
 void D3D11Renderer::changeMaterial(ResourceReference materialResource, ID3D11DeviceContext* context) {
@@ -166,7 +171,7 @@ void D3D11Renderer::draw(SceneSpaceRenderingData data) {
     DirectX::XMMATRIX viewTransformMatrix;
     prepareViewTransformMatrix(viewTransformMatrix);
     DirectX::XMMATRIX projTransformMatrix;
-    prepareProjTransformMatrix(projTransformMatrix);
+    prepareSceneProjTransformMatrix(projTransformMatrix);
 
     float clearVal[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
     deviceContext->ClearRenderTargetView(renderTargetView, clearVal);
@@ -186,6 +191,77 @@ void D3D11Renderer::draw(SceneSpaceRenderingData data) {
         }
 
         DirectX::XMMATRIX worldTransformMatrix = DirectX::XMLoadFloat4x4(node.transform);
+
+        PerObjectTransforms* mappedTransforms;
+        D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
+        deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+
+        mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
+        mappedTransforms->worldTransformMatrix = DirectX::XMMatrixTranspose(worldTransformMatrix);
+        mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransformMatrix);
+        mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransformMatrix);
+
+        deviceContext->Unmap(perObjectTransformBuffer, 0);
+
+        deviceContext->DrawIndexed(d3d11Sprite.getIndecesNum(), 0, 0);
+    }
+
+    //swapChain->Present(0, 0);
+}
+
+void D3D11Renderer::draw(CanvasSpaceRenderingData data) {
+    D3D11& d3d11 = D3D11::get();
+
+    ID3D11Device* device = d3d11.getDevice();
+    ID3D11DeviceContext* deviceContext = d3d11.getDeviceContext();
+    IDXGISwapChain* swapChain = d3d11.getSwapChain();
+
+    D3D11Sprite& d3d11Sprite = D3D11Sprite::get();
+
+    deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+    deviceContext->RSSetState(rasterizerState);
+    deviceContext->RSSetViewports(1, &viewport);
+    deviceContext->PSSetSamplers(0, 1, &spriteSampler);
+    deviceContext->VSSetConstantBuffers(1, 1, &perObjectTransformBuffer);
+
+    ID3D11Buffer* vertecesBuffer = d3d11Sprite.getVertecesBuffer();
+    UINT strides = sizeof(D3D11SpriteVertex);
+    UINT offsets = 0;
+
+    deviceContext->IASetVertexBuffers(0, 1, &vertecesBuffer, &strides, &offsets);
+    deviceContext->IASetIndexBuffer(d3d11Sprite.getIndecesBuffer(), DXGI_FORMAT_R32_UINT, 0);
+
+    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+    DirectX::XMMATRIX viewTransformMatrix;
+    prepareViewTransformMatrix(viewTransformMatrix);
+    DirectX::XMMATRIX projTransformMatrix;
+    prepareCanvasProjTransformMatrix(projTransformMatrix);
+
+    float clearVal[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
+    //deviceContext->ClearRenderTargetView(renderTargetView, clearVal);
+    deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+    RenderingOrder* order = data.getRedneringOrder();
+    CanvasNodeManager* nodeManager = data.getNodeManager();
+    size_t orderSize = order->size();
+    for (size_t i = 0; i < orderSize; ++i) {
+        const RenderingOrderNode& node = (*order)[i];
+
+        if (node.materialResource.getResourceID() != currentMaterialID) {
+            changeMaterial(node.materialResource, deviceContext);
+        }
+
+        if (node.spriteResource.getResourceID() != currentSpriteID) {
+            changeSprite(node.spriteResource, deviceContext);
+        }
+
+        CanvasNode* canvasNode = nodeManager->getNode(node.entityID);
+
+        DirectX::XMMATRIX worldTransformMatrix = DirectX::XMLoadFloat4x4(node.transform);
+        worldTransformMatrix.r[0].m128_f32[0] *= canvasNode->getWidth();
+        worldTransformMatrix.r[1].m128_f32[1] *= canvasNode->getHeight();
+        worldTransformMatrix.r[3].m128_f32[1] *= -1.0f;
 
         PerObjectTransforms* mappedTransforms;
         D3D11_MAPPED_SUBRESOURCE mappedSubresource{};

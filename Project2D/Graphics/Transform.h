@@ -12,6 +12,7 @@ protected:
 	TransformMatrix* worldTransformation;
 	bool isDirty;
 
+	virtual void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const Transform* parentTransform) = 0;
 	virtual void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) = 0;
 
 public:
@@ -24,6 +25,6 @@ public:
 	void markDirty() { isDirty = true; }
 
 	TransformMatrix* getWorldTransformMatrix() { return worldTransformation; }
-	void updateWorldTransformMatrix(const TransformMatrix* parentTransform);
+	void updateWorldTransformMatrix(const Transform* parentTransform);
 	void updateWorldTransformMatrix();
 };

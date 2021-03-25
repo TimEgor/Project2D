@@ -5,11 +5,13 @@
 
 #include <unordered_map>
 
+typedef SceneGameSpace Level;
+
 class LevelManager final {
 private:
 	std::unordered_map<GameSpaceID, SceneGameSpace> levels;
 
-	SceneGameSpace* currentLevel;
+	Level* currentLevel;
 	GameSpaceID nextLevelID;
 
 	LevelManager() : currentLevel(nullptr), nextLevelID(1) {}
@@ -17,11 +19,11 @@ private:
 public:
 	static LevelManager& get();
 
-	SceneGameSpace* getCurrentLevel();
+	Level* getCurrentLevel();
 
-	SceneGameSpace* createLevel();
+	Level* createLevel();
 	//Level& loadLevel(const ResourceName& levelName);
 
 	void changeCurrentLevel(GameSpaceID levelID);
-	void changeCurrentLevel(SceneGameSpace* level);
+	void changeCurrentLevel(Level* level);
 };

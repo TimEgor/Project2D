@@ -9,7 +9,8 @@ private:
 	float rotation;
 	float depth;
 
-	void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix);
+	void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const Transform* parentTransform) override;
+	void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) override;
 
 public:
 	SceneTransform(TransformMatrix* worldTransformationMatrix) : Transform(worldTransformationMatrix),

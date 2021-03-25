@@ -2,6 +2,7 @@
 #include <UserInterfaces/UserInterfaces.h>
 #include <UserInterfaces/Input.h>
 #include <BaseGameLogic/LevelManager.h>
+#include <BaseGameLogic/UICanvasManager.h>
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <Graphics/NodeManager.h>
@@ -14,6 +15,8 @@ typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::milliseconds Millisecond;
 
 int main() {
+	// Init 
+
 	ResourceManager& resourceManager = ResourceManager::get();
 	resourceManager.init();
 
@@ -28,30 +31,50 @@ int main() {
 
 	//
 
-	LevelManager& levelManager = LevelManager::get();
-	SceneGameSpace* level = levelManager.createLevel();
-	SceneNodeManager* levelNodeManager = level->getNodeManager();
-
-	Entity* entity1 = level->createEntity();
-	Entity* entity2 = level->createEntity(entity1);
-	Entity* entity3 = level->createEntity();
-
 	ResourceReference spriteResourceRef = resourceManager.getResourceFromArchive("testTexture.png");
-
-	SpriteRendererEntityComponent* spriteComponent1 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity1));
-	spriteComponent1->setSpriteResource(spriteResourceRef);
-
-	SpriteRendererEntityComponent* spriteComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity2));
-	spriteComponent2->setSpriteResource(spriteResourceRef);
-
-	SceneNodeManager::NodeType* node1 = levelNodeManager->getNode(entity1->getID());
-	SceneNodeManager::NodeType* node2 = levelNodeManager->getNode(entity2->getID());
-	node2->setPositionX(1.0f);
-	node2->setScaleX(0.5f);
-	node2->setScaleY(0.5f);
-
 	Input* input = userInterfaces.getInput();
-	//
+
+	// Scene
+
+	LevelManager& levelManager = LevelManager::get();
+	Level* sceneSpace = levelManager.createLevel();
+	SceneNodeManager* sceneNodeManager = sceneSpace->getNodeManager();
+
+	Entity* sceneEntity1 = sceneSpace->createEntity();
+	Entity* sceneEntity2 = sceneSpace->createEntity(sceneEntity1);
+
+	SpriteRendererEntityComponent* sceneSpriteComponent1 = (SpriteRendererEntityComponent*)(sceneSpace->createEntityComponent(SpriteRendererEntityComponentType, sceneEntity1));
+	sceneSpriteComponent1->setSpriteResource(spriteResourceRef);
+
+	SpriteRendererEntityComponent* sceneSpriteComponent2 = (SpriteRendererEntityComponent*)(sceneSpace->createEntityComponent(SpriteRendererEntityComponentType, sceneEntity2));
+	sceneSpriteComponent2->setSpriteResource(spriteResourceRef);
+
+	SceneNodeManager::NodeType* sceneNode1 = sceneNodeManager->getNode(sceneEntity1->getID());
+	SceneNodeManager::NodeType* sceneNode2 = sceneNodeManager->getNode(sceneEntity2->getID());
+	sceneNode2->setPositionX(1.0f);
+	sceneNode2->setScaleX(0.5f);
+	sceneNode2->setScaleY(0.5f);
+
+	// UI
+
+	UICanvasManager& canvasManager = UICanvasManager::get();
+	UICanvas* canvas = canvasManager.createCanvas();
+	CanvasNodeManager* canvasNodeManager = canvas->getNodeManager();
+
+	Entity* uiEntity = canvas->createEntity(1);
+
+	SpriteRendererEntityComponent* uiSpriteComponent = (SpriteRendererEntityComponent*)(canvas->createEntityComponent(SpriteRendererEntityComponentType, uiEntity));
+	uiSpriteComponent->setSpriteResource(spriteResourceRef);
+
+	CanvasNode* uiNode = canvasNodeManager->getNode(uiEntity->getID());
+	uiNode->setPivotX(0.0f);
+	//uiNode->setPivotY(0.0f);
+	uiNode->setPositionY(400.0f);
+	uiNode->setPositionX(50.0f);
+	uiNode->setScaleX(2.0f);
+	uiNode->setScaleY(2.0f);
+
+	// Loop
 
 	Clock::time_point startTime = Clock::now();
 	Clock::time_point currentTime, lastFrameStartTime;
@@ -75,17 +98,20 @@ int main() {
 
 		input->update();
 
-		node1->setPositionX(2.0f * std::sinf(time));
-		node1->setPositionY(2.0f * std::cosf(time));
+		sceneNode1->setPositionX(2.0f * std::sinf(time));
+		sceneNode1->setPositionY(2.0f * std::cosf(time));
 
-		node1->setRotation(node1->getRotation() + 10.0f * deltaTime);
-		node2->setRotation(node2->getRotation() + 15.0f * deltaTime);
+		sceneNode1->setRotation(sceneNode1->getRotation() + 10.0f * deltaTime);
+		sceneNode2->setRotation(sceneNode2->getRotation() + 15.0f * deltaTime);
 
 		time += deltaTime;
 
 		//Rendering
-		SceneSpaceRenderingData renderingData = level->getRenderingData();
-		d3d11Renderer.draw(renderingData);
+		SceneSpaceRenderingData sceneRenderingData = sceneSpace->getRenderingData();
+		d3d11Renderer.draw(sceneRenderingData);
+
+		CanvasSpaceRenderingData canvasRenderingData = canvas->getRenderingData();
+		d3d11Renderer.draw(canvasRenderingData);
 
 		lastFrameStartTime = currentTime;
 		Millisecond frameTime = std::chrono::duration_cast<Millisecond>(Clock::now() - currentTime);

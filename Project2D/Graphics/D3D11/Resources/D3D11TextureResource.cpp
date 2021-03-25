@@ -7,6 +7,12 @@ D3D11TextureResource::D3D11TextureResource(void* data, size_t dataSize) {
 	ID3D11Device* device = D3D11::get().getDevice();
 
 	DirectX::CreateWICTextureFromMemory(device, (const uint8_t*)(data), dataSize, (ID3D11Resource**)(&texture), &shaderResourceView);
+
+	D3D11_TEXTURE2D_DESC textureDesc{};
+	texture->GetDesc(&textureDesc);
+
+	width = textureDesc.Width;
+	height = textureDesc.Height;
 }
 
 D3D11TextureResource::~D3D11TextureResource() {

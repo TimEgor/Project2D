@@ -101,7 +101,7 @@ void Node::updateTransform() {
 	if (transform->isMatrixDirty()) {
 		if (parentNode) {
 			parentNode->updateTransform();
-			transform->updateWorldTransformMatrix(parentNode->transform->getWorldTransformMatrix());
+			transform->updateWorldTransformMatrix(parentNode->transform);
 		}
 		else {
 			transform->updateWorldTransformMatrix();

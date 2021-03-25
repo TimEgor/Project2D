@@ -85,21 +85,39 @@ void CanvasNode::setAnchorY(float Y) {
     notifyTransformChildren();
 }
 
-uint16_t CanvasNode::getPositionX() const {
+float CanvasNode::getPositionX() const {
     return ((CanvasTransform*)(transform))->getPositionX();
 }
 
-uint16_t CanvasNode::getPositionY() const {
+float CanvasNode::getPositionY() const {
     return ((CanvasTransform*)(transform))->getPositionY();
 }
 
-void CanvasNode::setPositionX(uint16_t X) {
+void CanvasNode::setPositionX(float X) {
     ((CanvasTransform*)(transform))->setPositionX(X);
     notifyTransformChildren();
 }
 
-void CanvasNode::setPositionY(uint16_t Y) {
+void CanvasNode::setPositionY(float Y) {
     ((CanvasTransform*)(transform))->setPositionY(Y);
+    notifyTransformChildren();
+}
+
+float CanvasNode::getWidth() const {
+    return ((CanvasTransform*)(transform))->getWidth();
+}
+
+float CanvasNode::getHeight() const {
+    return ((CanvasTransform*)(transform))->getHeight();
+}
+
+void CanvasNode::setWidth(float width) {
+    ((CanvasTransform*)(transform))->setWidth(width);
+    notifyTransformChildren();
+}
+
+void CanvasNode::setHeight(float height) {
+    ((CanvasTransform*)(transform))->setHeight(height);
     notifyTransformChildren();
 }
 

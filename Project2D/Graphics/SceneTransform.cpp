@@ -30,6 +30,10 @@ void SceneTransform::setDepth(float dph) {
 	isDirty = true;
 }
 
+void SceneTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const Transform* parentTransform) {
+	calculateLocalTransfomMatrix(matrix);
+}
+
 void SceneTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) {
 	DirectX::XMMATRIX translatingMatrix = DirectX::XMMatrixTranslation(posX, posY, depth);
 	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(rotation));

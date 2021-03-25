@@ -121,9 +121,6 @@
     <ClCompile Include="EntityManager\EntityComponentManager.cpp">
       <Filter>EntityManager</Filter>
     </ClCompile>
-    <ClCompile Include="BaseGameLogic\LevelManager.cpp">
-      <Filter>BaseGameLogic</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Node.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -207,6 +204,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\CanvasTransform.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGameLogic\LevelManager.cpp">
+      <Filter>BaseGameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGameLogic\UICanvasManager.cpp">
+      <Filter>BaseGameLogic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -312,9 +315,6 @@
     <ClInclude Include="Graphics\Transform.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="BaseGameLogic\LevelManager.h">
-      <Filter>BaseGameLogic</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\NodeHandler.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -416,6 +416,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\CanvasTransform.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGameLogic\LevelManager.h">
+      <Filter>BaseGameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGameLogic\UICanvasManager.h">
+      <Filter>BaseGameLogic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
