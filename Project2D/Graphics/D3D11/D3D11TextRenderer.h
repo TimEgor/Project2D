@@ -5,6 +5,7 @@
 #include <ResourceManager/ResourceReference.h>
 
 #include <unordered_map>
+#include <cstdint>
 
 class D3D11TextRenderer final {
 	typedef uint16_t CharID;

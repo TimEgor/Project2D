@@ -43,6 +43,9 @@ public:
 	bool init();
 	void release();
 
+	void beginDrawing();
+	void endDrawing();
+
 	void draw(SceneSpaceRenderingData data);
 	void draw(CanvasSpaceRenderingData data);
 };

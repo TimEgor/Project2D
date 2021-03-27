@@ -107,11 +107,15 @@ int main() {
 		time += deltaTime;
 
 		//Rendering
+		d3d11Renderer.beginDrawing();
+
 		SceneSpaceRenderingData sceneRenderingData = sceneSpace->getRenderingData();
 		d3d11Renderer.draw(sceneRenderingData);
 
 		CanvasSpaceRenderingData canvasRenderingData = canvas->getRenderingData();
 		d3d11Renderer.draw(canvasRenderingData);
+
+		d3d11Renderer.endDrawing();
 
 		lastFrameStartTime = currentTime;
 		Millisecond frameTime = std::chrono::duration_cast<Millisecond>(Clock::now() - currentTime);
