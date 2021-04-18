@@ -11,7 +11,7 @@
 D3D11Renderer::D3D11Renderer() : renderTargetView(nullptr),
     depthStencilBuffer(nullptr), depthStencilView(nullptr),
     rasterizerState(nullptr),
-    perObjectTransformBuffer(nullptr), spriteSampler(nullptr) {}
+    perObjectTransformBuffer(nullptr), spriteSamplerState(nullptr) {}
 
 D3D11Renderer& D3D11Renderer::get() {
     static D3D11Renderer uniqueD3D11Renderer;
@@ -73,7 +73,21 @@ bool D3D11Renderer::init() {
     spriteSamplerDesc.MinLOD = -FLT_MAX;
     spriteSamplerDesc.MaxLOD = FLT_MAX;
 
-    device->CreateSamplerState(&spriteSamplerDesc, &spriteSampler);
+    device->CreateSamplerState(&spriteSamplerDesc, &spriteSamplerState);
+
+    D3D11_BLEND_DESC spriteBlendDesc{};
+    spriteBlendDesc.IndependentBlendEnable = true;
+    spriteBlendDesc.RenderTarget[0].BlendEnable = true;
+    spriteBlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    spriteBlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    spriteBlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    spriteBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    spriteBlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    spriteBlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    spriteBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    spriteBlendDesc.AlphaToCoverageEnable = false;
+
+    device->CreateBlendState(&spriteBlendDesc, &spriteBlendState);
 
     D3D11Sprite::get().init();
 
@@ -99,7 +113,7 @@ void D3D11Renderer::release() {
     D3D11ObjectRelease(rasterizerState);
 
     D3D11ObjectRelease(perObjectTransformBuffer);
-    D3D11ObjectRelease(spriteSampler);
+    D3D11ObjectRelease(spriteSamplerState);
 }
 
 void D3D11Renderer::prepareViewTransformMatrix(DirectX::XMMATRIX& matrix) {
@@ -149,10 +163,13 @@ void D3D11Renderer::draw(RenderingData data) {
 
     D3D11Sprite& d3d11Sprite = D3D11Sprite::get();
 
+    float blendFactor[4] = { 1.0f };
+
+    deviceContext->OMSetBlendState(spriteBlendState, blendFactor, 0xffffffff);
     deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
     deviceContext->RSSetState(rasterizerState);
     deviceContext->RSSetViewports(1, &viewport);
-    deviceContext->PSSetSamplers(0, 1, &spriteSampler);
+    deviceContext->PSSetSamplers(0, 1, &spriteSamplerState);
     deviceContext->VSSetConstantBuffers(1, 1, &perObjectTransformBuffer);
 
     ID3D11Buffer* vertecesBuffer = d3d11Sprite.getVertecesBuffer();

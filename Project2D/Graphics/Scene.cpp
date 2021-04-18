@@ -4,18 +4,29 @@
 #include <BaseGameLogic/Level.h>
 
 bool Scene::init(Level* level) {
-    nodes.reserve(NODES_ALLOCATOR_SIZE);
-    if (!nodeAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Node), NODES_ALLOCATOR_SIZE)) {
+    nodes.reserve(SCENE_NODES_ALLOCATOR_SIZE + CANVAS_NODES_ALLOCATOR_SIZE);
+    if (!sceneNodeAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(SceneNode), SCENE_NODES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
 
-    if (!transformAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Transform), NODES_ALLOCATOR_SIZE)) {
+    if (!canvasNodeAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(CanvasNode), CANVAS_NODES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
 
-    if (!worldTransformsMatrixAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(TransformMatrix), NODES_ALLOCATOR_SIZE)) {
+    if (!sceneTransformAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(SceneTransform), SCENE_NODES_ALLOCATOR_SIZE)) {
+        release();
+        return false;
+    }
+
+    if (!canvasTransformAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(CanvasTransform), CANVAS_NODES_ALLOCATOR_SIZE)) {
+        release();
+        return false;
+    }
+
+
+    if (!worldTransformsMatrixAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(TransformMatrix), SCENE_NODES_ALLOCATOR_SIZE + CANVAS_NODES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
@@ -25,25 +36,46 @@ bool Scene::init(Level* level) {
 
 void Scene::release() {
     nodes = std::unordered_map<NodeID, NodeHandler>();
-    nodeAllocators.release();
+    sceneNodeAllocators.release();
+    canvasNodeAllocators.release();
+    sceneTransformAllocators.release();
+    canvasTransformAllocators.release();
 }
 
-Transform& Scene::createTransform(NodeID id) {
-    size_t oldAllocatorCount = transformAllocators.size();
+SceneTransform* Scene::createSceneTransform(NodeID id) {
+    size_t oldAllocatorCount = sceneTransformAllocators.size();
 
-    Allocators::AllocationInfo transformAllocationInfo = transformAllocators.allocate();
+    Allocators::AllocationInfo transformAllocationInfo = sceneTransformAllocators.allocate();
     Allocators::AllocationInfo matrixAllocationInfo = worldTransformsMatrixAllocators.allocate();
     TransformMatrix* matrix = new (matrixAllocationInfo.allocationAddress) TransformMatrix();
-    Transform* newTransform = new (transformAllocationInfo.allocationAddress) Transform(matrix);
+    SceneTransform* newTransform = new (transformAllocationInfo.allocationAddress) SceneTransform(matrix);
 
-    size_t newAllocatorCount = transformAllocators.size();
+    size_t newAllocatorCount = sceneTransformAllocators.size();
     if (oldAllocatorCount < newAllocatorCount) {
-        transforms.reserve(newAllocatorCount * NODES_ALLOCATOR_SIZE);
+        transforms.reserve(newAllocatorCount * SCENE_NODES_ALLOCATOR_SIZE);
     }
 
     transforms.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, newTransform, transformAllocationInfo.allocatorID));
 
-    return *newTransform;
+    return newTransform;
+}
+
+CanvasTransform* Scene::createCanvasTransform(NodeID id) {
+    size_t oldAllocatorCount = canvasTransformAllocators.size();
+
+    Allocators::AllocationInfo transformAllocationInfo = canvasTransformAllocators.allocate();
+    Allocators::AllocationInfo matrixAllocationInfo = worldTransformsMatrixAllocators.allocate();
+    TransformMatrix* matrix = new (matrixAllocationInfo.allocationAddress) TransformMatrix();
+    CanvasTransform* newTransform = new (transformAllocationInfo.allocationAddress) CanvasTransform(matrix);
+
+    size_t newAllocatorCount = sceneTransformAllocators.size();
+    if (oldAllocatorCount < newAllocatorCount) {
+        transforms.reserve(newAllocatorCount * CANVAS_NODES_ALLOCATOR_SIZE);
+    }
+
+    transforms.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, newTransform, transformAllocationInfo.allocatorID));
+
+    return newTransform;
 }
 
 void Scene::deleteTransform(TransformID id) {
@@ -53,7 +85,13 @@ void Scene::deleteTransform(TransformID id) {
         Transform* transform = handler.getTransform();
 
         worldTransformsMatrixAllocators.deallocate(handler.getTransformAllocatorID(), transform->getWorldTransformMatrix());
-        transformAllocators.deallocate(handler.getTransformAllocatorID(), transform);
+
+        if (transform->getTransformType() == SceneTransformType) {
+            sceneTransformAllocators.deallocate(handler.getTransformAllocatorID(), transform);
+        }
+        else if (transform->getTransformType() == CanvasTransformType) {
+            canvasTransformAllocators.deallocate(handler.getTransformAllocatorID(), transform);
+        }
 
         transforms.erase(findIter);
     }
@@ -68,18 +106,18 @@ void Scene::deleteChildrenNodes(Node* node) {
     }
 }
 
-Node* Scene::createNode(NodeID id) {
-    size_t oldAllocatorCount = nodeAllocators.size();
+SceneNode* Scene::createSceneNode(NodeID id) {
+    size_t oldAllocatorCount = sceneNodeAllocators.size();
 
-    Allocators::AllocationInfo allocationInfo = nodeAllocators.allocate();
+    Allocators::AllocationInfo allocationInfo = sceneNodeAllocators.allocate();
 
-    Transform& transform = createTransform(id);
+    SceneTransform* transform = createSceneTransform(id);
 
-    Node* newNode = new (allocationInfo.allocationAddress) Node(transform);
+    SceneNode* newNode = new (allocationInfo.allocationAddress) SceneNode(transform);
 
-    size_t newAllocatorCount = nodeAllocators.size();
+    size_t newAllocatorCount = sceneNodeAllocators.size();
     if (oldAllocatorCount < newAllocatorCount) {
-        nodes.reserve(newAllocatorCount * NODES_ALLOCATOR_SIZE);
+        nodes.reserve(newAllocatorCount * SCENE_NODES_ALLOCATOR_SIZE);
     }
 
     nodes.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, newNode, allocationInfo.allocatorID));
@@ -87,15 +125,15 @@ Node* Scene::createNode(NodeID id) {
     return newNode;
 }
 
-Node* Scene::createNode(NodeID id, NodeID parentID) {
-    Node* newNode = nullptr;
+SceneNode* Scene::createSceneNode(NodeID id, NodeID parentID) {
+    SceneNode* newNode = nullptr;
 
     auto nodeIter = nodes.find(parentID);
     if (nodeIter != nodes.end()) {
         NodeHandler& handler = nodeIter->second;
         Node* parentNode = handler.getNode();
 
-        newNode = createNode(id);
+        newNode = createSceneNode(id);
 
         parentNode->addChild(newNode);
     }
@@ -103,8 +141,47 @@ Node* Scene::createNode(NodeID id, NodeID parentID) {
     return newNode;
 }
 
-Node* Scene::createNode(NodeID id, Node* parent) {
-    return createNode(id, parent->getID());
+SceneNode* Scene::createSceneNode(NodeID id, Node* parent) {
+    return createSceneNode(id, parent->getID());
+}
+
+CanvasNode* Scene::createCanvasNode(NodeID id) {
+    size_t oldAllocatorCount = sceneNodeAllocators.size();
+
+    Allocators::AllocationInfo allocationInfo = canvasNodeAllocators.allocate();
+
+    CanvasTransform* transform = createCanvasTransform(id);
+
+    CanvasNode* newNode = new (allocationInfo.allocationAddress) CanvasNode(transform);
+
+    size_t newAllocatorCount = canvasNodeAllocators.size();
+    if (oldAllocatorCount < newAllocatorCount) {
+        nodes.reserve(newAllocatorCount * CANVAS_NODES_ALLOCATOR_SIZE);
+    }
+
+    nodes.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id, newNode, allocationInfo.allocatorID));
+
+    return newNode;
+}
+
+CanvasNode* Scene::createCanvasNode(NodeID id, NodeID parentID) {
+    CanvasNode* newNode = nullptr;
+
+    auto nodeIter = nodes.find(parentID);
+    if (nodeIter != nodes.end()) {
+        NodeHandler& handler = nodeIter->second;
+        Node* parentNode = handler.getNode();
+
+        newNode = createCanvasNode(id);
+
+        parentNode->addChild(newNode);
+    }
+
+    return newNode;
+}
+
+CanvasNode* Scene::createCanvasNode(NodeID id, Node* parent) {
+    return createCanvasNode(id, parent->getID());
 }
 
 void Scene::deleteNode(NodeID id) {
@@ -116,7 +193,12 @@ void Scene::deleteNode(NodeID id) {
         deleteTransform(nodeIter->first);
         deleteChildrenNodes(node);
 
-        nodeAllocators.deallocate(handler.getNodeAllocatorID(), node);
+        if (node->getNodeType() == SceneNodeType) {
+            sceneNodeAllocators.deallocate(handler.getNodeAllocatorID(), node);
+        }
+        else if (node->getNodeType() == CanvasNodeType) {
+            canvasNodeAllocators.deallocate(handler.getNodeAllocatorID(), node);
+        }
 
         nodes.erase(nodeIter);
     }

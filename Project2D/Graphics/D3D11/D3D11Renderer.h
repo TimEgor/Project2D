@@ -21,7 +21,8 @@ private:
 	ID3D11RasterizerState* rasterizerState;
 
 	ID3D11Buffer* perObjectTransformBuffer;
-	ID3D11SamplerState* spriteSampler;
+	ID3D11SamplerState* spriteSamplerState;
+	ID3D11BlendState* spriteBlendState;
 
 	ResourceID currentMaterialID;
 	ResourceID currentSpriteID;

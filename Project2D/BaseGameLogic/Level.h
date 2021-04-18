@@ -34,9 +34,12 @@ public:
 
 	LevelID getID() const { return levelID; }
 
-	Entity* createEntity();
-	Entity* createEntity(Entity* parent);
-	Entity* createEntity(EntityID parentID);
+	Entity* createSceneEntity();
+	Entity* createSceneEntity(Entity* parent);
+	Entity* createSceneEntity(EntityID parentID);
+	Entity* createCanvasEntity();
+	Entity* createCanvasEntity(Entity* parent);
+	Entity* createCanvasEntity(EntityID parentID);
 	void deleteEntity(Entity* entity);
 	void deleteEntity(EntityID id);
 

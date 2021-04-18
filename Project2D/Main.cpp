@@ -4,6 +4,7 @@
 #include <BaseGameLogic/LevelManager.h>
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/D3D11/D3D11TestRenderer.h>
 #include <Graphics/Scene.h>
@@ -32,27 +33,42 @@ int main() {
 	Level* level = levelManager.createLevel();
 	Scene* scene = level->getScene();
 
-	Entity* entity1 = level->createEntity();
-	Entity* entity2 = level->createEntity(entity1);
-	Entity* entity3 = level->createEntity();
+	Input* input = userInterfaces.getInput();
 
 	ResourceReference spriteResourceRef = resourceManager.getResourceFromArchive("testTexture.png");
 
-	SpriteRendererEntityComponent* spriteComponent1 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity1));
-	spriteComponent1->setSpriteResource(spriteResourceRef);
+	//Scene
+	Entity* sceneEntity1 = level->createSceneEntity();
+	Entity* sceneEntity2 = level->createSceneEntity(sceneEntity1);
+	Entity* sceneEntity3 = level->createSceneEntity();
 
-	SpriteRendererEntityComponent* spriteComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity2));
-	spriteComponent2->setSpriteResource(spriteResourceRef);
+	SpriteRendererEntityComponent* spriteSceneComponent1 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, sceneEntity1));
+	spriteSceneComponent1->setSpriteResource(spriteResourceRef);
 
-	Node* node1 = scene->getNode(entity1->getID());
-	Node* node2 = scene->getNode(entity2->getID());
-	node2->setPositionX(1.0f);
+	SpriteRendererEntityComponent* spriteSceneComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, sceneEntity2));
+	spriteSceneComponent2->setSpriteResource(spriteResourceRef);
+
+	SceneNode* node1 = (SceneNode*)(scene->getNode(sceneEntity1->getID()));
+	SceneNode* node2 = (SceneNode*)(scene->getNode(sceneEntity2->getID()));
+	node2->setPositionX(0.5f);
 	node2->setScaleX(0.5f);
 	node2->setScaleY(0.5f);
+	
+	//Canvas
+	Entity* canvas = level->createCanvasEntity();
+	CanvasNode* canvasNode = (CanvasNode*)(scene->getNode(canvas->getID()));
+	canvasNode->setWidth(800.0f);
+	canvasNode->setHeight(800.0f);
 
-	Input* input = userInterfaces.getInput();
+	Entity* canvasEntity1 = level->createCanvasEntity(canvas);
+	CanvasSpriteRendererEntityComponent* spriteCanvasComponent1 = (CanvasSpriteRendererEntityComponent*)(level->createEntityComponent(CanvasSpriteRendererEntityComponentType, canvasEntity1));
+	spriteCanvasComponent1->setSpriteResource(spriteResourceRef);
+
+	CanvasNode* canvasNode1 = (CanvasNode*)(scene->getNode(canvasEntity1->getID()));
+	canvasNode1->setWidth(100.0f);
+	canvasNode1->setHeight(100.0f);
+
 	//
-
 	Clock::time_point startTime = Clock::now();
 	Clock::time_point currentTime, lastFrameStartTime;
 	lastFrameStartTime = startTime;
@@ -75,6 +91,7 @@ int main() {
 
 		input->update();
 
+		//Logic
 		node1->setPositionX(2.0f * std::sinf(time));
 		node1->setPositionY(2.0f * std::cosf(time));
 
@@ -82,16 +99,6 @@ int main() {
 		node2->setRotation(node2->getRotation() + 15.0f * deltaTime);
 
 		time += deltaTime;
-
-		//Logic
-
-		//if (input->isKeyDown(KeysMap::RightArrow)) {
-		//	entity1Transform->setPositionX(entity1Transform->getPositionX() + 0.5f * deltaTime);
-		//}
-
-		//if (input->isKeyDown(KeysMap::LeftArrow)) {
-		//	entity1Transform->setPositionX(entity1Transform->getPositionX() - 0.5f * deltaTime);
-		//}
 
 		//Rendering
 		RenderingData renderingData = level->getRenderingData();

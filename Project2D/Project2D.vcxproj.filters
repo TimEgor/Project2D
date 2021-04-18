@@ -52,6 +52,9 @@
     <Filter Include="Utilities\XML_TypeReader">
       <UniqueIdentifier>{ddbe4ee7-afd6-44a2-bd18-21e89518aadb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EntityManager\EntityComponents\Canvas">
+      <UniqueIdentifier>{4c324dd9-17af-4c5c-a4c2-d60fa8e4922d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MemoryManager\Heap.cpp">
@@ -195,6 +198,15 @@
     </ClCompile>
     <ClCompile Include="Graphics\Transform.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.cpp">
+      <Filter>EntityManager\EntityComponents\Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponentReference.cpp">
+      <Filter>EntityManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponentHandler.cpp">
+      <Filter>EntityManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -386,6 +398,15 @@
     </ClInclude>
     <ClInclude Include="UserInterfaces\Input.h">
       <Filter>UserInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.h">
+      <Filter>EntityManager\EntityComponents\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasEntityComponent.h">
+      <Filter>EntityManager\EntityComponents\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponentReference.h">
+      <Filter>EntityManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

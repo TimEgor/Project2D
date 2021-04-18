@@ -3,6 +3,7 @@
 #include <EntityManager/EntityComponentHandler.h>
 #include <MemoryManager/Allocators/PoolAllocatorVector.h>
 #include <MemoryManager/Allocators/ArrayPoolAllocator.h>
+#include <MemoryManager/Allocators/PoolAllocator.h>
 
 #include <unordered_map>
 #include <vector>
@@ -11,35 +12,47 @@
 
 class Level;
 class SpriteRendererEntityComponent;
+class CanvasSpriteRendererEntityComponent;
+class EntityComponentReferenceHandler;
+class EntityComponentReference;
 
 class EntityComponentManager final {
-	typedef PoolAllocatorVector<ArrayPoolAllocator> Allocators;
+	friend EntityComponentReference;
+	friend EntityComponentHandler;
+
+	typedef PoolAllocatorVector<ArrayPoolAllocator> ComponentAllocators;
+	typedef PoolAllocatorVector<PoolAllocator> ReferenceAllocators;
 
 private:
 	std::unordered_map<EntityComponentID, EntityComponentHandler> components;
-	std::unordered_map<EntityComponentType, Allocators> allocators;
+	std::unordered_map<EntityComponentType, ComponentAllocators> componentAllocators;
 	std::unordered_map<EntityComponentType, size_t> counters;
+	ReferenceAllocators referenceAllocators;
 
-	Level* level;
+	Level* level = nullptr;
 
-	EntityComponentID nextEntityComponentID;
+	EntityComponentID nextEntityComponentID = 1;
 
-	Allocators::AllocationInfo allocateComponent(EntityComponentType type);
+	ComponentAllocators::AllocationInfo allocateComponent(EntityComponentType type);
+
+	EntityComponentReferenceHandler* createReference(EntityComponentHandler* componentHandler);
+	void releaseReference(EntityComponentReferenceHandler* referenceHandler);
 
 public:
-	EntityComponentManager() : nextEntityComponentID(1) {}
+	EntityComponentManager() = default;
 	~EntityComponentManager() { release(); }
 
 	bool init(Level* level);
 	void release();
 
-	SpriteRendererEntityComponent* createSpriteRendererEntityComponent();
+	template <typename ComponentType>
+	ComponentType* createComponent(EntityComponentType type);
 
 	void deleteEntityComponent(EntityComponentID id);
 	void deleteEntityComponent(EntityComponent* component);
 
 	EntityComponent* getEntityComponent(EntityComponentID id);
-	const Allocators* getEntityComponents(EntityComponentType type) const;
+	const ComponentAllocators* getEntityComponents(EntityComponentType type) const;
 
 	size_t getEntityComponentsNum(EntityComponentType type) const;
 };

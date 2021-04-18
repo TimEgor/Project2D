@@ -3,13 +3,20 @@
 #include <MemoryManager/MemoryManager.h>
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/Canvas/CanvasEntityComponent.h>
+#include <EntityManager/EntityComponentReference.h>
 
 #include <cassert>
 
-EntityComponentManager::Allocators::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
-    Allocators& allocatorVec = allocators.at(type);
+template SpriteRendererEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
+template CanvasSpriteRendererEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
+template CanvasEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
+
+EntityComponentManager::ComponentAllocators::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
+    ComponentAllocators& allocatorVec = componentAllocators.at(type);
     size_t oldSize = allocatorVec.size();
-    Allocators::AllocationInfo info = allocatorVec.allocate();
+    ComponentAllocators::AllocationInfo info = allocatorVec.allocate();
     size_t newSize = allocatorVec.size();
 
     if (oldSize < newSize) {
@@ -19,30 +26,47 @@ EntityComponentManager::Allocators::AllocationInfo EntityComponentManager::alloc
     return info;
 }
 
+EntityComponentReferenceHandler* EntityComponentManager::createReference(EntityComponentHandler* componentHandler) {
+    ReferenceAllocators::AllocationInfo info = referenceAllocators.allocate();
+
+    EntityComponentReferenceHandler* referenceHandler = new (info.allocationAddress) EntityComponentReferenceHandler(componentHandler, level, info.allocatorID);
+
+    return referenceHandler;
+}
+
+void EntityComponentManager::releaseReference(EntityComponentReferenceHandler* referenceHandler) {
+    referenceAllocators.deallocate(referenceHandler->getAllocatorIndex(), referenceHandler);
+}
+
 bool EntityComponentManager::init(Level* level) {
     Heap* defaultHeap = MemoryManager::get().getDefaultHeap();
 
-    allocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+    componentAllocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+    componentAllocators[CanvasSpriteRendererEntityComponentType].init(defaultHeap, sizeof(CanvasSpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+    componentAllocators[CanvasEntityComponentType].init(defaultHeap, sizeof(CanvasEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+
+    referenceAllocators.init(defaultHeap, sizeof(EntityComponentReferenceHandler), 512);
 
     return true;
 }
 
 void EntityComponentManager::release() {
     components = std::unordered_map<EntityComponentID, EntityComponentHandler>();
-    for (auto& typeAllocators : allocators) {
+    for (auto& typeAllocators : componentAllocators) {
         typeAllocators.second.release();
     }
 }
 
-SpriteRendererEntityComponent* EntityComponentManager::createSpriteRendererEntityComponent() {
-    Allocators::AllocationInfo allocationInfo = allocateComponent(SpriteRendererEntityComponentType);
-    SpriteRendererEntityComponent* newComponent = new (allocationInfo.allocationAddress) SpriteRendererEntityComponent();
+template<typename ComponentType>
+inline ComponentType* EntityComponentManager::createComponent(EntityComponentType type) {
+    ComponentAllocators::AllocationInfo allocationInfo = allocateComponent(type);
+    ComponentType* newComponent = new (allocationInfo.allocationAddress) ComponentType();
 
     components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
         std::forward_as_tuple(nextEntityComponentID, newComponent, allocationInfo.allocatorID, level));
 
     ++nextEntityComponentID;
-    ++counters[SpriteRendererEntityComponentType];
+    ++counters[type];
 
     return newComponent;
 }
@@ -53,7 +77,7 @@ void EntityComponentManager::deleteEntityComponent(EntityComponentID id) {
         EntityComponentHandler& handler = findIter->second;
         EntityComponent* component = handler.getComponent();
 
-        Allocators& allocatorVec = allocators[component->getEntityComponentType()];
+        ComponentAllocators& allocatorVec = componentAllocators[component->getEntityComponentType()];
         size_t allocatorIndex = allocatorVec.getAllocatorIndexByID(handler.getComponentAllocatorID());
 
         ArrayPoolAllocator& allocator = allocatorVec[allocatorIndex];
@@ -82,9 +106,9 @@ EntityComponent* EntityComponentManager::getEntityComponent(EntityComponentID id
     return findIter->second.getComponent();
 }
 
-const EntityComponentManager::Allocators* EntityComponentManager::getEntityComponents(EntityComponentType type) const {
-    auto allocatorTypeIter = allocators.find(type);
-    if (allocatorTypeIter != allocators.end()) {
+const EntityComponentManager::ComponentAllocators* EntityComponentManager::getEntityComponents(EntityComponentType type) const {
+    auto allocatorTypeIter = componentAllocators.find(type);
+    if (allocatorTypeIter != componentAllocators.end()) {
         return &allocatorTypeIter->second;
     }
 

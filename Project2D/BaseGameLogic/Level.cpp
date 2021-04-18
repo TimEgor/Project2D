@@ -69,20 +69,38 @@ void Level::release() {
     }
 }
 
-Entity* Level::createEntity() {
+Entity* Level::createSceneEntity() {
     Entity* entity = entityManager->createEntity();
-    scene->createNode(entity->getID());
+    scene->createSceneNode(entity->getID());
 
     return entity;
 }
 
-Entity* Level::createEntity(Entity* parent) {
-    return createEntity(parent->getID());
+Entity* Level::createSceneEntity(Entity* parent) {
+    return createSceneEntity(parent->getID());
 }
 
-Entity* Level::createEntity(EntityID parentID) {
+Entity* Level::createSceneEntity(EntityID parentID) {
     Entity* entity = entityManager->createEntity();
-    scene->createNode(entity->getID(), parentID);
+    scene->createSceneNode(entity->getID(), parentID);
+
+    return entity;
+}
+
+Entity* Level::createCanvasEntity() {
+    Entity* entity = entityManager->createEntity();
+    scene->createCanvasNode(entity->getID());
+
+    return entity;
+}
+
+Entity* Level::createCanvasEntity(Entity* parent) {
+    return createCanvasEntity(parent->getID());
+}
+
+Entity* Level::createCanvasEntity(EntityID parentID) {
+    Entity* entity = entityManager->createEntity();
+    scene->createCanvasNode(entity->getID(), parentID);
 
     return entity;
 }
@@ -106,7 +124,13 @@ EntityComponent* Level::createEntityComponent(EntityComponentType type, Entity* 
 
     switch (type) {
     case SpriteRendererEntityComponentType:
-        component = (EntityComponent*)(entityComponentManager->createSpriteRendererEntityComponent());
+        component = (EntityComponent*)(entityComponentManager->createComponent<SpriteRendererEntityComponent>(type));
+        break;
+    case CanvasSpriteRendererEntityComponentType:
+        component = (EntityComponent*)(entityComponentManager->createComponent<CanvasSpriteRendererEntityComponent>(type));
+        break;
+    case CanvasEntityComponentType:
+        component = (EntityComponent*)(entityComponentManager->createComponent<CanvasEntityComponent>(type));
         break;
     default:
         break;
@@ -172,6 +196,7 @@ RenderingData Level::getRenderingData() {
     renderingOrder->clear();
 
     size_t spritesNum = entityComponentManager->getEntityComponentsNum(SpriteRendererEntityComponentType);
+    spritesNum += entityComponentManager->getEntityComponentsNum(CanvasSpriteRendererEntityComponentType);
     if (spritesNum != 0) {
         renderingOrder->preReSize(spritesNum);
 
@@ -191,7 +216,7 @@ RenderingData Level::getRenderingData() {
                         Node* node = scene->getNode(id);
                         node->updateTransform();
 
-                        TransformMatrix* worldTransform = node->getTransform().getWorldTransformMatrix();
+                        TransformMatrix* worldTransform = node->getTransform()->getWorldTransformMatrix();
 
                         renderingOrder->pushNode(id, component.getMaterialResource(), spriteResource, worldTransform);
                     }

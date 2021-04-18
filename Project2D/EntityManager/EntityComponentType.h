@@ -1,5 +1,11 @@
 #pragma once
 
+class SpriteRendererEntityComponent;
+class CanvasSpriteRendererEntityComponent;
+class CanvasEntityComponent;
+
 enum EntityComponentType {
-	SpriteRendererEntityComponentType
+	SpriteRendererEntityComponentType,
+	CanvasEntityComponentType,
+	CanvasSpriteRendererEntityComponentType
 };

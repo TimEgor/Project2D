@@ -37,7 +37,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
@@ -52,7 +52,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
@@ -182,7 +182,10 @@
     <ClCompile Include="BaseGameLogic\LevelManager.cpp" />
     <ClCompile Include="EntityManager\Entity.cpp" />
     <ClCompile Include="EntityManager\EntityComponent.cpp" />
+    <ClCompile Include="EntityManager\EntityComponentHandler.cpp" />
     <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
+    <ClCompile Include="EntityManager\EntityComponentReference.cpp" />
+    <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
@@ -234,6 +237,9 @@
     <ClInclude Include="EntityManager\EntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentHandler.h" />
     <ClInclude Include="EntityManager\EntityComponentManager.h" />
+    <ClInclude Include="EntityManager\EntityComponentReference.h" />
+    <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasEntityComponent.h" />
+    <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentType.h" />
     <ClInclude Include="EntityManager\EntityHandler.h" />

@@ -22,7 +22,7 @@ void EntityManager::release() {
 Entity* EntityManager::createEntity() {
     size_t oldAllocatorCount = allocators.size();
 
-    Allocators::AllocationInfo allocationInfo = allocators.allocate();
+    EntityAllocators::AllocationInfo allocationInfo = allocators.allocate();
     Entity* newEntity = new (allocationInfo.allocationAddress) Entity();
 
     size_t newAllocatorCount = allocators.size();

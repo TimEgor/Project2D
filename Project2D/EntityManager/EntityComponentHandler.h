@@ -5,14 +5,17 @@
 
 class EntityComponent;
 class EntityComponentManager;
+class EntityComponentReferenceHandler;
+class EntityComponentReference;
 class Level;
 
 class EntityComponentHandler final {
 private:
-	EntityComponent* component;
-	Level* level;
-	AllocatorID allocatorID;
-	EntityComponentID id;
+	EntityComponent* component = nullptr;
+	Level* level = nullptr;
+	EntityComponentReferenceHandler* reference = nullptr;
+	AllocatorID allocatorID = 0;
+	EntityComponentID id = 0;
 
 public:
 	EntityComponentHandler(EntityComponentID id, EntityComponent *component, size_t componentAllocatorID, Level* level)
@@ -27,6 +30,8 @@ public:
 
 	EntityComponentID getID() { return id; }
 	void setParentID(EntityID parentID) { component->parentID = parentID; }
+
+	EntityComponentReference getReference();
 
 	size_t getComponentAllocatorID() { return allocatorID; }
 };

@@ -11,11 +11,11 @@
 class Level;
 
 class EntityManager final {
-	typedef PoolAllocatorVector<PoolAllocator> Allocators;
+	typedef PoolAllocatorVector<PoolAllocator> EntityAllocators;
 
 private:
 	std::unordered_map<EntityID, EntityHandler> entities;
-	Allocators allocators;
+	EntityAllocators allocators;
 
 	Level* level;
 
