@@ -6,7 +6,7 @@
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
 #include <Graphics/D3D11/D3D11.h>
-#include <Graphics/D3D11/D3D11TestRenderer.h>
+#include <Graphics/D3D11/D3D11Renderer.h>
 #include <Graphics/Scene.h>
 
 #include <chrono>
@@ -59,6 +59,8 @@ int main() {
 	CanvasNode* canvasNode = (CanvasNode*)(scene->getNode(canvas->getID()));
 	canvasNode->setWidth(800.0f);
 	canvasNode->setHeight(800.0f);
+	canvasNode->setPivotX(0.5f);
+	canvasNode->setPivotY(0.5f);
 
 	Entity* canvasEntity1 = level->createCanvasEntity(canvas);
 	CanvasSpriteRendererEntityComponent* spriteCanvasComponent1 = (CanvasSpriteRendererEntityComponent*)(level->createEntityComponent(CanvasSpriteRendererEntityComponentType, canvasEntity1));
@@ -67,6 +69,12 @@ int main() {
 	CanvasNode* canvasNode1 = (CanvasNode*)(scene->getNode(canvasEntity1->getID()));
 	canvasNode1->setWidth(100.0f);
 	canvasNode1->setHeight(100.0f);
+	canvasNode1->setPivotX(0.0f);
+	canvasNode1->setPivotY(0.0f);
+	canvasNode1->setAnchorX(0.5f);
+	canvasNode1->setAnchorY(0.5f);
+	//canvasNode1->setPositionX(500.0f);
+	//canvasNode1->setPositionY(500.0f);
 
 	//
 	Clock::time_point startTime = Clock::now();
@@ -101,8 +109,12 @@ int main() {
 		time += deltaTime;
 
 		//Rendering
+		d3d11Renderer.beginDrawing();
+
 		RenderingData renderingData = level->getRenderingData();
 		d3d11Renderer.draw(renderingData);
+
+		d3d11Renderer.endDrawing();
 
 		lastFrameStartTime = currentTime;
 		Millisecond frameTime = std::chrono::duration_cast<Millisecond>(Clock::now() - currentTime);

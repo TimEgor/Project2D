@@ -6,14 +6,17 @@ class Scene;
 
 class RenderingData final {
 private:
-	Scene* scene;
-	RenderingOrder* order;
+	Scene* scene = nullptr;
+	RenderingOrder* sceneOrder = nullptr;
+	RenderingOrder* canvasOrder = nullptr;
 
 public:
-	RenderingData() : scene(nullptr), order(nullptr) {}
+	RenderingData() = default;
 	
 	void setScene(Scene* renderingScene) { scene = renderingScene; }
 	Scene* getScene() { return scene; }
-	void setRenderingOrder(RenderingOrder* renderingOrder) { order = renderingOrder; }
-	RenderingOrder* getRedneringOrder() { return order; }
+	void setSceneRenderingOrder(RenderingOrder* renderingOrder) { sceneOrder = renderingOrder; }
+	RenderingOrder* getSceneRedneringOrder() { return sceneOrder; }
+	void setCanvasRenderingOrder(RenderingOrder* renderingOrder) { canvasOrder = renderingOrder; }
+	RenderingOrder* getCanvasRedneringOrder() { return canvasOrder; }
 };

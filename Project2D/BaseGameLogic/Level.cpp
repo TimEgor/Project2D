@@ -3,6 +3,7 @@
 #include <EntityManager/EntityManager.h>
 #include <EntityManager/EntityComponentManager.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
 #include <Graphics/Scene.h>
 #include <MemoryManager/MemoryManager.h>
 #include <ResourceManager/ResourceManager.h>
@@ -34,8 +35,14 @@ bool Level::init() {
         return false;
     }
 
-    renderingOrder = new RenderingOrder();
-    if (!renderingOrder->init(MemoryManager::get().getDefaultHeap())) {
+    sceneRenderingOrder = new RenderingOrder();
+    if (!sceneRenderingOrder->init(MemoryManager::get().getDefaultHeap())) {
+        release();
+        return false;
+    }
+
+    canvasRenderingOrder = new RenderingOrder();
+    if (!canvasRenderingOrder->init(MemoryManager::get().getDefaultHeap())) {
         release();
         return false;
     }
@@ -62,10 +69,16 @@ void Level::release() {
         scene = nullptr;
     }
 
-    if (renderingOrder) {
-        renderingOrder->release();
-        delete renderingOrder;
-        renderingOrder = nullptr;
+    if (sceneRenderingOrder) {
+        sceneRenderingOrder->release();
+        delete sceneRenderingOrder;
+        sceneRenderingOrder = nullptr;
+    }
+
+    if (canvasRenderingOrder) {
+        canvasRenderingOrder->release();
+        delete canvasRenderingOrder;
+        canvasRenderingOrder = nullptr;
     }
 }
 
@@ -133,9 +146,6 @@ EntityComponent* Level::createEntityComponent(EntityComponentType type, Entity* 
     case CanvasSpriteRendererEntityComponentType:
         component = (EntityComponent*)(entityComponentManager->createComponent<CanvasSpriteRendererEntityComponent>(type));
         break;
-    case CanvasEntityComponentType:
-        component = (EntityComponent*)(entityComponentManager->createComponent<CanvasEntityComponent>(type));
-        break;
     default:
         break;
     }
@@ -194,14 +204,15 @@ void Level::deleteEntityComponentsFromEntity(Entity* entity) {
 RenderingData Level::getRenderingData() {
     RenderingData renderingData;
     renderingData.setScene(scene);
-    renderingData.setRenderingOrder(renderingOrder);
+    renderingData.setSceneRenderingOrder(sceneRenderingOrder);
+    renderingData.setCanvasRenderingOrder(canvasRenderingOrder);
 
-    renderingOrder->clear();
+    sceneRenderingOrder->clear();
+    canvasRenderingOrder->clear();
 
     size_t spritesNum = entityComponentManager->getEntityComponentsNum(SpriteRendererEntityComponentType);
-    spritesNum += entityComponentManager->getEntityComponentsNum(CanvasSpriteRendererEntityComponentType);
     if (spritesNum != 0) {
-        renderingOrder->preReSize(spritesNum);
+        sceneRenderingOrder->preReSize(spritesNum);
 
         if (auto spritesAllocators = entityComponentManager->getEntityComponents(SpriteRendererEntityComponentType)) {
             size_t allocatorsNum = spritesAllocators->size();
@@ -219,7 +230,39 @@ RenderingData Level::getRenderingData() {
 
                         TransformMatrix* worldTransform = node->getTransform()->getWorldTransformMatrix();
 
-                        renderingOrder->pushNode(node->getID(), component.getMaterialResource(), spriteResource, worldTransform);
+                        sceneRenderingOrder->pushNode(node->getID(), component.getMaterialResource(), spriteResource, worldTransform);
+                    }
+                }
+            }
+        }
+    }
+
+    spritesNum = entityComponentManager->getEntityComponentsNum(CanvasSpriteRendererEntityComponentType);
+    if (spritesNum != 0) {
+        canvasRenderingOrder->preReSize(spritesNum);
+
+        if (auto spritesAllocators = entityComponentManager->getEntityComponents(CanvasSpriteRendererEntityComponentType)) {
+            size_t allocatorsNum = spritesAllocators->size();
+            for (size_t allocatorIndex = 0; allocatorIndex < allocatorsNum; ++allocatorIndex) {
+                const ArrayPoolAllocator& allocator = (*spritesAllocators)[allocatorIndex];
+                size_t allocatorSize = allocator.size();
+
+                for (size_t componentIndex = 0; componentIndex < allocatorSize; ++componentIndex) {
+                    const CanvasSpriteRendererEntityComponent& component = allocator.getElement<CanvasSpriteRendererEntityComponent>(componentIndex);
+
+                    ResourceReference spriteResource = component.getSpriteResource();
+                    if (!spriteResource.isNull()) {
+                        Node* node = component.getParent()->getNode();
+                        node->updateTransform();
+                        
+                        Transform* transform = node->getTransform();
+                        if (transform->getTransformType() == CanvasTransformType) {
+                            ((CanvasTransform*)(transform))->prepareForRenderingCanvas();
+                        }
+
+                        TransformMatrix* worldTransform = transform->getWorldTransformMatrix();
+
+                        canvasRenderingOrder->pushNode(node->getID(), component.getMaterialResource(), spriteResource, worldTransform);
                     }
                 }
             }

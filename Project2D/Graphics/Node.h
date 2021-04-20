@@ -78,9 +78,6 @@ public:
 };
 
 class CanvasNode final : public Node {
-private:
-	CanvasNode* rootCanvasNode = nullptr;
-
 public:
 	CanvasNode(CanvasTransform* transform, Entity* entity)
 		: Node((Transform*)(transform), entity) {}
@@ -117,8 +114,6 @@ public:
 	void setHeight(float height);
 
 	CanvasTransform* getTransform();
-
-	CanvasNode* getRootCanvasNode() { return rootCanvasNode; }
 
 	virtual NodeType getNodeType() const override { return CanvasNodeType; }
 };

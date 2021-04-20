@@ -101,61 +101,82 @@ void CanvasTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) {
 void CanvasTransform::setScaleX(float X) {
 	scaleX = X;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setScaleY(float Y) {
 	scaleY = Y;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setRotation(float rot) {
 	rotation = rot;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setDepth(float dph) {
 	depth = dph;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setPivotX(float X) {
 	pivotX = X;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setPivotY(float Y) {
 	pivotY = Y;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setAnchorX(float X) {
 	anchorX = X;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setAnchorY(float Y) {
 	anchorY = Y;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setPositionX(float X) {
 	posX = X;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setPositionY(float Y) {
 	posY = Y;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setWidth(float wdth) {
 	width = wdth;
 	isDirty = true;
+	isPreparing = false;
 }
 
 void CanvasTransform::setHeight(float hght) {
 	height = hght;
 	isDirty = true;
+	isPreparing = false;
+}
+
+void CanvasTransform::prepareForRenderingCanvas() {
+	if (!isPreparing && !isDirty) {
+		worldTransformation->m[0][0] *= getWidth();
+		worldTransformation->m[1][1] *= getHeight();
+
+		isPreparing = true;
+	}
 }
 
 void Transform::markDirty() {

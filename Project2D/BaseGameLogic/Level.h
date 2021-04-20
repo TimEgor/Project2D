@@ -18,7 +18,8 @@ private:
 	EntityComponentManager* entityComponentManager;
 	Scene* scene;
 
-	RenderingOrder* renderingOrder;
+	RenderingOrder* sceneRenderingOrder;
+	RenderingOrder* canvasRenderingOrder;
 
 	LevelID levelID;
 

@@ -32,6 +32,7 @@ public:
 	void setParent(Entity* parent) { component->entity = parent; }
 
 	EntityComponentReference getReference();
+	EntityComponentReferenceHandler* getReferenceHandler() { return reference; }
 
 	size_t getComponentAllocatorID() { return allocatorID; }
 };

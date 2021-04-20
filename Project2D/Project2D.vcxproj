@@ -191,7 +191,6 @@
     <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Sprite.cpp" />
-    <ClCompile Include="Graphics\D3D11\D3D11TestRenderer.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Verteces.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResource.cpp" />
@@ -238,7 +237,6 @@
     <ClInclude Include="EntityManager\EntityComponentHandler.h" />
     <ClInclude Include="EntityManager\EntityComponentManager.h" />
     <ClInclude Include="EntityManager\EntityComponentReference.h" />
-    <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentType.h" />
@@ -248,7 +246,6 @@
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Sprite.h" />
-    <ClInclude Include="Graphics\D3D11\D3D11TestRenderer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Verteces.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResource.h" />

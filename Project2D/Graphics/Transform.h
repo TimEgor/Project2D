@@ -83,6 +83,8 @@ private:
 	float posX, posY;
 	float width, height;
 
+	bool isPreparing;
+
 	virtual void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const SceneTransform* parentTransform) override;
 	virtual void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const CanvasTransform* parentTransform) override;
 	virtual void calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) override;
@@ -94,7 +96,8 @@ public:
 		pivotX(0.5f), pivotY(0.5f),
 		anchorX(0.5f), anchorY(0.5f),
 		posX(0.0f), posY(0.0f),
-		width(100.0f), height(100.0f) {
+		width(100.0f), height(100.0f),
+		isPreparing(false) {
 	}
 
 	float getScaleX() const { return scaleX; }
@@ -127,6 +130,8 @@ public:
 	float getHeight() const { return height; }
 	void setWidth(float width);
 	void setHeight(float height);
+
+	void prepareForRenderingCanvas();
 
 	virtual TransformType getTransformType() const override { return CanvasTransformType; }
 };

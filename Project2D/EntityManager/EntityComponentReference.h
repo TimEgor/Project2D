@@ -44,7 +44,7 @@ public:
 
 	EntityComponentReference& operator=(const EntityComponentReference& reference);
 
-	bool isNull() const { return handler == nullptr; }
+	bool isNull() const { return handler->getComponentHandler() == nullptr; }
 
 	template <typename T>
 	T& getComponent();

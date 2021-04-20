@@ -4,14 +4,12 @@
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
-#include <EntityManager/EntityComponents/Canvas/CanvasEntityComponent.h>
 #include <EntityManager/EntityComponentReference.h>
 
 #include <cassert>
 
 template SpriteRendererEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
 template CanvasSpriteRendererEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
-template CanvasEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
 
 EntityComponentManager::ComponentAllocators::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
     ComponentAllocators& allocatorVec = componentAllocators.at(type);
@@ -43,7 +41,6 @@ bool EntityComponentManager::init(Level* level) {
 
     componentAllocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
     componentAllocators[CanvasSpriteRendererEntityComponentType].init(defaultHeap, sizeof(CanvasSpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
-    componentAllocators[CanvasEntityComponentType].init(defaultHeap, sizeof(CanvasEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
 
     referenceAllocators.init(defaultHeap, sizeof(EntityComponentReferenceHandler), 512);
 
@@ -76,6 +73,11 @@ void EntityComponentManager::deleteEntityComponent(EntityComponentID id) {
     if (findIter != components.end()) {
         EntityComponentHandler& handler = findIter->second;
         EntityComponent* component = handler.getComponent();
+
+        EntityComponentReferenceHandler* referenceHandler = handler.getReferenceHandler();
+        if (referenceHandler) {
+            referenceHandler->setComponentHandler(nullptr);
+        }
 
         ComponentAllocators& allocatorVec = componentAllocators[component->getEntityComponentType()];
         size_t allocatorIndex = allocatorVec.getAllocatorIndexByID(handler.getComponentAllocatorID());
