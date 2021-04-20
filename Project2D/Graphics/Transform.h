@@ -1,19 +1,12 @@
 #pragma once
 
-#include <DirectXMath.h>
+#include <Graphics/SceneTypes.h>
 
+#include <DirectXMath.h>
 #include <cstdint>
 
 typedef DirectX::XMFLOAT4X4 TransformMatrix;
-typedef uint32_t TransformID;
 
-class SceneTransform;
-class CanvasTransform;
-
-enum TransformType {
-	SceneTransformType,
-	CanvasTransformType
-};
 
 class Transform {
 protected:

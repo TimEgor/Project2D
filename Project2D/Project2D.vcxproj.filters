@@ -408,6 +408,9 @@
     <ClInclude Include="EntityManager\EntityComponentReference.h">
       <Filter>EntityManager</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\SceneTypes.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="RenderingOrder.natvis">

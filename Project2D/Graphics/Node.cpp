@@ -60,8 +60,8 @@ void Node::notifyTransformChildren() {
 	}
 }
 
-Node::Node(Transform* transform)
-	: parentNode(nullptr), handler(nullptr), transform(transform) {
+Node::Node(Transform* transform, Entity* entity)
+	: parentNode(nullptr), handler(nullptr), transform(transform), entity(entity) {
 	transform->markDirty();
 }
 

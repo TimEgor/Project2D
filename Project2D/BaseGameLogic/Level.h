@@ -3,12 +3,12 @@
 #include <EntityManager/EntityManagerTypes.h>
 #include <EntityManager/EntityComponentType.h>
 #include <Graphics/RenderingData.h>
+#include <Graphics/SceneTypes.h>
 
 #include <cstdint>
 
 class EntityManager;
 class EntityComponentManager;
-class Scene;
 
 typedef uint32_t LevelID;
 

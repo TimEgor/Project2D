@@ -71,7 +71,8 @@ void Level::release() {
 
 Entity* Level::createSceneEntity() {
     Entity* entity = entityManager->createEntity();
-    scene->createSceneNode(entity->getID());
+    Node* node = scene->createSceneNode(entity);
+    entity->setNode(node);
 
     return entity;
 }
@@ -82,14 +83,16 @@ Entity* Level::createSceneEntity(Entity* parent) {
 
 Entity* Level::createSceneEntity(EntityID parentID) {
     Entity* entity = entityManager->createEntity();
-    scene->createSceneNode(entity->getID(), parentID);
+    Node* node = scene->createSceneNode(entity, parentID);
+    entity->setNode(node);
 
     return entity;
 }
 
 Entity* Level::createCanvasEntity() {
     Entity* entity = entityManager->createEntity();
-    scene->createCanvasNode(entity->getID());
+    Node* node = scene->createCanvasNode(entity);
+    entity->setNode(node);
 
     return entity;
 }
@@ -100,7 +103,8 @@ Entity* Level::createCanvasEntity(Entity* parent) {
 
 Entity* Level::createCanvasEntity(EntityID parentID) {
     Entity* entity = entityManager->createEntity();
-    scene->createCanvasNode(entity->getID(), parentID);
+    Node* node = scene->createCanvasNode(entity, parentID);
+    entity->setNode(node);
 
     return entity;
 }
@@ -137,7 +141,7 @@ EntityComponent* Level::createEntityComponent(EntityComponentType type, Entity* 
     }
 
     parent->addComponent(component->getID());
-    component->getHandler()->setParentID(parent->getID());
+    component->getHandler()->setParent(parent);
 
     return component;
 }
@@ -150,8 +154,7 @@ EntityComponent* Level::createEntityComponent(EntityComponentType type, EntityID
 void Level::deleteEntityComponent(EntityComponent* component) {
     assert(component);
 
-    Entity* entity = entityManager->getEntity(component->getParentID());
-    entity->removeComponent(component->getID());
+    component->getParent()->removeComponent(component->getID());
 
     entityComponentManager->deleteEntityComponent(component);
 }
@@ -211,14 +214,12 @@ RenderingData Level::getRenderingData() {
 
                     ResourceReference spriteResource = component.getSpriteResource();
                     if (!spriteResource.isNull()) {
-                        EntityID id = component.getParentID();
-
-                        Node* node = scene->getNode(id);
+                        Node* node = component.getParent()->getNode();
                         node->updateTransform();
 
                         TransformMatrix* worldTransform = node->getTransform()->getWorldTransformMatrix();
 
-                        renderingOrder->pushNode(id, component.getMaterialResource(), spriteResource, worldTransform);
+                        renderingOrder->pushNode(node->getID(), component.getMaterialResource(), spriteResource, worldTransform);
                     }
                 }
             }

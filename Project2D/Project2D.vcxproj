@@ -263,6 +263,7 @@
     <ClInclude Include="Graphics\RenderingData.h" />
     <ClInclude Include="Graphics\RenderingOrder.h" />
     <ClInclude Include="Graphics\Scene.h" />
+    <ClInclude Include="Graphics\SceneTypes.h" />
     <ClInclude Include="Graphics\Transform.h" />
     <ClInclude Include="Graphics\TransformHandler.h" />
     <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h" />

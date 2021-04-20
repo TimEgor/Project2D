@@ -29,7 +29,7 @@ public:
 	void setComponent(EntityComponent* newComponent) { component = newComponent; }
 
 	EntityComponentID getID() { return id; }
-	void setParentID(EntityID parentID) { component->parentID = parentID; }
+	void setParent(Entity* parent) { component->entity = parent; }
 
 	EntityComponentReference getReference();
 

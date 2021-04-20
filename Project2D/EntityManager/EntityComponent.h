@@ -10,16 +10,16 @@ class EntityComponent {
 	friend EntityComponentHandler;
 
 protected:
-	EntityID parentID;
-	EntityComponentHandler *handler;
+	EntityComponentHandler* handler = nullptr;
+	Entity* entity = nullptr;
 
 public:
-	EntityComponent() : parentID(0), handler(nullptr) {}
+	EntityComponent() = default;
 	virtual ~EntityComponent() {}
 
 	EntityComponentHandler* getHandler() const { return handler; }
 	EntityComponentID getID() const;
-	EntityID getParentID() const { return parentID; }
+	Entity* getParent() const { return entity; }
 
 	virtual EntityComponentType getEntityComponentType() const = 0;
 };

@@ -1,19 +1,11 @@
 #pragma once
 
-#include <cstdint>
+#include <Graphics/SceneTypes.h>
+
 #include <vector>
 
 class NodeHandler;
-class Transform;
-class SceneTransform;
-class CanvasTransform;
-
-typedef uint32_t NodeID;
-
-enum NodeType {
-	SceneNodeType,
-	CanvasNodeType
-};
+class Entity;
 
 class Node {
 	friend NodeHandler;
@@ -22,13 +14,14 @@ protected:
 	std::vector<Node*> children;
 	Node* parentNode;
 	NodeHandler* handler;
+	Entity* entity;
 
 	Transform* transform;
 
 	void notifyTransformChildren();
 
 public:
-	Node(Transform* transform);
+	Node(Transform* transform, Entity* entity);
 	virtual ~Node() {}
 
 	NodeHandler* getHandler() { return handler; }
@@ -50,6 +43,8 @@ public:
 
 	Transform* getTransform() { return transform; }
 
+	Entity* getEntity() { return entity; }
+
 	const std::vector<Node*>& getChildren();
 	void getChildren(std::vector<Node*> container);
 
@@ -58,8 +53,8 @@ public:
 
 class SceneNode final : public Node {
 public:
-	SceneNode(SceneTransform* transform)
-		: Node((Transform*)(transform)) {}
+	SceneNode(SceneTransform* transform, Entity* entity)
+		: Node((Transform*)(transform), entity) {}
 
 	float getPositionX() const;
 	float getPositionY() const;
@@ -83,9 +78,12 @@ public:
 };
 
 class CanvasNode final : public Node {
+private:
+	CanvasNode* rootCanvasNode = nullptr;
+
 public:
-	CanvasNode(CanvasTransform* transform)
-		: Node((Transform*)(transform)) {}
+	CanvasNode(CanvasTransform* transform, Entity* entity)
+		: Node((Transform*)(transform), entity) {}
 
 	float getScaleX() const;
 	float getScaleY() const;
@@ -119,6 +117,8 @@ public:
 	void setHeight(float height);
 
 	CanvasTransform* getTransform();
+
+	CanvasNode* getRootCanvasNode() { return rootCanvasNode; }
 
 	virtual NodeType getNodeType() const override { return CanvasNodeType; }
 };

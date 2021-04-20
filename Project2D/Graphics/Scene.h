@@ -40,12 +40,12 @@ public:
 	bool init(Level* level);
 	void release();
 
-	SceneNode* createSceneNode(NodeID id);
-	SceneNode* createSceneNode(NodeID id, NodeID parentID);
-	SceneNode* createSceneNode(NodeID id, Node* parent);
-	CanvasNode* createCanvasNode(NodeID id);
-	CanvasNode* createCanvasNode(NodeID id, NodeID parentID);
-	CanvasNode* createCanvasNode(NodeID id, Node* parent);
+	SceneNode* createSceneNode(Entity* entity);
+	SceneNode* createSceneNode(Entity* entity, NodeID parentID);
+	SceneNode* createSceneNode(Entity* entity, Node* parent);
+	CanvasNode* createCanvasNode(Entity* entity);
+	CanvasNode* createCanvasNode(Entity* entity, NodeID parentID);
+	CanvasNode* createCanvasNode(Entity* entity, Node* parent);
 	void deleteNode(NodeID id);
 	void deleteNode(Node* node);
 

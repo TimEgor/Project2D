@@ -2,6 +2,7 @@
 
 #include <MemoryManager/MemoryManager.h>
 #include <BaseGameLogic/Level.h>
+#include <EntityManager/Entity.h>
 
 bool Scene::init(Level* level) {
     nodes.reserve(SCENE_NODES_ALLOCATOR_SIZE + CANVAS_NODES_ALLOCATOR_SIZE);
@@ -106,14 +107,15 @@ void Scene::deleteChildrenNodes(Node* node) {
     }
 }
 
-SceneNode* Scene::createSceneNode(NodeID id) {
+SceneNode* Scene::createSceneNode(Entity* entity) {
     size_t oldAllocatorCount = sceneNodeAllocators.size();
 
     Allocators::AllocationInfo allocationInfo = sceneNodeAllocators.allocate();
 
-    SceneTransform* transform = createSceneTransform(id);
+    NodeID id = entity->getID();
 
-    SceneNode* newNode = new (allocationInfo.allocationAddress) SceneNode(transform);
+    SceneTransform* transform = createSceneTransform(id);
+    SceneNode* newNode = new (allocationInfo.allocationAddress) SceneNode(transform, entity);
 
     size_t newAllocatorCount = sceneNodeAllocators.size();
     if (oldAllocatorCount < newAllocatorCount) {
@@ -125,7 +127,7 @@ SceneNode* Scene::createSceneNode(NodeID id) {
     return newNode;
 }
 
-SceneNode* Scene::createSceneNode(NodeID id, NodeID parentID) {
+SceneNode* Scene::createSceneNode(Entity* entity, NodeID parentID) {
     SceneNode* newNode = nullptr;
 
     auto nodeIter = nodes.find(parentID);
@@ -133,7 +135,7 @@ SceneNode* Scene::createSceneNode(NodeID id, NodeID parentID) {
         NodeHandler& handler = nodeIter->second;
         Node* parentNode = handler.getNode();
 
-        newNode = createSceneNode(id);
+        newNode = createSceneNode(entity);
 
         parentNode->addChild(newNode);
     }
@@ -141,18 +143,19 @@ SceneNode* Scene::createSceneNode(NodeID id, NodeID parentID) {
     return newNode;
 }
 
-SceneNode* Scene::createSceneNode(NodeID id, Node* parent) {
-    return createSceneNode(id, parent->getID());
+SceneNode* Scene::createSceneNode(Entity* entity, Node* parent) {
+    return createSceneNode(entity, parent->getID());
 }
 
-CanvasNode* Scene::createCanvasNode(NodeID id) {
+CanvasNode* Scene::createCanvasNode(Entity* entity) {
     size_t oldAllocatorCount = sceneNodeAllocators.size();
 
     Allocators::AllocationInfo allocationInfo = canvasNodeAllocators.allocate();
 
-    CanvasTransform* transform = createCanvasTransform(id);
+    NodeID id = entity->getID();
 
-    CanvasNode* newNode = new (allocationInfo.allocationAddress) CanvasNode(transform);
+    CanvasTransform* transform = createCanvasTransform(id);
+    CanvasNode* newNode = new (allocationInfo.allocationAddress) CanvasNode(transform, entity);
 
     size_t newAllocatorCount = canvasNodeAllocators.size();
     if (oldAllocatorCount < newAllocatorCount) {
@@ -164,7 +167,7 @@ CanvasNode* Scene::createCanvasNode(NodeID id) {
     return newNode;
 }
 
-CanvasNode* Scene::createCanvasNode(NodeID id, NodeID parentID) {
+CanvasNode* Scene::createCanvasNode(Entity* entity, NodeID parentID) {
     CanvasNode* newNode = nullptr;
 
     auto nodeIter = nodes.find(parentID);
@@ -172,7 +175,7 @@ CanvasNode* Scene::createCanvasNode(NodeID id, NodeID parentID) {
         NodeHandler& handler = nodeIter->second;
         Node* parentNode = handler.getNode();
 
-        newNode = createCanvasNode(id);
+        newNode = createCanvasNode(entity);
 
         parentNode->addChild(newNode);
     }
@@ -180,8 +183,8 @@ CanvasNode* Scene::createCanvasNode(NodeID id, NodeID parentID) {
     return newNode;
 }
 
-CanvasNode* Scene::createCanvasNode(NodeID id, Node* parent) {
-    return createCanvasNode(id, parent->getID());
+CanvasNode* Scene::createCanvasNode(Entity* entity, Node* parent) {
+    return createCanvasNode(entity, parent->getID());
 }
 
 void Scene::deleteNode(NodeID id) {
