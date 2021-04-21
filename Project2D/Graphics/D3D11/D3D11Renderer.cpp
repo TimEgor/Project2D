@@ -192,7 +192,6 @@ void D3D11Renderer::draw(RenderingData data) {
     prepareViewTransformMatrix(viewTransformMatrix);
 
     D3D11Sprite& d3d11Sprite = D3D11Sprite::get();
-    d3d11Sprite.init();
 
     deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
     deviceContext->RSSetState(rasterizerState);
