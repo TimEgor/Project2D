@@ -239,6 +239,8 @@ void D3D11Renderer::draw(RenderingData data) {
         deviceContext->DrawIndexed(d3d11Sprite.getIndecesNum(), 0, 0);
     }
 
+    deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
     prepareCanvasProjTransformMatrix(projTransformMatrix);
 
     order = data.getCanvasRedneringOrder();

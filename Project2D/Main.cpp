@@ -59,8 +59,6 @@ int main() {
 	CanvasNode* canvasNode = (CanvasNode*)(scene->getNode(canvas->getID()));
 	canvasNode->setWidth(800.0f);
 	canvasNode->setHeight(800.0f);
-	canvasNode->setPivotX(0.5f);
-	canvasNode->setPivotY(0.5f);
 
 	Entity* canvasEntity1 = level->createCanvasEntity(canvas);
 	CanvasSpriteRendererEntityComponent* spriteCanvasComponent1 = (CanvasSpriteRendererEntityComponent*)(level->createEntityComponent(CanvasSpriteRendererEntityComponentType, canvasEntity1));
@@ -69,12 +67,24 @@ int main() {
 	CanvasNode* canvasNode1 = (CanvasNode*)(scene->getNode(canvasEntity1->getID()));
 	canvasNode1->setWidth(100.0f);
 	canvasNode1->setHeight(100.0f);
-	canvasNode1->setPivotX(0.0f);
-	canvasNode1->setPivotY(0.0f);
+	canvasNode1->setPivotX(0.5f);
+	canvasNode1->setPivotY(0.5f);
 	canvasNode1->setAnchorX(0.5f);
 	canvasNode1->setAnchorY(0.5f);
-	//canvasNode1->setPositionX(500.0f);
-	//canvasNode1->setPositionY(500.0f);
+
+	Entity* canvasEntity2 = level->createCanvasEntity(canvasEntity1);
+	CanvasSpriteRendererEntityComponent* spriteCanvasComponent2 = (CanvasSpriteRendererEntityComponent*)(level->createEntityComponent(CanvasSpriteRendererEntityComponentType, canvasEntity2));
+	spriteCanvasComponent2->setSpriteResource(spriteResourceRef);
+
+	CanvasNode* canvasNode2 = (CanvasNode*)(scene->getNode(canvasEntity2->getID()));
+	canvasNode2->setWidth(100.0f);
+	canvasNode2->setHeight(100.0f);
+	canvasNode2->setPivotX(0.5f);
+	canvasNode2->setPivotY(0.5f);
+	canvasNode2->setAnchorX(0.5f);
+	canvasNode2->setAnchorY(0.5f);
+	canvasNode2->setPositionX(50.0f);
+	canvasNode2->setPositionY(50.0f);
 
 	//
 	Clock::time_point startTime = Clock::now();

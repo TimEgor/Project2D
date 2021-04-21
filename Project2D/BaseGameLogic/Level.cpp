@@ -254,15 +254,16 @@ RenderingData Level::getRenderingData() {
                     if (!spriteResource.isNull()) {
                         Node* node = component.getParent()->getNode();
                         node->updateTransform();
-                        
+
                         Transform* transform = node->getTransform();
+                        TransformMatrix worldTransform = *(transform->getWorldTransformMatrix());
+
                         if (transform->getTransformType() == CanvasTransformType) {
-                            ((CanvasTransform*)(transform))->prepareForRenderingCanvas();
-                        }
+                            worldTransform.m[0][0] *= ((CanvasTransform*)(transform))->getWidth();
+                            worldTransform.m[1][1] *= ((CanvasTransform*)(transform))->getHeight();
+                        }             
 
-                        TransformMatrix* worldTransform = transform->getWorldTransformMatrix();
-
-                        canvasRenderingOrder->pushNode(node->getID(), component.getMaterialResource(), spriteResource, worldTransform);
+                        canvasRenderingOrder->pushNode(node->getID(), component.getMaterialResource(), spriteResource, &worldTransform);
                     }
                 }
             }

@@ -131,7 +131,5 @@ public:
 	void setWidth(float width);
 	void setHeight(float height);
 
-	void prepareForRenderingCanvas();
-
 	virtual TransformType getTransformType() const override { return CanvasTransformType; }
 };

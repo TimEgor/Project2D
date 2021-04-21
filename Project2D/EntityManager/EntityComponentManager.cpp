@@ -36,13 +36,15 @@ void EntityComponentManager::releaseReference(EntityComponentReferenceHandler* r
     referenceAllocators.deallocate(referenceHandler->getAllocatorIndex(), referenceHandler);
 }
 
-bool EntityComponentManager::init(Level* level) {
+bool EntityComponentManager::init(Level* currentLevel) {
     Heap* defaultHeap = MemoryManager::get().getDefaultHeap();
 
     componentAllocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
     componentAllocators[CanvasSpriteRendererEntityComponentType].init(defaultHeap, sizeof(CanvasSpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
 
     referenceAllocators.init(defaultHeap, sizeof(EntityComponentReferenceHandler), 512);
+
+    level = currentLevel;
 
     return true;
 }

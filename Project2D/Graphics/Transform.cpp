@@ -7,17 +7,7 @@ void SceneTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, con
 }
 
 void SceneTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const CanvasTransform* parentTransform) {
-	float currentPosX = (parentTransform->getWidth() * parentTransform->getScaleX()) * (parentTransform->getAnchorX() - 0.5f);
-	float currentPosY = (parentTransform->getHeight() * parentTransform->getScaleY()) * (parentTransform->getAnchorY() - 0.5f);
-	currentPosX += posX;
-	currentPosY += posY;
-
-	DirectX::XMMATRIX translatingMatrix = DirectX::XMMatrixTranslation(currentPosX, currentPosY, depth);
-	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(rotation));
-	DirectX::XMMATRIX scalingMatrix = DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f);
-
-	rotationMatrix = DirectX::XMMatrixMultiply(scalingMatrix, rotationMatrix);
-	matrix = DirectX::XMMatrixMultiply(rotationMatrix, translatingMatrix);
+	calculateLocalTransfomMatrix(matrix);
 }
 
 void SceneTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) {
@@ -74,8 +64,8 @@ void CanvasTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, co
 }
 
 void CanvasTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const CanvasTransform* parentTransform) {
-	float currentPosX = (parentTransform->width * parentTransform->scaleX) * (parentTransform->anchorX - 0.5f);
-	float currentPosY = (parentTransform->height * parentTransform->scaleY) * (parentTransform->anchorY - 0.5f);
+	float currentPosX = (parentTransform->width * parentTransform->scaleX) * anchorX;
+	float currentPosY = (parentTransform->height * parentTransform->scaleY) * anchorY;
 	currentPosX += (width * scaleX) * (0.5f - pivotX);
 	currentPosY += (height * scaleY) * (0.5f - pivotY);
 	currentPosX += posX;
@@ -101,82 +91,61 @@ void CanvasTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) {
 void CanvasTransform::setScaleX(float X) {
 	scaleX = X;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setScaleY(float Y) {
 	scaleY = Y;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setRotation(float rot) {
 	rotation = rot;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setDepth(float dph) {
 	depth = dph;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setPivotX(float X) {
 	pivotX = X;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setPivotY(float Y) {
 	pivotY = Y;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setAnchorX(float X) {
 	anchorX = X;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setAnchorY(float Y) {
 	anchorY = Y;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setPositionX(float X) {
 	posX = X;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setPositionY(float Y) {
 	posY = Y;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setWidth(float wdth) {
 	width = wdth;
 	isDirty = true;
-	isPreparing = false;
 }
 
 void CanvasTransform::setHeight(float hght) {
 	height = hght;
 	isDirty = true;
-	isPreparing = false;
-}
-
-void CanvasTransform::prepareForRenderingCanvas() {
-	if (!isPreparing && !isDirty) {
-		worldTransformation->m[0][0] *= getWidth();
-		worldTransformation->m[1][1] *= getHeight();
-
-		isPreparing = true;
-	}
 }
 
 void Transform::markDirty() {
