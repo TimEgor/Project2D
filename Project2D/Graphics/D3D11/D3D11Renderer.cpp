@@ -181,7 +181,7 @@ void D3D11Renderer::draw(RenderingData data) {
     float blendFactor[4] = { 1.0f };
 
     deviceContext->OMSetBlendState(spriteBlendState, blendFactor, 0xffffffff);
-    deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+    deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
     deviceContext->RSSetState(rasterizerState);
     deviceContext->RSSetViewports(1, &viewport);
     deviceContext->PSSetSamplers(0, 1, &spriteSamplerState);
@@ -192,10 +192,6 @@ void D3D11Renderer::draw(RenderingData data) {
     prepareViewTransformMatrix(viewTransformMatrix);
 
     D3D11Sprite& d3d11Sprite = D3D11Sprite::get();
-
-    deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-    deviceContext->RSSetState(rasterizerState);
-    deviceContext->RSSetViewports(1, &viewport);
 
     ID3D11Buffer* vertecesBuffer = d3d11Sprite.getVertecesBuffer();
     UINT strides = sizeof(D3D11SpriteVertex);

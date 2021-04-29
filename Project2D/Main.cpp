@@ -53,6 +53,7 @@ int main() {
 	node2->setPositionX(0.5f);
 	node2->setScaleX(0.5f);
 	node2->setScaleY(0.5f);
+	node2->setDepth(1.0f);
 	
 	//Canvas
 	Entity* canvas = level->createCanvasEntity();
@@ -119,11 +120,12 @@ int main() {
 		time += deltaTime;
 
 		//Rendering
-		d3d11Renderer.beginDrawing();
-
 		RenderingData renderingData = level->getRenderingData();
-		d3d11Renderer.draw(renderingData);
+		renderingData.getSceneRedneringOrder()->sort();
+		renderingData.getCanvasRedneringOrder()->sort();
 
+		d3d11Renderer.beginDrawing();
+		d3d11Renderer.draw(renderingData);
 		d3d11Renderer.endDrawing();
 
 		lastFrameStartTime = currentTime;

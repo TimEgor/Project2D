@@ -81,15 +81,13 @@ void RenderingOrder::pushNode(EntityID entityID, ResourceReference materialResou
 
 void RenderingOrder::sort() {
     std::qsort(nodes, currentNodeSize, sizeof(RenderingOrderNode), [](const void* node1, const void* node2) {
-        ResourceID materialResID1 = ((RenderingOrderNode*)(node1))->materialResource.getResourceID();
-        ResourceID materialResID2 = ((RenderingOrderNode*)(node2))->materialResource.getResourceID();
-        ResourceID spriteResID1 = ((RenderingOrderNode*)(node1))->spriteResource.getResourceID();
-        ResourceID spriteResID2 = ((RenderingOrderNode*)(node2))->spriteResource.getResourceID();
+        TransformMatrix* transform1 = ((RenderingOrderNode*)(node1))->transform;
+        TransformMatrix* transform2 = ((RenderingOrderNode*)(node2))->transform;
 
-        if ((materialResID1 > materialResID2) || ((materialResID1 == materialResID2) && (spriteResID1 > spriteResID2))) {
+        if (transform1->_43 > transform2->_43) {
             return 1;
         }
-        if ((materialResID1 < materialResID2) || ((materialResID1 == materialResID2) && (spriteResID1 < spriteResID2))) {
+        if (transform1->_43 < transform2->_43) {
             return -1;
         }
 
