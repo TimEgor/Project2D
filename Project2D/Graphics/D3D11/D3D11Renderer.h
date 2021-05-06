@@ -3,8 +3,9 @@
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/RenderingData.h>
 
+class D3D11SpriteBatch;
+
 struct alignas(16) PerObjectTransforms final {
-	DirectX::XMMATRIX worldTransformMatrix;
 	DirectX::XMMATRIX viewTransformMatrix;
 	DirectX::XMMATRIX projTransformMatrix;
 };
@@ -24,6 +25,8 @@ private:
 	ID3D11SamplerState* spriteSamplerState;
 	ID3D11BlendState* spriteBlendState;
 
+	D3D11SpriteBatch* spriteBatch;
+
 	ResourceID currentMaterialID;
 	ResourceID currentSpriteID;
 
@@ -35,6 +38,8 @@ private:
 
 	void changeMaterial(ResourceReference materialResource, ID3D11DeviceContext* context);
 	void changeSprite(ResourceReference spriteResource, ID3D11DeviceContext* context);
+
+	void drawSprite(const RenderingOrderNode& node, size_t indexPos, size_t indexCount, ID3D11DeviceContext* context);
 
 public:
 	~D3D11Renderer() { release(); }

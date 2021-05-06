@@ -3,7 +3,7 @@
 #include <UserInterfaces/UserInterfaces.h>
 
 #define CheckResult(result) \
-    if (result) { \
+    if (FAILED(result)) { \
         release(); \
         return false; \
     }

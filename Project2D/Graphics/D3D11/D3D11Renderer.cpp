@@ -5,6 +5,7 @@
 #include <Graphics/D3D11/Resources/D3D11ShaderResource.h>
 #include <Graphics/D3D11/Resources/D3D11TextureResource.h>
 #include <Graphics/D3D11/D3D11Verteces.h>
+#include <Graphics/D3D11/D3D11SpriteBatch.h>
 #include <Graphics/Scene.h>
 #include <ResourceManager/ResourceManager.h>
 
@@ -48,7 +49,7 @@ bool D3D11Renderer::init() {
     D3D11_RASTERIZER_DESC rasterizerDesc{};
     rasterizerDesc.CullMode = D3D11_CULL_BACK;
     rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    rasterizerDesc.FrontCounterClockwise = false;
+    rasterizerDesc.FrontCounterClockwise = true;
 
     device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
 
@@ -101,6 +102,9 @@ bool D3D11Renderer::init() {
     currentMaterialID = 0;
     currentSpriteID = 0;
 
+    spriteBatch = new D3D11SpriteBatch();
+    spriteBatch->init(100);
+
     return true;
 }
 
@@ -114,6 +118,12 @@ void D3D11Renderer::release() {
 
     D3D11ObjectRelease(perObjectTransformBuffer);
     D3D11ObjectRelease(spriteSamplerState);
+
+    if (spriteBatch) {
+        spriteBatch->release();
+        delete spriteBatch;
+        spriteBatch = nullptr;
+    }
 }
 
 void D3D11Renderer::prepareViewTransformMatrix(DirectX::XMMATRIX& matrix) {
@@ -172,6 +182,18 @@ void D3D11Renderer::changeSprite(ResourceReference spriteResource, ID3D11DeviceC
     currentSpriteID = spriteResource.getResourceID();
 }
 
+void D3D11Renderer::drawSprite(const RenderingOrderNode& node, size_t indexPos, size_t indexCount, ID3D11DeviceContext* deviceContext) {
+    if (node.materialResource.getResourceID() != currentMaterialID) {
+        changeMaterial(node.materialResource, deviceContext);
+    }
+
+    if (node.spriteResource.getResourceID() != currentSpriteID) {
+        changeSprite(node.spriteResource, deviceContext);
+    }
+
+    deviceContext->DrawIndexed(indexCount, indexPos, 0);
+}
+
 void D3D11Renderer::draw(RenderingData data) {
     D3D11& d3d11 = D3D11::get();
 
@@ -191,53 +213,75 @@ void D3D11Renderer::draw(RenderingData data) {
     DirectX::XMMATRIX viewTransformMatrix;
     prepareViewTransformMatrix(viewTransformMatrix);
 
-    D3D11Sprite& d3d11Sprite = D3D11Sprite::get();
+    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    ID3D11Buffer* vertecesBuffer = d3d11Sprite.getVertecesBuffer();
+    Scene* scene = data.getScene();
+
+    PerObjectTransforms* mappedTransforms;
+    D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
+
+    size_t indexPos = 0;
+    size_t indexCount = 6;
+
+    ResourceID currentBatchTextureID = 0;
+
+    //
+
+    prepareSceneProjTransformMatrix(projTransformMatrix);
+
+    deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+
+    mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
+    mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransformMatrix);
+    mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransformMatrix);
+
+    deviceContext->Unmap(perObjectTransformBuffer, 0);
+
+    RenderingOrder* order = data.getSceneRedneringOrder();
+    size_t orderSize = order->size();
+
+    if (orderSize == 0) {
+        return;
+    }
+
+    spriteBatch->buildData(&(*order)[0], orderSize);
+    ID3D11Buffer* vertecesBuffer = spriteBatch->getVertecesBuffer();
     UINT strides = sizeof(D3D11SpriteVertex);
     UINT offsets = 0;
 
     deviceContext->IASetVertexBuffers(0, 1, &vertecesBuffer, &strides, &offsets);
-    deviceContext->IASetIndexBuffer(d3d11Sprite.getIndecesBuffer(), DXGI_FORMAT_R32_UINT, 0);
-
-    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-    Scene* scene = data.getScene();
-
-    prepareSceneProjTransformMatrix(projTransformMatrix);
-
-    RenderingOrder* order = data.getSceneRedneringOrder();
-    size_t orderSize = order->size();
+    deviceContext->IASetIndexBuffer(spriteBatch->getIndecesBuffer(), DXGI_FORMAT_R16_UINT, 0);
     for (size_t i = 0; i < orderSize; ++i) {
         const RenderingOrderNode& node = (*order)[i];
 
-        if (node.materialResource.getResourceID() != currentMaterialID) {
-            changeMaterial(node.materialResource, deviceContext);
+        if (node.spriteResource.getResourceID() != currentBatchTextureID) {
+            if (i != 0) {
+                drawSprite(node, indexPos, indexCount, deviceContext);
+
+                indexPos += indexCount;
+                indexCount = 6;
+            }
+
+            currentBatchTextureID = node.spriteResource.getResourceID();
         }
-
-        if (node.spriteResource.getResourceID() != currentSpriteID) {
-            changeSprite(node.spriteResource, deviceContext);
+        else {
+            indexCount += 6;
         }
-
-        DirectX::XMMATRIX worldTransformMatrix = DirectX::XMLoadFloat4x4(node.transform);
-
-        PerObjectTransforms* mappedTransforms;
-        D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
-        deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
-
-        mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
-        mappedTransforms->worldTransformMatrix = DirectX::XMMatrixTranspose(worldTransformMatrix);
-        mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransformMatrix);
-        mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransformMatrix);
-
-        deviceContext->Unmap(perObjectTransformBuffer, 0);
-
-        deviceContext->DrawIndexed(d3d11Sprite.getIndecesNum(), 0, 0);
     }
 
-    deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    drawSprite((*order)[orderSize - 1], indexPos, indexCount, deviceContext);
 
-    prepareCanvasProjTransformMatrix(projTransformMatrix);
+    //
+
+    /*prepareCanvasProjTransformMatrix(projTransformMatrix);
+
+    deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+
+    mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
+    mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransformMatrix);
+    mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransformMatrix);
+
+    deviceContext->Unmap(perObjectTransformBuffer, 0);
 
     order = data.getCanvasRedneringOrder();
     orderSize = order->size();
@@ -252,20 +296,6 @@ void D3D11Renderer::draw(RenderingData data) {
             changeSprite(node.spriteResource, deviceContext);
         }
 
-        DirectX::XMMATRIX worldTransformMatrix = DirectX::XMLoadFloat4x4(node.transform);
-        worldTransformMatrix.r[3].m128_f32[1] *= -1.0f;
-
-        PerObjectTransforms* mappedTransforms;
-        D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
-        deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
-
-        mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
-        mappedTransforms->worldTransformMatrix = DirectX::XMMatrixTranspose(worldTransformMatrix);
-        mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransformMatrix);
-        mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransformMatrix);
-
-        deviceContext->Unmap(perObjectTransformBuffer, 0);
-
         deviceContext->DrawIndexed(d3d11Sprite.getIndecesNum(), 0, 0);
-    }
+    }*/
 }
