@@ -1,5 +1,6 @@
 #include "RenderingOrder.h"
 
+#include <algorithm>
 #include <cassert>
 
 bool RenderingOrder::init(Heap* _heap) {
@@ -80,17 +81,21 @@ void RenderingOrder::pushNode(EntityID entityID, ResourceReference materialResou
 }
 
 void RenderingOrder::sort() {
-    std::qsort(nodes, currentNodeSize, sizeof(RenderingOrderNode), [](const void* node1, const void* node2) {
-        TransformMatrix* transform1 = ((RenderingOrderNode*)(node1))->transform;
-        TransformMatrix* transform2 = ((RenderingOrderNode*)(node2))->transform;
+    std::sort(nodes, nodes + currentNodeSize, [](const RenderingOrderNode& node1, const RenderingOrderNode& node2) {
+        TransformMatrix* transform1 = node1.transform;
+        TransformMatrix* transform2 = node2.transform;
 
-        if (transform1->_43 > transform2->_43) {
-            return 1;
+        
+        if (transform1->_43 == transform2->_43) {
+            if (node1.materialResource.getResourceID() == node2.materialResource.getResourceID()) {
+                return node1.spriteResource.getResourceID() < node2.spriteResource.getResourceID();
+            }
+            else {
+                return node1.materialResource.getResourceID() < node2.materialResource.getResourceID();
+            }
         }
-        if (transform1->_43 < transform2->_43) {
-            return -1;
+        else {
+            return transform1->_43 < transform2->_43;
         }
-
-        return 0;
         });
 }

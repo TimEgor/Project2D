@@ -3,7 +3,7 @@
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/RenderingData.h>
 
-class D3D11SpriteBatch;
+class D3D11SpriteBatchManager;
 
 struct alignas(16) PerObjectTransforms final {
 	DirectX::XMMATRIX viewTransformMatrix;
@@ -25,7 +25,7 @@ private:
 	ID3D11SamplerState* spriteSamplerState;
 	ID3D11BlendState* spriteBlendState;
 
-	D3D11SpriteBatch* spriteBatch;
+	D3D11SpriteBatchManager* spriteBatchManager;
 
 	ResourceID currentMaterialID;
 	ResourceID currentSpriteID;

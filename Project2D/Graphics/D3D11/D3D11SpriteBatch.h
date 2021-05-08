@@ -19,6 +19,8 @@ public:
 
 	void buildData(RenderingOrderNode* node, size_t count);
 
-	ID3D11Buffer* getVertecesBuffer() { return vertecesBuffer; }
-	ID3D11Buffer* getIndecesBuffer() { return indecesBuffer; }
+	ID3D11Buffer* getVertecesBuffer() const { return vertecesBuffer; }
+	ID3D11Buffer* getIndecesBuffer() const { return indecesBuffer; }
+
+	bool isInit() const { return vertecesBuffer || indecesBuffer; }
 };
