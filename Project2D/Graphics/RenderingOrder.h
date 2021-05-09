@@ -6,6 +6,11 @@
 
 #include <MemoryManager/Heap.h>
 
+enum RenderingOrderType {
+	SceneOrderType,
+	CanvasOrderType
+};
+
 struct RenderingOrderNode final {
 	ResourceReference materialResource;
 	ResourceReference spriteResource;
@@ -26,8 +31,10 @@ private:
 	size_t allocatedNodesSize;
 	size_t currentNodeSize;
 
+	RenderingOrderType type;
+
 public:
-	RenderingOrder() = default;
+	RenderingOrder(RenderingOrderType type);
 	RenderingOrder(const RenderingOrder&) = delete;
 	~RenderingOrder() { release(); }
 
@@ -47,4 +54,6 @@ public:
 
 	size_t size() const { return currentNodeSize; }
 	size_t capacity() const { return allocatedNodesSize; }
+
+	RenderingOrderType getType() const { return type; }
 };

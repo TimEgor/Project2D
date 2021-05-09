@@ -2,7 +2,6 @@
 
 #include <Graphics/D3D11/D3D11Verteces.h>
 #include <Graphics/D3D11/D3D11Sprite.h>
-#include <Graphics/RenderingOrder.h>
 
 bool D3D11SpriteBatch::init(size_t count) {
 	ID3D11Device* device = D3D11::get().getDevice();
@@ -34,9 +33,11 @@ bool D3D11SpriteBatch::init(size_t count) {
 void D3D11SpriteBatch::release() {
     D3D11ObjectRelease(vertecesBuffer);
     D3D11ObjectRelease(indecesBuffer);
+
+    spriteCount = 0;
 }
 
-void D3D11SpriteBatch::buildData(RenderingOrderNode* node, size_t count) {
+void D3D11SpriteBatch::buildData(RenderingOrderNode* node, size_t count, RenderingOrderType type) {
     ID3D11DeviceContext* context = D3D11::get().getDeviceContext();
 
     D3D11_MAPPED_SUBRESOURCE vertecesMappedSubresource{};
@@ -55,6 +56,10 @@ void D3D11SpriteBatch::buildData(RenderingOrderNode* node, size_t count) {
 
     for (size_t i = 0; i < count; ++i) {
         RenderingOrderNode* currentNode = node + i;
+
+        if (type == RenderingOrderType::CanvasOrderType) {
+            currentNode->transform->_42 = -currentNode->transform->_42;
+        }
 
         for (size_t vertexIndex = 0; vertexIndex < 4; ++vertexIndex) {
             const D3D11SpriteVertex& spriteVertex = spriteVerteces[vertexIndex];
@@ -85,4 +90,6 @@ void D3D11SpriteBatch::buildData(RenderingOrderNode* node, size_t count) {
 
     context->Unmap(vertecesBuffer, 0);
     context->Unmap(indecesBuffer, 0);
+
+    spriteCount = count;
 }

@@ -25,7 +25,8 @@ private:
 	ID3D11SamplerState* spriteSamplerState;
 	ID3D11BlendState* spriteBlendState;
 
-	D3D11SpriteBatchManager* spriteBatchManager;
+	D3D11SpriteBatchManager* sceneBatchManager;
+	D3D11SpriteBatchManager* canvasBatchManager;
 
 	ResourceID currentMaterialID;
 	ResourceID currentSpriteID;
@@ -39,6 +40,7 @@ private:
 	void changeMaterial(ResourceReference materialResource, ID3D11DeviceContext* context);
 	void changeSprite(ResourceReference spriteResource, ID3D11DeviceContext* context);
 
+	void drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOrder* order, ID3D11DeviceContext* context);
 	void drawSprite(const RenderingOrderNode& node, size_t indexPos, size_t indexCount, ID3D11DeviceContext* context);
 
 public:

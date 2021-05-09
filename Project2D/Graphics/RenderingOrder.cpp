@@ -3,6 +3,14 @@
 #include <algorithm>
 #include <cassert>
 
+RenderingOrder::RenderingOrder(RenderingOrderType type)
+    : nodes(nullptr),
+    transforms(nullptr),
+    heap(nullptr),
+    allocatedNodesSize(0),
+    currentNodeSize(0),
+    type(type) {}
+
 bool RenderingOrder::init(Heap* _heap) {
     heap = _heap;
 

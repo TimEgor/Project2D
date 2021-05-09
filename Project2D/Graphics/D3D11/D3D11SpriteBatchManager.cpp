@@ -6,7 +6,7 @@
 
 D3D11SpriteBatchManager::D3D11SpriteBatchManager() : preparingBatchesCount(0) {}
 
-void D3D11SpriteBatchManager::prepareRenderingData(RenderingOrderNode* nodes, size_t nodesCount) {
+void D3D11SpriteBatchManager::prepareRenderingData(RenderingOrderNode* nodes, size_t nodesCount, RenderingOrderType  nodesType) {
 	assert(nodes && nodesCount);
 
 	size_t currentBatchesCount = batches.size();
@@ -39,7 +39,7 @@ void D3D11SpriteBatchManager::prepareRenderingData(RenderingOrderNode* nodes, si
 
 		size_t currentBatchNodesCount = currentNodesCount < BATCH_SIZE ? currentNodesCount : BATCH_SIZE;
 
-		batch.buildData(currentNodePtr, currentBatchNodesCount);
+		batch.buildData(currentNodePtr, currentBatchNodesCount, nodesType);
 
 		currentNodePtr += currentBatchNodesCount;
 		currentNodesCount -= currentBatchNodesCount;

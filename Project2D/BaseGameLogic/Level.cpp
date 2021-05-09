@@ -35,13 +35,13 @@ bool Level::init() {
         return false;
     }
 
-    sceneRenderingOrder = new RenderingOrder();
+    sceneRenderingOrder = new RenderingOrder(SceneOrderType);
     if (!sceneRenderingOrder->init(MemoryManager::get().getDefaultHeap())) {
         release();
         return false;
     }
 
-    canvasRenderingOrder = new RenderingOrder();
+    canvasRenderingOrder = new RenderingOrder(CanvasOrderType);
     if (!canvasRenderingOrder->init(MemoryManager::get().getDefaultHeap())) {
         release();
         return false;

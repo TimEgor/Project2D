@@ -1,8 +1,7 @@
 #pragma once
 
-#include <Graphics\D3D11\D3D11.h>
-
-struct RenderingOrderNode;
+#include <Graphics/D3D11/D3D11.h>
+#include <Graphics/RenderingOrder.h>
 
 class D3D11SpriteBatch final {
 private:
@@ -17,7 +16,9 @@ public:
 	bool init(size_t count);
 	void release();
 
-	void buildData(RenderingOrderNode* node, size_t count);
+	void buildData(RenderingOrderNode* node, size_t count, RenderingOrderType type);
+
+	size_t getSpriteCount() const { return spriteCount; }
 
 	ID3D11Buffer* getVertecesBuffer() const { return vertecesBuffer; }
 	ID3D11Buffer* getIndecesBuffer() const { return indecesBuffer; }
