@@ -14,7 +14,7 @@ private:
 public:
 	D3D11SpriteBatchManager();
 
-	void prepareRenderingData(RenderingOrderNode* node, size_t nodesCount, RenderingOrderType nodesType);
+	void prepareRenderingData(const std::vector<RenderingOrderNode*>& nodes, RenderingOrderType nodesType);
 
 	void releaseUselessBranches();
 	void release();

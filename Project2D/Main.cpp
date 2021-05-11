@@ -5,9 +5,11 @@
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/Canvas/CanvasLabelEntityComponent.h>
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/D3D11/D3D11Renderer.h>
 #include <Graphics/Scene.h>
+#include <Graphics/FontManager.h>
 
 #include <chrono>
 
@@ -20,6 +22,10 @@ int main() {
 
 	UserInterfaces& userInterfaces = UserInterfaces::get();
 	userInterfaces.init();
+
+	FontManager& fontManager = FontManager::get();
+	fontManager.init();
+	fontManager.addFont("Fonts/Arial");
 
 	D3D11& d3d11 = D3D11::get();
 	d3d11.init();
@@ -86,6 +92,10 @@ int main() {
 	canvasNode2->setAnchorY(0.5f);
 	canvasNode2->setPositionX(50.0f);
 	canvasNode2->setPositionY(50.0f);
+
+	Entity* canvasEntity3 = level->createCanvasEntity(canvasEntity1);
+	CanvasLabelEntityComponent* labelCanvasComponent = (CanvasLabelEntityComponent*)(level->createEntityComponent(CanvasLabelEntityComponentType, canvasEntity3));
+	labelCanvasComponent->setText("Test");
 
 	//
 	Clock::time_point startTime = Clock::now();

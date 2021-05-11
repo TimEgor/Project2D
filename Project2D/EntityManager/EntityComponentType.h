@@ -2,8 +2,10 @@
 
 class SpriteRendererEntityComponent;
 class CanvasSpriteRendererEntityComponent;
+class CanvasLabelEntityComponent;
 
 enum EntityComponentType {
 	SpriteRendererEntityComponentType,
-	CanvasSpriteRendererEntityComponentType
+	CanvasSpriteRendererEntityComponentType,
+	CanvasLabelEntityComponentType
 };

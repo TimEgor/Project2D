@@ -16,7 +16,7 @@ public:
 	bool init(size_t count);
 	void release();
 
-	void buildData(RenderingOrderNode* node, size_t count, RenderingOrderType type);
+	void buildData(const std::vector<RenderingOrderNode*>& nodes, size_t currentIndex, size_t count, RenderingOrderType type);
 
 	size_t getSpriteCount() const { return spriteCount; }
 

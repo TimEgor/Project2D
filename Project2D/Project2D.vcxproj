@@ -39,14 +39,14 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <EnableASAN>false</EnableASAN>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
-    <EnableASAN>false</EnableASAN>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -54,7 +54,7 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <EnableASAN>false</EnableASAN>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -186,6 +186,7 @@
     <ClCompile Include="EntityManager\EntityComponentManager.cpp" />
     <ClCompile Include="EntityManager\EntityComponentReference.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.cpp" />
+    <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResource.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\WICTextureLoader11.cpp" />
+    <ClCompile Include="Graphics\FontManager.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
     <ClCompile Include="Graphics\RenderingOrder.cpp" />
     <ClCompile Include="Graphics\Scene.cpp" />
@@ -240,6 +242,7 @@
     <ClInclude Include="EntityManager\EntityComponentManager.h" />
     <ClInclude Include="EntityManager\EntityComponentReference.h" />
     <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.h" />
+    <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentType.h" />
     <ClInclude Include="EntityManager\EntityHandler.h" />
@@ -259,14 +262,17 @@
     <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResource.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.h" />
     <ClInclude Include="Graphics\D3D11\WICTextureLoader11.h" />
+    <ClInclude Include="Graphics\FontManager.h" />
     <ClInclude Include="Graphics\Node.h" />
     <ClInclude Include="Graphics\NodeHandler.h" />
     <ClInclude Include="Graphics\RenderingData.h" />
     <ClInclude Include="Graphics\RenderingOrder.h" />
     <ClInclude Include="Graphics\Scene.h" />
     <ClInclude Include="Graphics\SceneTypes.h" />
+    <ClInclude Include="Graphics\TextureResource.h" />
     <ClInclude Include="Graphics\Transform.h" />
     <ClInclude Include="Graphics\TransformHandler.h" />
+    <ClInclude Include="Graphics\Verteces.h" />
     <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h" />
     <ClInclude Include="MemoryManager\Allocators\ArrayPoolAllocator.h" />
     <ClInclude Include="MemoryManager\Allocators\ChunkAllocator.h" />

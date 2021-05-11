@@ -10,6 +10,8 @@
 #include <Graphics/D3D11/Resources/D3D11ShaderResourceCreator.h>
 #include <Graphics/D3D11/Resources/D3D11TextureResourceCreator.h>
 
+#include <cassert>
+
 ResourceManager& ResourceManager::get() {
     static ResourceManager uniqueResourceManager;
     return uniqueResourceManager;
@@ -183,7 +185,20 @@ ResourceReference ResourceManager::getResourceAsyncFromArchive(ResourceID resour
 }
 
 void* ResourceManager::getRawResourceFromArchive(const ResourceName& resourceName, size_t& resourceSize) {
-    return nullptr;
+    return getRawResourceFromArchive(resourceName.hash(), resourceSize);
+}
+
+void* ResourceManager::getRawResourceFromArchive(ResourceID resourceID, size_t& resourceSize) {
+    resourceSize = 0;
+    bool checker = false;
+    checker = zipFileSystem->getResourceSize(resourceID, resourceSize);
+    assert(checker);
+
+    void* data = new uint8_t[resourceSize];
+    checker = zipFileSystem->getResourceData(resourceID, data, resourceSize);
+    assert(checker);
+
+    return data;
 }
 
 void* ResourceManager::getRawResourceFromNativeFileSystem(const ResourceName& resourceName, size_t& resourceSize) {

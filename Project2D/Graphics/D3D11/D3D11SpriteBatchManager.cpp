@@ -6,8 +6,12 @@
 
 D3D11SpriteBatchManager::D3D11SpriteBatchManager() : preparingBatchesCount(0) {}
 
-void D3D11SpriteBatchManager::prepareRenderingData(RenderingOrderNode* nodes, size_t nodesCount, RenderingOrderType  nodesType) {
-	assert(nodes && nodesCount);
+void D3D11SpriteBatchManager::prepareRenderingData(const std::vector<RenderingOrderNode*>& nodes, RenderingOrderType  nodesType) {
+	if (nodes.empty()) {
+		return;
+	}
+
+	size_t nodesCount = nodes.size();
 
 	size_t currentBatchesCount = batches.size();
 	size_t currentCapacity = currentBatchesCount * BATCH_SIZE;
@@ -27,7 +31,7 @@ void D3D11SpriteBatchManager::prepareRenderingData(RenderingOrderNode* nodes, si
 		++requiringBatchesCount;
 	}
 
-	RenderingOrderNode* currentNodePtr = nodes;
+	size_t currentIndex = 0;
 	size_t currentNodesCount = nodesCount;
 
 	for (size_t i = 0; i < requiringBatchesCount; ++i) {
@@ -38,10 +42,9 @@ void D3D11SpriteBatchManager::prepareRenderingData(RenderingOrderNode* nodes, si
 		}
 
 		size_t currentBatchNodesCount = currentNodesCount < BATCH_SIZE ? currentNodesCount : BATCH_SIZE;
-
-		batch.buildData(currentNodePtr, currentBatchNodesCount, nodesType);
-
-		currentNodePtr += currentBatchNodesCount;
+		batch.buildData(nodes, currentIndex, currentBatchNodesCount, nodesType);
+		
+		currentIndex += currentBatchNodesCount;
 		currentNodesCount -= currentBatchNodesCount;
 	}
 

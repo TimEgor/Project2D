@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Graphics/D3D11/D3D11.h>
-#include <ResourceManager/Resource.h>
+#include <Graphics/TextureResource.h>
 
-class D3D11TextureResource final : public Resource {
+class D3D11TextureResource final : public TextureResource {
 private:
 	ID3D11Texture2D* texture;
 	ID3D11ShaderResourceView* shaderResourceView;

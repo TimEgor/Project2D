@@ -207,11 +207,13 @@ void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOr
         return;
     }
 
-    RenderingOrderNode* currentNode = &(*order)[0];
-    batchManager->prepareRenderingData(currentNode, orderSize, order->getType());
+    const std::vector<RenderingOrderNode*>& renderingNodes = order->getNodes();
+    batchManager->prepareRenderingData(renderingNodes, order->getType());
 
     const std::vector<D3D11SpriteBatch>& batches = batchManager->getBatches();
     size_t batchesCount = batchManager->getPreparingBatchesCount();
+
+    size_t currentIndex = 0;
 
     for (size_t i = 0; i < batchesCount; ++i) {
         const D3D11SpriteBatch& batch = batches[i];
@@ -219,7 +221,7 @@ void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOr
         size_t batchSize = batch.getSpriteCount();
 
         size_t indexPos = 0;
-        size_t indexCount = 6;
+        size_t indexCount = 0;
 
         ResourceID currentBatchMaterialID = 0;
         ResourceID currentBatchTextureID = 0;
@@ -231,37 +233,50 @@ void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOr
         deviceContext->IASetVertexBuffers(0, 1, &vertecesBuffer, &strides, &offsets);
         deviceContext->IASetIndexBuffer(batch.getIndecesBuffer(), DXGI_FORMAT_R16_UINT, 0);
         for (size_t i = 0; i < batchSize; ++i) {
-            const RenderingOrderNode& node = *(currentNode + i);
+            RenderingOrderNode* node = renderingNodes[currentIndex + i];
 
-            if (node.materialResource.getResourceID() != currentBatchMaterialID || node.spriteResource.getResourceID() != currentBatchTextureID) {
+            if (node->materialResource.getResourceID() != currentBatchMaterialID || node->spriteResource.getResourceID() != currentBatchTextureID) {
                 if (i != 0) {
                     drawSprite(node, indexPos, indexCount, deviceContext);
 
                     indexPos += indexCount;
                     indexCount = 6;
                 }
+                else {
+                    if (node->getType() == BatchSpriteOrderNodeType) {
+                        indexCount = ((BatchRenderingOrderNode*)(node))->indecesCount;
+                    }
+                    else {
+                        indexCount = 6;
+                    }
+                }
 
-                currentBatchMaterialID = node.materialResource.getResourceID();
-                currentBatchTextureID = node.spriteResource.getResourceID();
+                currentBatchMaterialID = node->materialResource.getResourceID();
+                currentBatchTextureID = node->spriteResource.getResourceID();
             }
             else {
-                indexCount += 6;
+                if (node->getType() == BatchSpriteOrderNodeType) {
+                    indexCount += ((BatchRenderingOrderNode*)(node))->indecesCount;
+                }
+                else {
+                    indexCount += 6;
+                }
             }
         }
 
-        currentNode += batchSize;
+        currentIndex += batchSize;
 
-        drawSprite(*(currentNode - 1), indexPos, indexCount, deviceContext);
+        drawSprite(renderingNodes[currentIndex - 1], indexPos, indexCount, deviceContext);
     }
 }
 
-void D3D11Renderer::drawSprite(const RenderingOrderNode& node, size_t indexPos, size_t indexCount, ID3D11DeviceContext* deviceContext) {
-    if (node.materialResource.getResourceID() != currentMaterialID) {
-        changeMaterial(node.materialResource, deviceContext);
+void D3D11Renderer::drawSprite(RenderingOrderNode* node, size_t indexPos, size_t indexCount, ID3D11DeviceContext* deviceContext) {
+    if (node->materialResource.getResourceID() != currentMaterialID) {
+        changeMaterial(node->materialResource, deviceContext);
     }
 
-    if (node.spriteResource.getResourceID() != currentSpriteID) {
-        changeSprite(node.spriteResource, deviceContext);
+    if (node->spriteResource.getResourceID() != currentSpriteID) {
+        changeSprite(node->spriteResource, deviceContext);
     }
 
     deviceContext->DrawIndexed(indexCount, indexPos, 0);

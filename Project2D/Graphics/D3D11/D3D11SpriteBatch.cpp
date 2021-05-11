@@ -37,7 +37,7 @@ void D3D11SpriteBatch::release() {
     spriteCount = 0;
 }
 
-void D3D11SpriteBatch::buildData(RenderingOrderNode* node, size_t count, RenderingOrderType type) {
+void D3D11SpriteBatch::buildData(const std::vector<RenderingOrderNode*>& nodes, size_t currentIndex, size_t count, RenderingOrderType type) {
     ID3D11DeviceContext* context = D3D11::get().getDeviceContext();
 
     D3D11_MAPPED_SUBRESOURCE vertecesMappedSubresource{};
@@ -55,7 +55,7 @@ void D3D11SpriteBatch::buildData(RenderingOrderNode* node, size_t count, Renderi
     size_t indexNum = 0;
 
     for (size_t i = 0; i < count; ++i) {
-        RenderingOrderNode* currentNode = node + i;
+        RenderingOrderNode* currentNode = nodes[currentIndex + i];
 
         if (type == RenderingOrderType::CanvasOrderType) {
             currentNode->transform->_42 = -currentNode->transform->_42;
@@ -64,14 +64,14 @@ void D3D11SpriteBatch::buildData(RenderingOrderNode* node, size_t count, Renderi
         for (size_t vertexIndex = 0; vertexIndex < 4; ++vertexIndex) {
             const D3D11SpriteVertex& spriteVertex = spriteVerteces[vertexIndex];
 
-            DirectX::XMFLOAT4 spritePosition{ spriteVertex.posX, spriteVertex.posY, 0.0f, 1.0f };
+            DirectX::XMFLOAT4 spritePosition{ spriteVertex.vertex.posX, spriteVertex.vertex.posY, 0.0f, 1.0f };
             DirectX::XMVECTOR position = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&spritePosition), DirectX::XMLoadFloat4x4(currentNode->transform));
             DirectX::XMStoreFloat4(&spritePosition, position);
 
-            vertexPtr->posX = spritePosition.x;
-            vertexPtr->posY = spritePosition.y;
-            vertexPtr->texU = spriteVertex.texU;
-            vertexPtr->texV = spriteVertex.texV;
+            vertexPtr->vertex.posX = spritePosition.x;
+            vertexPtr->vertex.posY = spritePosition.y;
+            vertexPtr->vertex.texU = spriteVertex.vertex.texU;
+            vertexPtr->vertex.texV = spriteVertex.vertex.texV;
 
             ++vertexPtr;
         }

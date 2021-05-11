@@ -4,7 +4,9 @@
 #include <EntityManager/EntityComponentManager.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/Canvas/CanvasLabelEntityComponent.h>
 #include <Graphics/Scene.h>
+#include <Graphics/FontManager.h>
 #include <MemoryManager/MemoryManager.h>
 #include <ResourceManager/ResourceManager.h>
 
@@ -36,13 +38,8 @@ bool Level::init() {
     }
 
     sceneRenderingOrder = new RenderingOrder(SceneOrderType);
-    if (!sceneRenderingOrder->init(MemoryManager::get().getDefaultHeap())) {
-        release();
-        return false;
-    }
-
     canvasRenderingOrder = new RenderingOrder(CanvasOrderType);
-    if (!canvasRenderingOrder->init(MemoryManager::get().getDefaultHeap())) {
+    if (!sceneRenderingOrder && !canvasRenderingOrder) {
         release();
         return false;
     }
@@ -146,6 +143,9 @@ EntityComponent* Level::createEntityComponent(EntityComponentType type, Entity* 
     case CanvasSpriteRendererEntityComponentType:
         component = (EntityComponent*)(entityComponentManager->createComponent<CanvasSpriteRendererEntityComponent>(type));
         break;
+    case CanvasLabelEntityComponentType:
+        component = (EntityComponent*)(entityComponentManager->createComponent<CanvasLabelEntityComponent>(type));
+        break;
     default:
         break;
     }
@@ -212,7 +212,7 @@ RenderingData Level::getRenderingData() {
 
     size_t spritesNum = entityComponentManager->getEntityComponentsNum(SpriteRendererEntityComponentType);
     if (spritesNum != 0) {
-        sceneRenderingOrder->preReSize(spritesNum);
+        sceneRenderingOrder->reserve(spritesNum);
 
         if (auto spritesAllocators = entityComponentManager->getEntityComponents(SpriteRendererEntityComponentType)) {
             size_t allocatorsNum = spritesAllocators->size();
@@ -230,7 +230,7 @@ RenderingData Level::getRenderingData() {
 
                         TransformMatrix* worldTransform = node->getTransform()->getWorldTransformMatrix();
 
-                        sceneRenderingOrder->pushNode(node->getID(), component.getMaterialResource(), spriteResource, worldTransform);
+                        sceneRenderingOrder->pushNode(component.getMaterialResource(), spriteResource, worldTransform);
                     }
                 }
             }
@@ -238,17 +238,18 @@ RenderingData Level::getRenderingData() {
     }
 
     spritesNum = entityComponentManager->getEntityComponentsNum(CanvasSpriteRendererEntityComponentType);
+    spritesNum += entityComponentManager->getEntityComponentsNum(CanvasLabelEntityComponentType);
     if (spritesNum != 0) {
-        canvasRenderingOrder->preReSize(spritesNum);
+        canvasRenderingOrder->reserve(spritesNum);
 
         if (auto spritesAllocators = entityComponentManager->getEntityComponents(CanvasSpriteRendererEntityComponentType)) {
             size_t allocatorsNum = spritesAllocators->size();
             for (size_t allocatorIndex = 0; allocatorIndex < allocatorsNum; ++allocatorIndex) {
-                const ArrayPoolAllocator& allocator = (*spritesAllocators)[allocatorIndex];
+                ArrayPoolAllocator& allocator = (*spritesAllocators)[allocatorIndex];
                 size_t allocatorSize = allocator.size();
 
                 for (size_t componentIndex = 0; componentIndex < allocatorSize; ++componentIndex) {
-                    const CanvasSpriteRendererEntityComponent& component = allocator.getElement<CanvasSpriteRendererEntityComponent>(componentIndex);
+                    CanvasSpriteRendererEntityComponent& component = allocator.getElement<CanvasSpriteRendererEntityComponent>(componentIndex);
 
                     ResourceReference spriteResource = component.getSpriteResource();
                     if (!spriteResource.isNull()) {
@@ -263,7 +264,36 @@ RenderingData Level::getRenderingData() {
                             worldTransform.m[1][1] *= ((CanvasTransform*)(transform))->getHeight();
                         }             
 
-                        canvasRenderingOrder->pushNode(node->getID(), component.getMaterialResource(), spriteResource, &worldTransform);
+                        canvasRenderingOrder->pushNode(component.getMaterialResource(), spriteResource, &worldTransform);
+                    }
+                }
+            }
+        }
+
+        if (auto labelsAllocators = entityComponentManager->getEntityComponents(CanvasLabelEntityComponentType)) {
+            FontManager& fontManager = FontManager::get();
+
+            size_t allocatorsNum = labelsAllocators->size();
+            for (size_t allocatorIndex = 0; allocatorIndex < allocatorsNum; ++allocatorIndex) {
+                ArrayPoolAllocator& allocator = (*labelsAllocators)[allocatorIndex];
+                size_t allocatorSize = allocator.size();
+
+                for (size_t componentIndex = 0; componentIndex < allocatorSize; ++componentIndex) {
+                    CanvasLabelEntityComponent& component = allocator.getElement<CanvasLabelEntityComponent>(componentIndex);
+
+                    if (!component.getText().empty()) {
+                        component.update();
+
+                        ResourceReference spriteResource = fontManager.getFontInfo(component.getFontID())->bitmapTexture;
+
+                        Node* node = component.getParent()->getNode();
+                        node->updateTransform();
+
+                        Transform* transform = node->getTransform();
+                        TransformMatrix worldTransform = *(transform->getWorldTransformMatrix());
+
+                        canvasRenderingOrder->pushBatchNode(component.getMaterialResource(), spriteResource, &worldTransform,
+                            component.getVertecesCount(), component.getVerteces(), component.getIndecesCount(), component.getIndeces());
                     }
                 }
             }

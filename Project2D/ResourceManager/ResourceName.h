@@ -17,8 +17,10 @@ public:
 	ResourceName(const char* newName);
 	ResourceName(const ResourceName& newName);
 
-	ResourceName& operator=(const char* newName);
-	ResourceName& operator=(const ResourceName& newName);
+	ResourceName& operator=(const char* name);
+	ResourceName& operator=(const ResourceName& name);
+	ResourceName& operator+(const char* name);
+	ResourceName& operator+(const ResourceName& name);
 
 	const ResourceNameCharType* c_str() const { return name; }
 	ResourceNameCharType* data() { return name; }
