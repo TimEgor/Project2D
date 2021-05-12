@@ -46,6 +46,9 @@ private:
 	std::vector<BatchRenderingOrderNode> batchSpritesNode;
 	std::vector<TransformMatrix> transforms;
 
+	size_t vertecesCount;
+	size_t indecesCount;
+
 	RenderingOrderType type;
 
 public:
@@ -58,6 +61,9 @@ public:
 	const RenderingOrderNode* operator[](size_t index) const;
 
 	const std::vector<RenderingOrderNode*>& getNodes() const { return nodes; }
+
+	size_t getVertecesCount() const { return vertecesCount; }
+	size_t getIndecesCount() const { return indecesCount; }
 
 	void release();
 

@@ -23,15 +23,15 @@ int main() {
 	UserInterfaces& userInterfaces = UserInterfaces::get();
 	userInterfaces.init();
 
-	FontManager& fontManager = FontManager::get();
-	fontManager.init();
-	fontManager.addFont("Fonts/Arial");
-
 	D3D11& d3d11 = D3D11::get();
 	d3d11.init();
 
 	D3D11Renderer& d3d11Renderer = D3D11Renderer::get();
 	d3d11Renderer.init();
+
+	FontManager& fontManager = FontManager::get();
+	fontManager.init();
+	fontManager.addFont("Fonts/Arial");
 
 	//
 

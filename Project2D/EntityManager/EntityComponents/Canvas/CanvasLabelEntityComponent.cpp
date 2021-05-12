@@ -97,10 +97,10 @@ void CanvasLabelEntityComponent::updateBuffers() {
 					kerning = fontInfo->getKerning(currentChar, lastChar);
 				}
 
-				posX += (charInfo.xoffset + kerning) / (float)(fontInfo->lineHeight);
+				posX += charInfo.xoffset + kerning;
 
-				float posYTop = -charInfo.yoffset / (float)(fontInfo->lineHeight);
-				float posYDown = -(charInfo.yoffset + charInfo.height) / (float)(fontInfo->lineHeight);
+				float posYTop = -charInfo.yoffset;
+				float posYDown = -(charInfo.yoffset + charInfo.height);
 
 				float bitmapU = charInfo.x / (float)(bitmapWight);
 				float bitmapV = charInfo.y / (float)(bitmapHeight);
@@ -123,7 +123,7 @@ void CanvasLabelEntityComponent::updateBuffers() {
 				verteces[vertexPos + 1].texU = bitmapU;
 				verteces[vertexPos + 1].texV = bitmapVF;
 
-				posX += charInfo.width / (float)(fontInfo->lineHeight);
+				posX += charInfo.width;
 
 				//Right bottom
 				verteces[vertexPos + 2].posX = posX;

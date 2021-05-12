@@ -27,6 +27,8 @@ bool D3D11SpriteBatch::init(size_t count) {
 
     device->CreateBuffer(&bufferDesc, nullptr, &indecesBuffer);
 
+    capacity = count;
+
 	return true;
 }
 
@@ -35,9 +37,10 @@ void D3D11SpriteBatch::release() {
     D3D11ObjectRelease(indecesBuffer);
 
     spriteCount = 0;
+    capacity = 0;
 }
 
-void D3D11SpriteBatch::buildData(const std::vector<RenderingOrderNode*>& nodes, size_t currentIndex, size_t count, RenderingOrderType type) {
+size_t D3D11SpriteBatch::buildData(const std::vector<RenderingOrderNode*>& nodes, size_t currentIndex, RenderingOrderType type) {
     ID3D11DeviceContext* context = D3D11::get().getDeviceContext();
 
     D3D11_MAPPED_SUBRESOURCE vertecesMappedSubresource{};
@@ -54,42 +57,98 @@ void D3D11SpriteBatch::buildData(const std::vector<RenderingOrderNode*>& nodes, 
     size_t vertNum = 0;
     size_t indexNum = 0;
 
-    for (size_t i = 0; i < count; ++i) {
-        RenderingOrderNode* currentNode = nodes[currentIndex + i];
+    size_t startIndex = currentIndex;
+    size_t count = nodes.size();
 
-        if (type == RenderingOrderType::CanvasOrderType) {
-            currentNode->transform->_42 = -currentNode->transform->_42;
+    size_t vertCapacity = capacity * 4;
+    size_t indexCapacity = capacity * 6;
+
+    spriteCount = 0;
+
+    for (currentIndex; currentIndex < count; ++currentIndex) {
+        RenderingOrderNode* currentNode = nodes[currentIndex];
+
+        if (currentNode->getType() == BatchSpriteOrderNodeType) {
+            BatchRenderingOrderNode* batchNode = static_cast<BatchRenderingOrderNode*>(currentNode);
+
+            if ((vertNum + batchNode->vertecesCount >= vertCapacity) && (indexNum + batchNode->indecesCount >= indexCapacity)) {
+                break;
+            }
+
+            if (type == RenderingOrderType::CanvasOrderType) {
+                currentNode->transform->_42 = -currentNode->transform->_42;
+            }
+
+            for (size_t vertexIndex = 0; vertexIndex < batchNode->vertecesCount; ++vertexIndex) {
+                const SpriteVertex& spriteVertex = batchNode->verteces[vertexIndex];
+
+                DirectX::XMFLOAT4 spritePosition{ spriteVertex.posX, spriteVertex.posY, 0.0f, 1.0f };
+                DirectX::XMVECTOR position = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&spritePosition), DirectX::XMLoadFloat4x4(currentNode->transform));
+
+                vertexPtr->vertex.posX = position.m128_f32[0];
+                vertexPtr->vertex.posY = position.m128_f32[1];
+                vertexPtr->vertex.texU = spriteVertex.texU;
+                vertexPtr->vertex.texV = spriteVertex.texV;
+
+                ++vertexPtr;
+            }
+
+            const uint16_t* currentIndeces = batchNode->indeces;
+            for (size_t spriteIndex = 0; spriteIndex < batchNode->indecesCount; spriteIndex += 6) {
+                indexPtr[0] = currentIndeces[spriteIndex];
+                indexPtr[1] = currentIndeces[spriteIndex + 1];
+                indexPtr[2] = currentIndeces[spriteIndex + 2];
+                indexPtr[3] = currentIndeces[spriteIndex + 3];
+                indexPtr[4] = currentIndeces[spriteIndex + 4];
+                indexPtr[5] = currentIndeces[spriteIndex + 5];
+                indexPtr += 6;
+            }
+
+            vertNum += batchNode->vertecesCount;
+            indexNum += batchNode->indecesCount;
+
+            spriteCount += batchNode->indecesCount / 6;
         }
+        else {
+            if ((vertNum + 4 >= vertCapacity) && (indexNum + 6 >= indexCapacity)) {
+                break;
+            }
 
-        for (size_t vertexIndex = 0; vertexIndex < 4; ++vertexIndex) {
-            const D3D11SpriteVertex& spriteVertex = spriteVerteces[vertexIndex];
+            if (type == RenderingOrderType::CanvasOrderType) {
+                currentNode->transform->_42 = -currentNode->transform->_42;
+            }
 
-            DirectX::XMFLOAT4 spritePosition{ spriteVertex.vertex.posX, spriteVertex.vertex.posY, 0.0f, 1.0f };
-            DirectX::XMVECTOR position = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&spritePosition), DirectX::XMLoadFloat4x4(currentNode->transform));
-            DirectX::XMStoreFloat4(&spritePosition, position);
+            for (size_t vertexIndex = 0; vertexIndex < 4; ++vertexIndex) {
+                const D3D11SpriteVertex& spriteVertex = spriteVerteces[vertexIndex];
 
-            vertexPtr->vertex.posX = spritePosition.x;
-            vertexPtr->vertex.posY = spritePosition.y;
-            vertexPtr->vertex.texU = spriteVertex.vertex.texU;
-            vertexPtr->vertex.texV = spriteVertex.vertex.texV;
+                DirectX::XMFLOAT4 spritePosition{ spriteVertex.vertex.posX, spriteVertex.vertex.posY, 0.0f, 1.0f };
+                DirectX::XMVECTOR position = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&spritePosition), DirectX::XMLoadFloat4x4(currentNode->transform));
 
-            ++vertexPtr;
+                vertexPtr->vertex.posX = position.m128_f32[0];
+                vertexPtr->vertex.posY = position.m128_f32[1];
+                vertexPtr->vertex.texU = spriteVertex.vertex.texU;
+                vertexPtr->vertex.texV = spriteVertex.vertex.texV;
+
+                ++vertexPtr;
+            }
+
+            indexPtr[0] = spriteIndeces[0] + vertNum;
+            indexPtr[1] = spriteIndeces[1] + vertNum;
+            indexPtr[2] = spriteIndeces[2] + vertNum;
+            indexPtr[3] = spriteIndeces[3] + vertNum;
+            indexPtr[4] = spriteIndeces[4] + vertNum;
+            indexPtr[5] = spriteIndeces[5] + vertNum;
+            indexPtr += 6;
+
+            vertNum += 4;
+            indexNum += 6;
+
+            ++spriteCount;
         }
-
-        indexPtr[0] = spriteIndeces[0] + vertNum;
-        indexPtr[1] = spriteIndeces[1] + vertNum;
-        indexPtr[2] = spriteIndeces[2] + vertNum;
-        indexPtr[3] = spriteIndeces[3] + vertNum;
-        indexPtr[4] = spriteIndeces[4] + vertNum;
-        indexPtr[5] = spriteIndeces[5] + vertNum;
-        indexPtr += 6;
-
-        vertNum += 4;
-        indexNum += 6;
     }
 
     context->Unmap(vertecesBuffer, 0);
     context->Unmap(indecesBuffer, 0);
 
-    spriteCount = count;
+    return startIndex - currentIndex;
 }

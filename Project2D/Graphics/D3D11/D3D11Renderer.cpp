@@ -179,11 +179,11 @@ void D3D11Renderer::endDrawing() {
 void D3D11Renderer::changeMaterial(ResourceReference materialResource, ID3D11DeviceContext* context) {
     D3D11MaterialResource material = materialResource.getResource<D3D11MaterialResource>();
 
-    D3D11VertexShaderResource vertexShader = material.getVertexShaderResource().getResource<D3D11VertexShaderResource>();
+    D3D11VertexShaderResource& vertexShader = material.getVertexShaderResource().getResource<D3D11VertexShaderResource>();
     context->VSSetShader(vertexShader.getVertexShader(), nullptr, 0);
     context->IASetInputLayout(vertexShader.getInputLayout());
 
-    D3D11PixelShaderResource pixelShader = material.getPixelShaderResource().getResource<D3D11PixelShaderResource>();
+    D3D11PixelShaderResource& pixelShader = material.getPixelShaderResource().getResource<D3D11PixelShaderResource>();
     context->PSSetShader(pixelShader.getPixelShader(), nullptr, 0);
 
     currentMaterialID = materialResource.getResourceID();
@@ -208,7 +208,7 @@ void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOr
     }
 
     const std::vector<RenderingOrderNode*>& renderingNodes = order->getNodes();
-    batchManager->prepareRenderingData(renderingNodes, order->getType());
+    batchManager->prepareRenderingData(renderingNodes, order->getType(), order->getVertecesCount(), order->getIndecesCount());
 
     const std::vector<D3D11SpriteBatch>& batches = batchManager->getBatches();
     size_t batchesCount = batchManager->getPreparingBatchesCount();
@@ -230,14 +230,16 @@ void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOr
         UINT strides = sizeof(D3D11SpriteVertex);
         UINT offsets = 0;
 
+        RenderingOrderNode* lastNode = nullptr;
+
         deviceContext->IASetVertexBuffers(0, 1, &vertecesBuffer, &strides, &offsets);
         deviceContext->IASetIndexBuffer(batch.getIndecesBuffer(), DXGI_FORMAT_R16_UINT, 0);
-        for (size_t i = 0; i < batchSize; ++i) {
-            RenderingOrderNode* node = renderingNodes[currentIndex + i];
+        for (size_t i = 0; i < batchSize; ) {
+            RenderingOrderNode* node = renderingNodes[currentIndex];
 
             if (node->materialResource.getResourceID() != currentBatchMaterialID || node->spriteResource.getResourceID() != currentBatchTextureID) {
                 if (i != 0) {
-                    drawSprite(node, indexPos, indexCount, deviceContext);
+                    drawSprite(lastNode, indexPos, indexCount, deviceContext);
 
                     indexPos += indexCount;
                     indexCount = 6;
@@ -262,11 +264,19 @@ void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOr
                     indexCount += 6;
                 }
             }
+
+            if (node->getType() == BatchSpriteOrderNodeType) {
+                i += ((BatchRenderingOrderNode*)(node))->indecesCount / 6;
+            }
+            else {
+                ++i;
+            }
+
+            lastNode = node;
+            ++currentIndex;
         }
 
-        currentIndex += batchSize;
-
-        drawSprite(renderingNodes[currentIndex - 1], indexPos, indexCount, deviceContext);
+        drawSprite(lastNode, indexPos, indexCount, deviceContext);
     }
 }
 

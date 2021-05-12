@@ -8,6 +8,7 @@ private:
 	ID3D11Buffer* vertecesBuffer;
 	ID3D11Buffer* indecesBuffer;
 	size_t spriteCount;
+	size_t capacity;
 
 public:
 	D3D11SpriteBatch() : vertecesBuffer(nullptr), indecesBuffer(nullptr), spriteCount(0) {}
@@ -16,7 +17,7 @@ public:
 	bool init(size_t count);
 	void release();
 
-	void buildData(const std::vector<RenderingOrderNode*>& nodes, size_t currentIndex, size_t count, RenderingOrderType type);
+	size_t buildData(const std::vector<RenderingOrderNode*>& nodes, size_t currentIndex, RenderingOrderType type);
 
 	size_t getSpriteCount() const { return spriteCount; }
 

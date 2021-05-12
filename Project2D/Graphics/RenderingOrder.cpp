@@ -17,6 +17,9 @@ void RenderingOrder::clear() {
     spritesNodes.clear();
     batchSpritesNode.clear();
     transforms.clear();
+
+    vertecesCount = 0;
+    indecesCount = 0;
 }
 
 RenderingOrderNode* RenderingOrder::operator[](size_t index) {
@@ -43,22 +46,28 @@ void RenderingOrder::pushNode(ResourceReference materialResource, ResourceRefere
     node.transform = &transforms.back();
 
     nodes.push_back(&node);
+
+    vertecesCount += 4;
+    indecesCount += 6;
 }
 
 void RenderingOrder::pushBatchNode(ResourceReference materialResource, ResourceReference spriteResource, const TransformMatrix* transform,
-    uint16_t vertecesCount, SpriteVertex* verteces, uint16_t indecesCount, uint16_t* indeces) {
+    uint16_t vertCount, SpriteVertex* verteces, uint16_t indCount, uint16_t* indeces) {
     BatchRenderingOrderNode& node = batchSpritesNode.emplace_back();
     node.materialResource = materialResource;
     node.spriteResource = spriteResource;
     node.verteces = verteces;
     node.indeces = indeces;
-    node.vertecesCount = vertecesCount;
-    node.indecesCount = indecesCount;
+    node.vertecesCount = vertCount;
+    node.indecesCount = indCount;
 
     transforms.push_back(*transform);
     node.transform = &transforms.back();
 
     nodes.push_back(&node);
+
+    vertecesCount += vertCount;
+    indecesCount += indCount;
 }
 
 void RenderingOrder::sort() {
