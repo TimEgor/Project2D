@@ -240,17 +240,16 @@ void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOr
             if (node->materialResource.getResourceID() != currentBatchMaterialID || node->spriteResource.getResourceID() != currentBatchTextureID) {
                 if (i != 0) {
                     drawSprite(lastNode, indexPos, indexCount, deviceContext);
-
                     indexPos += indexCount;
-                    indexCount = 6;
+                }
+
+                if (node->getType() == BatchSpriteOrderNodeType) {
+                    indexCount = ((BatchRenderingOrderNode*)(node))->indecesCount;
+                    i += ((BatchRenderingOrderNode*)(node))->indecesCount / 6;
                 }
                 else {
-                    if (node->getType() == BatchSpriteOrderNodeType) {
-                        indexCount = ((BatchRenderingOrderNode*)(node))->indecesCount;
-                    }
-                    else {
-                        indexCount = 6;
-                    }
+                    indexCount = 6;
+                    ++i;
                 }
 
                 currentBatchMaterialID = node->materialResource.getResourceID();
@@ -259,17 +258,12 @@ void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOr
             else {
                 if (node->getType() == BatchSpriteOrderNodeType) {
                     indexCount += ((BatchRenderingOrderNode*)(node))->indecesCount;
+                    i += ((BatchRenderingOrderNode*)(node))->indecesCount / 6;
                 }
                 else {
                     indexCount += 6;
+                    ++i;
                 }
-            }
-
-            if (node->getType() == BatchSpriteOrderNodeType) {
-                i += ((BatchRenderingOrderNode*)(node))->indecesCount / 6;
-            }
-            else {
-                ++i;
             }
 
             lastNode = node;
