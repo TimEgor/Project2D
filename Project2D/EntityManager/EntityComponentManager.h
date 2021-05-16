@@ -52,7 +52,7 @@ public:
 	void deleteEntityComponent(EntityComponent* component);
 
 	EntityComponent* getEntityComponent(EntityComponentID id);
-	const ComponentAllocators* getEntityComponents(EntityComponentType type) const;
+	ComponentAllocators* getEntityComponents(EntityComponentType type);
 
 	size_t getEntityComponentsNum(EntityComponentType type) const;
 };

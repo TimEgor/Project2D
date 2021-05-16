@@ -5,9 +5,11 @@
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/Canvas/CanvasLabelEntityComponent.h>
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/D3D11/D3D11Renderer.h>
 #include <Graphics/Scene.h>
+#include <Graphics/FontManager.h>
 
 #include <chrono>
 
@@ -15,6 +17,8 @@ typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::milliseconds Millisecond;
 
 int main() {
+	srand(time(0));
+
 	ResourceManager& resourceManager = ResourceManager::get();
 	resourceManager.init();
 
@@ -27,6 +31,10 @@ int main() {
 	D3D11Renderer& d3d11Renderer = D3D11Renderer::get();
 	d3d11Renderer.init();
 
+	FontManager& fontManager = FontManager::get();
+	fontManager.init();
+	fontManager.addFont("Fonts/Arial");
+
 	//
 
 	LevelManager& levelManager = LevelManager::get();
@@ -35,7 +43,11 @@ int main() {
 
 	Input* input = userInterfaces.getInput();
 
-	ResourceReference spriteResourceRef = resourceManager.getResourceFromArchive("testTexture.png");
+	ResourceReference testSpriteResourceRef = resourceManager.getResourceFromArchive("testTexture.png");
+	ResourceReference squareSpriteResourceRef = resourceManager.getResourceFromArchive("square.png");
+	ResourceReference circleSpriteResourceRef = resourceManager.getResourceFromArchive("circle.png");
+
+	std::vector<ResourceReference> sprites = { testSpriteResourceRef, squareSpriteResourceRef, circleSpriteResourceRef };
 
 	//Scene
 	Entity* sceneEntity1 = level->createSceneEntity();
@@ -43,10 +55,10 @@ int main() {
 	Entity* sceneEntity3 = level->createSceneEntity();
 
 	SpriteRendererEntityComponent* spriteSceneComponent1 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, sceneEntity1));
-	spriteSceneComponent1->setSpriteResource(spriteResourceRef);
+	spriteSceneComponent1->setSpriteResource(testSpriteResourceRef);
 
 	SpriteRendererEntityComponent* spriteSceneComponent2 = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, sceneEntity2));
-	spriteSceneComponent2->setSpriteResource(spriteResourceRef);
+	spriteSceneComponent2->setSpriteResource(testSpriteResourceRef);
 
 	SceneNode* node1 = (SceneNode*)(scene->getNode(sceneEntity1->getID()));
 	SceneNode* node2 = (SceneNode*)(scene->getNode(sceneEntity2->getID()));
@@ -61,31 +73,39 @@ int main() {
 	canvasNode->setWidth(800.0f);
 	canvasNode->setHeight(800.0f);
 
-	Entity* canvasEntity1 = level->createCanvasEntity(canvas);
-	CanvasSpriteRendererEntityComponent* spriteCanvasComponent1 = (CanvasSpriteRendererEntityComponent*)(level->createEntityComponent(CanvasSpriteRendererEntityComponentType, canvasEntity1));
-	spriteCanvasComponent1->setSpriteResource(spriteResourceRef);
 
-	CanvasNode* canvasNode1 = (CanvasNode*)(scene->getNode(canvasEntity1->getID()));
-	canvasNode1->setWidth(100.0f);
-	canvasNode1->setHeight(100.0f);
-	canvasNode1->setPivotX(0.5f);
-	canvasNode1->setPivotY(0.5f);
-	canvasNode1->setAnchorX(0.5f);
-	canvasNode1->setAnchorY(0.5f);
 
-	Entity* canvasEntity2 = level->createCanvasEntity(canvasEntity1);
-	CanvasSpriteRendererEntityComponent* spriteCanvasComponent2 = (CanvasSpriteRendererEntityComponent*)(level->createEntityComponent(CanvasSpriteRendererEntityComponentType, canvasEntity2));
-	spriteCanvasComponent2->setSpriteResource(spriteResourceRef);
+	for (size_t i = 0; i < 4000; ++i) {
+		Entity* canvasEntity2 = level->createCanvasEntity(canvas);
+		CanvasSpriteRendererEntityComponent* spriteCanvasComponent2 = (CanvasSpriteRendererEntityComponent*)(level->createEntityComponent(CanvasSpriteRendererEntityComponentType, canvasEntity2));
+		spriteCanvasComponent2->setSpriteResource(sprites[rand() % 3]);
 
-	CanvasNode* canvasNode2 = (CanvasNode*)(scene->getNode(canvasEntity2->getID()));
-	canvasNode2->setWidth(100.0f);
-	canvasNode2->setHeight(100.0f);
-	canvasNode2->setPivotX(0.5f);
-	canvasNode2->setPivotY(0.5f);
-	canvasNode2->setAnchorX(0.5f);
-	canvasNode2->setAnchorY(0.5f);
-	canvasNode2->setPositionX(50.0f);
-	canvasNode2->setPositionY(50.0f);
+		CanvasNode* canvasNode2 = (CanvasNode*)(scene->getNode(canvasEntity2->getID()));
+
+		int size = (rand() % 300) + 100;
+		canvasNode2->setWidth(size);
+		canvasNode2->setHeight(size);
+		canvasNode2->setDepth(rand() % 20);
+		canvasNode2->setPivotX(0.5f);
+		canvasNode2->setPivotY(0.5f);
+		canvasNode2->setAnchorX(0.0f);
+		canvasNode2->setAnchorY(0.0f);
+		canvasNode2->setPositionX(rand() % 800);
+		canvasNode2->setPositionY(rand() % 800);
+	}
+
+	Entity* canvasEntity3 = level->createCanvasEntity(canvas);
+	CanvasLabelEntityComponent* labelCanvasComponent = (CanvasLabelEntityComponent*)(level->createEntityComponent(CanvasLabelEntityComponentType, canvasEntity3));
+	labelCanvasComponent->setText("Hello");
+	CanvasNode* canvasNode3 = (CanvasNode*)(canvasEntity3->getNode());
+	canvasNode3->setWidth(100.0f);
+	canvasNode3->setHeight(100.0f);
+	canvasNode3->setPivotX(0.0f);
+	canvasNode3->setPivotY(0.0f);
+	canvasNode3->setAnchorX(0.0f);
+	canvasNode3->setAnchorY(0.0f);
+	canvasNode3->setPositionX(50.0f);
+	canvasNode3->setPositionY(50.0f);
 
 	//
 	Clock::time_point startTime = Clock::now();

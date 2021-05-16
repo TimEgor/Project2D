@@ -4,6 +4,7 @@
 #include <MemoryManager/CustomHeapAllocator.h>
 #include <ResourceManager/ResourceReference.h>
 #include <ResourceManager/ResourceName.h>
+#include <Graphics/Verteces.h>
 
 #include <string>
 
@@ -17,21 +18,33 @@ struct LabelRect final {
 	float height = 0.0f;
 };
 
-class LabelComponent : public EntityComponent {
+class CanvasLabelEntityComponent final : public EntityComponent {
 protected:
 	LabelText text = "";
 	ResourceReference materialResource;
+
+	Heap* heap = nullptr;
+	SpriteVertex* verteces = nullptr;
+	uint16_t* indeces = nullptr;
+
 	ResourceID fontID = ResourceName("Fonts/Arial").hash();
 	LabelRect rect;
+
+	uint16_t vertecesCount = 0;
+	uint16_t indecesCount = 0;
+	uint16_t allocatedCharSize = 0;
+
 	bool isDirty = false;
 
-	virtual void updateBuffers() = 0;
+	void release();
+	void updateBuffers();
 
 public:
-	LabelComponent();
-	LabelComponent(Heap* heap);
-	LabelComponent(const char* text);
-	LabelComponent(const char* text, Heap* heap);
+	CanvasLabelEntityComponent();
+	CanvasLabelEntityComponent(Heap* heap);
+	CanvasLabelEntityComponent(const char* text);
+	CanvasLabelEntityComponent(const char* text, Heap* heap);
+	~CanvasLabelEntityComponent();
 
 	void setText(const char* newText);
 	LabelText& getText() { return text; }
@@ -49,5 +62,11 @@ public:
 
 	void update();
 
-	virtual EntityComponentType getEntityComponentType() const override { return LabelEntityComponentType; }
+	SpriteVertex* getVerteces() const { return verteces; }
+	uint16_t* getIndeces() const { return indeces; }
+
+	uint16_t getVertecesCount() const { return vertecesCount; }
+	uint16_t getIndecesCount() const { return indecesCount; }
+
+	virtual EntityComponentType getEntityComponentType() const override { return CanvasLabelEntityComponentType; }
 };

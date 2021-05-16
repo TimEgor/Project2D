@@ -23,9 +23,17 @@ public:
 
 	template <typename T>
 	T& getResource();
+
+	template <typename T>
+	const T& getResource() const;
 };
 
 template<typename T>
 inline T& ResourceReference::getResource() {
+	return *(T*)(handler->getResource());
+}
+
+template<typename T>
+inline const T& ResourceReference::getResource() const {
 	return *(T*)(handler->getResource());
 }

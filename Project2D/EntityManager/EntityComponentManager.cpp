@@ -4,12 +4,14 @@
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/Canvas/CanvasLabelEntityComponent.h>
 #include <EntityManager/EntityComponentReference.h>
 
 #include <cassert>
 
 template SpriteRendererEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
 template CanvasSpriteRendererEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
+template CanvasLabelEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
 
 EntityComponentManager::ComponentAllocators::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
     ComponentAllocators& allocatorVec = componentAllocators.at(type);
@@ -41,6 +43,7 @@ bool EntityComponentManager::init(Level* currentLevel) {
 
     componentAllocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
     componentAllocators[CanvasSpriteRendererEntityComponentType].init(defaultHeap, sizeof(CanvasSpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+    componentAllocators[CanvasLabelEntityComponentType].init(defaultHeap, sizeof(CanvasLabelEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
 
     referenceAllocators.init(defaultHeap, sizeof(EntityComponentReferenceHandler), 512);
 
@@ -110,7 +113,7 @@ EntityComponent* EntityComponentManager::getEntityComponent(EntityComponentID id
     return findIter->second.getComponent();
 }
 
-const EntityComponentManager::ComponentAllocators* EntityComponentManager::getEntityComponents(EntityComponentType type) const {
+EntityComponentManager::ComponentAllocators* EntityComponentManager::getEntityComponents(EntityComponentType type) {
     auto allocatorTypeIter = componentAllocators.find(type);
     if (allocatorTypeIter != componentAllocators.end()) {
         return &allocatorTypeIter->second;

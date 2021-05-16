@@ -205,6 +205,18 @@
     <ClCompile Include="EntityManager\EntityComponentHandler.cpp">
       <Filter>EntityManager</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\D3D11\D3D11SpriteBatch.cpp">
+      <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\D3D11SpriteBatchManager.cpp">
+      <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.cpp">
+      <Filter>EntityManager\EntityComponents\Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\FontManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -400,6 +412,24 @@
       <Filter>EntityManager</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\SceneTypes.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11SpriteBatch.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11SpriteBatchManager.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Verteces.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.h">
+      <Filter>EntityManager\EntityComponents\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\FontManager.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\TextureResource.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

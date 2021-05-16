@@ -53,5 +53,6 @@ public:
 	ResourceReference getResourceAsyncFromArchive(ResourceID resourceID);
 
 	void* getRawResourceFromArchive(const ResourceName& resourceName, size_t& resourceSize);
+	void* getRawResourceFromArchive(ResourceID resourceID, size_t& resourceSize);
 	void* getRawResourceFromNativeFileSystem(const ResourceName& resourceName, size_t& resourceSize);
 };

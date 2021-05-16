@@ -2,6 +2,18 @@
 
 #include <Graphics/D3D11/D3D11Verteces.h>
 
+const D3D11SpriteVertex D3D11Sprite::verteces[] = {
+    { -0.5f, 0.5f, 0.0f, 0.0f },
+    { -0.5f, -0.5f, 0.0f, 1.0f },
+    { 0.5f, -0.5f, 1.0f, 1.0f },
+    { 0.5f, 0.5f, 1.0f, 0.0f }
+};
+
+const uint16_t D3D11Sprite::indeces[] = {
+    0, 1, 2,
+    0, 2, 3
+};
+
 D3D11Sprite::D3D11Sprite() :
     vertecesBuffer(nullptr), vertecesNum(0),
     indecesBuffer(nullptr), indecesNum(0) {}
@@ -12,18 +24,6 @@ D3D11Sprite& D3D11Sprite::get() {
 }
 
 bool D3D11Sprite::init() {
-    D3D11SpriteVertex verteces[4] = {
-        { -0.5f, 0.5f, 0.0f, 0.0f },
-        { -0.5f, -0.5f, 0.0f, 1.0f },
-        { 0.5f, -0.5f, 1.0f, 1.0f },
-        { 0.5f, 0.5f, 1.0f, 0.0f }
-    };
-
-    uint32_t indeces[6] = {
-        0, 1, 2,
-        0, 2, 3
-    };
-
     D3D11& d3d11 = D3D11::get();
     ID3D11Device* device = d3d11.getDevice();
 
@@ -47,7 +47,7 @@ bool D3D11Sprite::init() {
     //Indeces buffer
 
     bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    bufferDesc.ByteWidth = sizeof(size_t) * 6;
+    bufferDesc.ByteWidth = sizeof(uint16_t) * 6;
 
     subresourcesData.pSysMem = indeces;
 
