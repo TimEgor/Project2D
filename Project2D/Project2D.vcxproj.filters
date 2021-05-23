@@ -93,7 +93,6 @@
     <ClCompile Include="ResourceManager\Zip\ZipFileSystem.cpp">
       <Filter>ResourceManager\Zip</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="ResourceManager\ResourceAsyncLoader.cpp">
       <Filter>ResourceManager</Filter>
     </ClCompile>
@@ -217,6 +216,7 @@
     <ClCompile Include="Graphics\FontManager.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Core.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -432,6 +432,7 @@
     <ClInclude Include="Graphics\TextureResource.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core.h" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="RenderingOrder.natvis">
