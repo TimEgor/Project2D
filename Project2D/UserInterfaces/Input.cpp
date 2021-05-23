@@ -1,7 +1,7 @@
 #include "Input.h"
 
 bool Input::init() {
-    keys = new BYTE[255];
+    keys = new BYTE[256];
 
     return true;
 }

@@ -19,8 +19,14 @@ D3D11& D3D11::get() {
 bool D3D11::init() {
     HRESULT result;
 
+    UINT flags = 0;
+#ifdef _DEBUG
+    flags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif // DEBUG
+
+
     D3D_FEATURE_LEVEL featureLevel;
-    result = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, D3D11_CREATE_DEVICE_DEBUG, nullptr, 0, D3D11_SDK_VERSION, &device, &featureLevel, &deviceContext);
+    result = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, flags, nullptr, 0, D3D11_SDK_VERSION, &device, &featureLevel, &deviceContext);
     CheckResult(result);
 
     result = CreateDXGIFactory(__uuidof(dxgiFactory), (void**)(&dxgiFactory));
@@ -53,5 +59,15 @@ void D3D11::release() {
     D3D11ObjectRelease(swapChain);
     D3D11ObjectRelease(dxgiFactory);
     D3D11ObjectRelease(deviceContext);
+
+#ifdef _DEBUG
+    if (device) {
+        ID3D11Debug* debug;
+        device->QueryInterface(__uuidof(debug), (void**)(&debug));
+        debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+        D3D11ObjectRelease(debug);
+    }
+#endif // _DEBUG
+
     D3D11ObjectRelease(device);
 }

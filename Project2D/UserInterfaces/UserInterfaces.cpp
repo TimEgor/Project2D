@@ -55,7 +55,7 @@ bool UserInterfaces::initMainWindow() {
 
     RegisterClass(&wndClass);
 
-    mainWindow = CreateWindow("Project2D", "Project2D", WS_EX_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 800, NULL, NULL, instance, NULL);
+    mainWindow = CreateWindow("Project2D", "Project2D", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 800, NULL, NULL, instance, NULL);
     if (mainWindow == NULL) {
         return false;
     }
@@ -67,5 +67,11 @@ bool UserInterfaces::initMainWindow() {
 }
 
 LRESULT UserInterfaces::wndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    switch (uMsg) {
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            return 0;
+    }
+
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

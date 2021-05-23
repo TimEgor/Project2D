@@ -32,10 +32,10 @@ bool Core::init() {
 
 void Core::release() {
 	ResourceManager::get().release();
-	UserInterfaces::get().release();
-	D3D11::get().release();
-	D3D11Renderer::get().release();
 	FontManager::get().release();
+	D3D11Renderer::get().release();
+	D3D11::get().release();
+	UserInterfaces::get().release();
 }
 
 void Core::run() {
@@ -47,15 +47,13 @@ void Core::run() {
 	float deltaTime;
 
 	UserInterfaces& userInterfaces = UserInterfaces::get();
-	Input* input = UserInterfaces::get().getInput();
-	
+	Input* input = UserInterfaces::get().getInput();	
 	LevelManager& levelManager = LevelManager::get();
-
 	D3D11Renderer& d3d11Renderer = D3D11Renderer::get();
 
 	MSG msg{ 0 };
 	while (msg.message != WM_QUIT) {
-		if (PeekMessage(&msg, userInterfaces.getMainWindow(), 0, 0, PM_REMOVE)) {
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}

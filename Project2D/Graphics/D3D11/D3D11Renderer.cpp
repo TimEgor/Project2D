@@ -31,6 +31,7 @@ bool D3D11Renderer::init() {
     ID3D11Texture2D* backBuffer = nullptr;
     swapChain->GetBuffer(0, __uuidof(backBuffer), (void**)(&backBuffer));
     device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
+    D3D11ObjectRelease(backBuffer);
 
     D3D11_TEXTURE2D_DESC dsBufferDesc{};
     dsBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -120,6 +121,7 @@ void D3D11Renderer::release() {
 
     D3D11ObjectRelease(perObjectTransformBuffer);
     D3D11ObjectRelease(spriteSamplerState);
+    D3D11ObjectRelease(spriteBlendState);
 
     if (sceneBatchManager) {
         delete sceneBatchManager;
@@ -130,6 +132,8 @@ void D3D11Renderer::release() {
         delete canvasBatchManager;
         canvasBatchManager = nullptr;
     }
+
+    D3D11Sprite::get().release();
 }
 
 void D3D11Renderer::prepareViewTransformMatrix(DirectX::XMMATRIX& matrix) {
