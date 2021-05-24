@@ -73,5 +73,6 @@ public:
 	ResourceReference getMaterialResource() const { return material; }
 	void setMaterialResource(ResourceReference newMaterialResource);
 
-	virtual EntityComponentType getEntityComponentType() const override { return SpriteRendererEntityComponentType; };
+	virtual EntityComponentType getEntityComponentType() const override { return SpriteRendererEntityComponentType; }
+	static EntityComponentType getType() { return SpriteRendererEntityComponentType; }
 };

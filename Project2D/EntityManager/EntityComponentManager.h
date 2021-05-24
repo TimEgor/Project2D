@@ -45,8 +45,8 @@ public:
 	bool init(Level* level);
 	void release();
 
-	template <typename ComponentType>
-	ComponentType* createComponent(EntityComponentType type);
+	template <typename ComponentType, typename ...Args>
+	ComponentType* createComponent(Args... args);
 
 	void deleteEntityComponent(EntityComponentID id);
 	void deleteEntityComponent(EntityComponent* component);
@@ -56,3 +56,19 @@ public:
 
 	size_t getEntityComponentsNum(EntityComponentType type) const;
 };
+
+template<typename ComponentType, typename ...Args>
+inline ComponentType* EntityComponentManager::createComponent(Args... args) {
+	EntityComponentType type = ComponentType::getType();
+
+	ComponentAllocators::AllocationInfo allocationInfo = allocateComponent(type);
+	ComponentType* newComponent = new (allocationInfo.allocationAddress) ComponentType(args...);
+
+	components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
+		std::forward_as_tuple(nextEntityComponentID, newComponent, allocationInfo.allocatorID, level));
+
+	++nextEntityComponentID;
+	++counters[type];
+
+	return newComponent;
+}

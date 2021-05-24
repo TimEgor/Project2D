@@ -15,9 +15,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR args, int show) 
 	Level* level = LevelManager::get().createLevel();
 
 	Entity* entity = level->createSceneEntity();
-	SpriteRendererEntityComponent* spriteComponent = (SpriteRendererEntityComponent*)(level->createEntityComponent(SpriteRendererEntityComponentType, entity));
-
-	spriteComponent->setSpriteResource(ResourceManager::get().getResourceFromArchive("testTexture.png"));
+	SpriteRendererEntityComponent* spriteComponent = level->createEntityComponent<SpriteRendererEntityComponent>(entity, ResourceManager::get().getResourceFromArchive("testTexture.png"));
 
 	core.run();
 	core.release();

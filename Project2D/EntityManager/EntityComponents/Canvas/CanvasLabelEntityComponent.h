@@ -69,4 +69,5 @@ public:
 	uint16_t getIndecesCount() const { return indecesCount; }
 
 	virtual EntityComponentType getEntityComponentType() const override { return CanvasLabelEntityComponentType; }
+	static EntityComponentType getType() { return CanvasLabelEntityComponentType; }
 };

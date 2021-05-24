@@ -9,10 +9,6 @@
 
 #include <cassert>
 
-template SpriteRendererEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
-template CanvasSpriteRendererEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
-template CanvasLabelEntityComponent* EntityComponentManager::createComponent(EntityComponentType type);
-
 EntityComponentManager::ComponentAllocators::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
     ComponentAllocators& allocatorVec = componentAllocators.at(type);
     size_t oldSize = allocatorVec.size();
@@ -57,20 +53,6 @@ void EntityComponentManager::release() {
     for (auto& typeAllocators : componentAllocators) {
         typeAllocators.second.release();
     }
-}
-
-template<typename ComponentType>
-inline ComponentType* EntityComponentManager::createComponent(EntityComponentType type) {
-    ComponentAllocators::AllocationInfo allocationInfo = allocateComponent(type);
-    ComponentType* newComponent = new (allocationInfo.allocationAddress) ComponentType();
-
-    components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
-        std::forward_as_tuple(nextEntityComponentID, newComponent, allocationInfo.allocatorID, level));
-
-    ++nextEntityComponentID;
-    ++counters[type];
-
-    return newComponent;
 }
 
 void EntityComponentManager::deleteEntityComponent(EntityComponentID id) {

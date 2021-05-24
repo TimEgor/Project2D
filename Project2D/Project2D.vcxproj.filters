@@ -55,6 +55,12 @@
     <Filter Include="EntityManager\EntityComponents\Canvas">
       <UniqueIdentifier>{4c324dd9-17af-4c5c-a4c2-d60fa8e4922d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripting">
+      <UniqueIdentifier>{bd474045-82fe-46f1-81ea-bdbbab43207d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting\CPP_Scripting">
+      <UniqueIdentifier>{f72b8371-d6aa-49be-8033-d1dcafdd2350}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MemoryManager\Heap.cpp">

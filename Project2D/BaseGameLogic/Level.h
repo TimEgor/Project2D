@@ -1,7 +1,7 @@
 #pragma once
 
-#include <EntityManager/EntityManagerTypes.h>
-#include <EntityManager/EntityComponentType.h>
+#include <EntityManager/EntityManager.h>
+#include <EntityManager/EntityComponentManager.h>
 #include <Graphics/RenderingData.h>
 #include <Graphics/SceneTypes.h>
 
@@ -44,8 +44,11 @@ public:
 	void deleteEntity(Entity* entity);
 	void deleteEntity(EntityID id);
 
-	EntityComponent* createEntityComponent(EntityComponentType type, Entity* parent);
-	EntityComponent* createEntityComponent(EntityComponentType type, EntityID parentID);
+	template <typename ComponentType, typename... Args>
+	ComponentType* createEntityComponent(Entity* parent, Args... args);
+	template <typename ComponentType, typename... Args>
+	ComponentType* createEntityComponent(EntityID parentID, Args... args);
+
 	void deleteEntityComponent(EntityComponent* component);
 	void deleteEntityComponent(EntityComponentID id);
 	void removeEntityComponentsFromEntity(Entity* entity);
@@ -61,3 +64,21 @@ public:
 	EntityComponentManager* getEntityComponentManager() { return entityComponentManager; }
 	Scene* getScene() { return scene; }
 };
+
+template<typename ComponentType, typename... Args>
+inline ComponentType* Level::createEntityComponent(Entity* parent, Args... args) {
+	assert(parent);
+
+	ComponentType* component = entityComponentManager->createComponent<ComponentType>(args...);
+
+	parent->addComponent(component->getID());
+	component->getHandler()->setParent(parent);
+
+	return (ComponentType*)(component);
+}
+
+template<typename ComponentType, typename... Args>
+inline ComponentType* Level::createEntityComponent(EntityID parentID, Args... args) {
+	Entity* entity = entityManager->getEntity(parentID);
+	return createEntityComponent<ComponentType>(entity, args...);
+}

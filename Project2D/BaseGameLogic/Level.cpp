@@ -1,7 +1,5 @@
 #include "Level.h"
 
-#include <EntityManager/EntityManager.h>
-#include <EntityManager/EntityComponentManager.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasLabelEntityComponent.h>
@@ -129,36 +127,6 @@ void Level::deleteEntity(Entity* entity) {
 void Level::deleteEntity(EntityID id) {
     Entity* entity = entityManager->getEntity(id);
     deleteEntity(entity);
-}
-
-EntityComponent* Level::createEntityComponent(EntityComponentType type, Entity* parent) {
-    assert(parent);
-
-    EntityComponent* component = nullptr;
-
-    switch (type) {
-    case SpriteRendererEntityComponentType:
-        component = (EntityComponent*)(entityComponentManager->createComponent<SpriteRendererEntityComponent>(type));
-        break;
-    case CanvasSpriteRendererEntityComponentType:
-        component = (EntityComponent*)(entityComponentManager->createComponent<CanvasSpriteRendererEntityComponent>(type));
-        break;
-    case CanvasLabelEntityComponentType:
-        component = (EntityComponent*)(entityComponentManager->createComponent<CanvasLabelEntityComponent>(type));
-        break;
-    default:
-        break;
-    }
-
-    parent->addComponent(component->getID());
-    component->getHandler()->setParent(parent);
-
-    return component;
-}
-
-EntityComponent* Level::createEntityComponent(EntityComponentType type, EntityID parentID) {
-    Entity* entity = entityManager->getEntity(parentID);
-    return createEntityComponent(type, entity);
 }
 
 void Level::deleteEntityComponent(EntityComponent* component) {
