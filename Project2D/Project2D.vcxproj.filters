@@ -34,9 +34,6 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{da0af92a-49bb-46f9-9a8c-fcc4ac78d98c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BaseGameLogic">
-      <UniqueIdentifier>{a2a49a0c-0062-4ea2-b778-a6210a627016}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UserInterfaces">
       <UniqueIdentifier>{4c04422e-4e6f-4796-b51a-042c054847e1}</UniqueIdentifier>
     </Filter>
@@ -55,10 +52,13 @@
     <Filter Include="EntityManager\EntityComponents\Canvas">
       <UniqueIdentifier>{4c324dd9-17af-4c5c-a4c2-d60fa8e4922d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripting">
+    <Filter Include="LevelManager">
+      <UniqueIdentifier>{a2a49a0c-0062-4ea2-b778-a6210a627016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameLogic">
       <UniqueIdentifier>{bd474045-82fe-46f1-81ea-bdbbab43207d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripting\CPP_Scripting">
+    <Filter Include="GameLogic\CPP">
       <UniqueIdentifier>{f72b8371-d6aa-49be-8033-d1dcafdd2350}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -128,12 +128,6 @@
     </ClCompile>
     <ClCompile Include="EntityManager\EntityComponentManager.cpp">
       <Filter>EntityManager</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseGameLogic\Level.cpp">
-      <Filter>BaseGameLogic</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseGameLogic\LevelManager.cpp">
-      <Filter>BaseGameLogic</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Node.cpp">
       <Filter>Graphics</Filter>
@@ -223,6 +217,12 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="LevelManager\Level.cpp">
+      <Filter>LevelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager\LevelManager.cpp">
+      <Filter>LevelManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -330,12 +330,6 @@
     <ClInclude Include="Graphics\Transform.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="BaseGameLogic\Level.h">
-      <Filter>BaseGameLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseGameLogic\LevelManager.h">
-      <Filter>BaseGameLogic</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\NodeHandler.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -439,6 +433,15 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="LevelManager\Level.h">
+      <Filter>LevelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager\LevelManager.h">
+      <Filter>LevelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic\CPP\ClassManager.h">
+      <Filter>GameLogic\CPP</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="RenderingOrder.natvis">

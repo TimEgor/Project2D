@@ -3,7 +3,7 @@
 #include <Graphics/NodeHandler.h>
 #include <Graphics/Scene.h>
 #include <Graphics/Transform.h>
-#include <BaseGameLogic/LevelManager.h>
+#include <LevelManager/LevelManager.h>
 
 #include <cassert>
 

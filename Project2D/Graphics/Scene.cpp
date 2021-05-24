@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 #include <MemoryManager/MemoryManager.h>
-#include <BaseGameLogic/Level.h>
+#include <LevelManager/Level.h>
 #include <EntityManager/Entity.h>
 
 bool Scene::init(Level* level) {

@@ -3,7 +3,7 @@
 #include <ResourceManager/ResourceManager.h>
 #include <UserInterfaces/UserInterfaces.h>
 #include <UserInterfaces/Input.h>
-#include <BaseGameLogic/LevelManager.h>
+#include <LevelManager/LevelManager.h>
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/D3D11/D3D11Renderer.h>
 #include <Graphics/FontManager.h>

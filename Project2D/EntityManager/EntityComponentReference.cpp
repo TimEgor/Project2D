@@ -1,6 +1,6 @@
 #include "EntityComponentReference.h"
 
-#include <BaseGameLogic/Level.h>
+#include <LevelManager/Level.h>
 #include <EntityManager/EntityComponentManager.h>
 
 void EntityComponentReference::releaseReference() {
