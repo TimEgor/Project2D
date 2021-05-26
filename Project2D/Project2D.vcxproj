@@ -216,6 +216,7 @@
     <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassManager.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Sprite.cpp" />
@@ -275,7 +276,7 @@
     <ClInclude Include="EntityManager\EntityHandler.h" />
     <ClInclude Include="EntityManager\EntityManager.h" />
     <ClInclude Include="EntityManager\EntityManagerTypes.h" />
-    <ClInclude Include="GameLogic\CPP\ClassManager.h" />
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassManager.h" />
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Sprite.h" />
