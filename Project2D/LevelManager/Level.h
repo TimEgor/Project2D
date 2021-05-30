@@ -35,6 +35,8 @@ public:
 
 	LevelID getID() const { return levelID; }
 
+	void update(float deltaTime);
+
 	Entity* createSceneEntity();
 	Entity* createSceneEntity(Entity* parent);
 	Entity* createSceneEntity(EntityID parentID);

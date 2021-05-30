@@ -214,6 +214,7 @@
     <ClCompile Include="EntityManager\EntityComponentReference.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.cpp" />
+    <ClCompile Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassManager.cpp" />
@@ -271,11 +272,14 @@
     <ClInclude Include="EntityManager\EntityComponentReference.h" />
     <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.h" />
+    <ClInclude Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.h" />
+    <ClInclude Include="EntityManager\EntityComponents\GameLogicEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentType.h" />
     <ClInclude Include="EntityManager\EntityHandler.h" />
     <ClInclude Include="EntityManager\EntityManager.h" />
     <ClInclude Include="EntityManager\EntityManagerTypes.h" />
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClass.h" />
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassManager.h" />
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />

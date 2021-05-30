@@ -12,8 +12,8 @@ template <typename AllocatorType>
 class PoolAllocatorVector final {
 public:
 	struct AllocationInfo final {
-		void* allocationAddress;
-		AllocatorID allocatorID;
+		void* allocationAddress = nullptr;
+		AllocatorID allocatorID = 0;
 	};
 
 private:

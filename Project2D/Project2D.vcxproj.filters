@@ -226,6 +226,9 @@
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassManager.cpp">
       <Filter>GameLogic\CPP</Filter>
     </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.cpp">
+      <Filter>EntityManager\EntityComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -443,6 +446,15 @@
       <Filter>LevelManager</Filter>
     </ClInclude>
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassManager.h">
+      <Filter>GameLogic\CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponents\GameLogicEntityComponent.h">
+      <Filter>EntityManager\EntityComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.h">
+      <Filter>EntityManager\EntityComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClass.h">
       <Filter>GameLogic\CPP</Filter>
     </ClInclude>
   </ItemGroup>

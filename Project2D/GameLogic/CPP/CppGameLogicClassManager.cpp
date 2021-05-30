@@ -25,18 +25,21 @@ bool CppGameLogicClassManager::init() {
 void CppGameLogicClassManager::release() {
 }
 
-CppGameLogicEntityComponent* CppGameLogicClassManager::createComponent(const char* className, Heap* heap) {
+CppGameLogicClass* CppGameLogicClassManager::createComponent(const char* className, Heap* heap, CppGameLogicEntityComponent* component) {
 	assert(className);
 	size_t classNameLength = strlen(className);
 	assert(classNameLength);
 
-	return createComponent(Crc32(className, classNameLength), heap);
+	return createComponent(Crc32(className, classNameLength), heap, component);
 }
 
-CppGameLogicEntityComponent* CppGameLogicClassManager::createComponent(ClassNameHash classNameHash, Heap* heap) {
+CppGameLogicClass* CppGameLogicClassManager::createComponent(CppClassNameHash classNameHash, Heap* heap, CppGameLogicEntityComponent* component) {
 	auto findIter = classes.find(classNameHash);
 	if (findIter != classes.end()) {
-		return findIter->second(heap);
+		CppGameLogicClass* newGameLogicClass = findIter->second(heap, component);
+		newGameLogicClass->setComponent(component);
+
+		return newGameLogicClass;
 	}
 
 	return nullptr;

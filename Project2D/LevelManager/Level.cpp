@@ -1,6 +1,7 @@
 #include "Level.h"
 
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/CppGameLogicEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasLabelEntityComponent.h>
 #include <Graphics/Scene.h>
@@ -74,6 +75,22 @@ void Level::release() {
         canvasRenderingOrder->release();
         delete canvasRenderingOrder;
         canvasRenderingOrder = nullptr;
+    }
+}
+
+void Level::update(float deltaTime) {
+    ComponentAllocators* cppGameLogicComponentsAllocators = entityComponentManager->getEntityComponents(CppGameLogicEntityComponentType);
+    if (cppGameLogicComponentsAllocators) {
+        size_t allocatorsNum = cppGameLogicComponentsAllocators->size();
+        for (size_t allocatorIndex = 0; allocatorIndex < allocatorsNum; ++allocatorIndex) {
+            ArrayPoolAllocator& allocator = (*cppGameLogicComponentsAllocators)[allocatorIndex];
+            size_t allocatorSize = allocator.size();
+
+            for (size_t componentIndex = 0; componentIndex < allocatorSize; ++componentIndex) {
+                CppGameLogicEntityComponent& component = allocator.getElement<CppGameLogicEntityComponent>(componentIndex);
+                component.update(deltaTime);
+            }
+        }
     }
 }
 

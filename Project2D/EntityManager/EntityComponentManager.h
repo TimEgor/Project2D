@@ -16,12 +16,12 @@ class CanvasSpriteRendererEntityComponent;
 class EntityComponentReferenceHandler;
 class EntityComponentReference;
 
+typedef PoolAllocatorVector<ArrayPoolAllocator> ComponentAllocators;
+typedef PoolAllocatorVector<PoolAllocator> ReferenceAllocators;
+
 class EntityComponentManager final {
 	friend EntityComponentReference;
 	friend EntityComponentHandler;
-
-	typedef PoolAllocatorVector<ArrayPoolAllocator> ComponentAllocators;
-	typedef PoolAllocatorVector<PoolAllocator> ReferenceAllocators;
 
 private:
 	std::unordered_map<EntityComponentID, EntityComponentHandler> components;
@@ -57,18 +57,32 @@ public:
 	size_t getEntityComponentsNum(EntityComponentType type) const;
 };
 
+template <typename ComponentType>
+class ComponentCreator final {
+public:
+	template <typename... Args>
+	static ComponentType* createComponent(ComponentAllocators::AllocationInfo allocationInfo, Args... args) {
+		return new (allocationInfo.allocationAddress) ComponentType(args...);
+	}
+};
+
 template<typename ComponentType, typename ...Args>
 inline ComponentType* EntityComponentManager::createComponent(Args... args) {
 	EntityComponentType type = ComponentType::getType();
 
 	ComponentAllocators::AllocationInfo allocationInfo = allocateComponent(type);
-	ComponentType* newComponent = new (allocationInfo.allocationAddress) ComponentType(args...);
+	ComponentType* newComponent = nullptr;
 
-	components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
-		std::forward_as_tuple(nextEntityComponentID, newComponent, allocationInfo.allocatorID, level));
+	assert(allocationInfo.allocationAddress);
+	if (allocationInfo.allocationAddress) {
+		newComponent = ComponentCreator<ComponentType>::createComponent(allocationInfo, args...);
 
-	++nextEntityComponentID;
-	++counters[type];
+		components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
+			std::forward_as_tuple(nextEntityComponentID, newComponent, allocationInfo.allocatorID, level));
+
+		++nextEntityComponentID;
+		++counters[type];
+	}
 
 	return newComponent;
 }

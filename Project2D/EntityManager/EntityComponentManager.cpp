@@ -3,20 +3,28 @@
 #include <MemoryManager/MemoryManager.h>
 #include <EntityManager/Entity.h>
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
+#include <EntityManager/EntityComponents/CppGameLogicEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasLabelEntityComponent.h>
 #include <EntityManager/EntityComponentReference.h>
 
 #include <cassert>
 
-EntityComponentManager::ComponentAllocators::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
-    ComponentAllocators& allocatorVec = componentAllocators.at(type);
-    size_t oldSize = allocatorVec.size();
-    ComponentAllocators::AllocationInfo info = allocatorVec.allocate();
-    size_t newSize = allocatorVec.size();
+ComponentAllocators::AllocationInfo EntityComponentManager::allocateComponent(EntityComponentType type) {
+    ComponentAllocators::AllocationInfo info;
+    
+    auto findIter = componentAllocators.find(type);
+    assert(findIter != componentAllocators.end());
+    if (findIter != componentAllocators.end()) {
+        ComponentAllocators& allocatorVec = findIter->second;
 
-    if (oldSize < newSize) {
-        components.reserve(components.bucket_count() + ENTITIES_COMPONENTS_ALLOCATOR_SIZE * (newSize - oldSize));
+        size_t oldSize = allocatorVec.size();
+        info = allocatorVec.allocate();
+        size_t newSize = allocatorVec.size();
+
+        if (oldSize < newSize) {
+            components.reserve(components.bucket_count() + ENTITIES_COMPONENTS_ALLOCATOR_SIZE * (newSize - oldSize));
+        }
     }
 
     return info;
@@ -40,6 +48,7 @@ bool EntityComponentManager::init(Level* currentLevel) {
     componentAllocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
     componentAllocators[CanvasSpriteRendererEntityComponentType].init(defaultHeap, sizeof(CanvasSpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
     componentAllocators[CanvasLabelEntityComponentType].init(defaultHeap, sizeof(CanvasLabelEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+    componentAllocators[CppGameLogicEntityComponentType].init(defaultHeap, sizeof(CppGameLogicEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
 
     referenceAllocators.init(defaultHeap, sizeof(EntityComponentReferenceHandler), 512);
 
@@ -70,6 +79,7 @@ void EntityComponentManager::deleteEntityComponent(EntityComponentID id) {
         size_t allocatorIndex = allocatorVec.getAllocatorIndexByID(handler.getComponentAllocatorID());
 
         ArrayPoolAllocator& allocator = allocatorVec[allocatorIndex];
+        component->release();
         allocator.deallocate(component);
         if (allocator.size()) {
             EntityComponentHandler* reallocatingComponentHandler = component->getHandler();
@@ -95,7 +105,7 @@ EntityComponent* EntityComponentManager::getEntityComponent(EntityComponentID id
     return findIter->second.getComponent();
 }
 
-EntityComponentManager::ComponentAllocators* EntityComponentManager::getEntityComponents(EntityComponentType type) {
+ComponentAllocators* EntityComponentManager::getEntityComponents(EntityComponentType type) {
     auto allocatorTypeIter = componentAllocators.find(type);
     if (allocatorTypeIter != componentAllocators.end()) {
         return &allocatorTypeIter->second;

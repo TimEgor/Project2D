@@ -1,23 +1,21 @@
 #pragma once
 
 #include <MemoryManager/Heap.h>
+#include <GameLogic/CPP/CppGameLogicClass.h>
 
 #include <unordered_map>
 #include <string>
 
 class Heap;
-class CppGameLogicEntityComponent;
 
-typedef CppGameLogicEntityComponent* (*CppGameLogicEntityComponentCreatingFunc)(Heap*);
+typedef CppGameLogicClass* (*CppGameLogicEntityComponentCreatingFunc)(Heap*, CppGameLogicEntityComponent* component);
 
 class CppGameLogicClassManager final {
 	template <typename ClassType>
 	friend class ClassRegister;
 
-	typedef uint32_t ClassNameHash;
-
 private:
-	std::unordered_map<ClassNameHash, CppGameLogicEntityComponentCreatingFunc> classes;
+	std::unordered_map<CppClassNameHash, CppGameLogicEntityComponentCreatingFunc> classes;
 
 	CppGameLogicClassManager() = default;
 	bool registryNewCreatingFunction(const char* className, CppGameLogicEntityComponentCreatingFunc function);
@@ -30,13 +28,13 @@ public:
 	bool init();
 	void release();
 
-	CppGameLogicEntityComponent* createComponent(const char* className, Heap* heap);
-	CppGameLogicEntityComponent* createComponent(ClassNameHash classNameHash, Heap* heap);
+	CppGameLogicClass* createComponent(const char* className, Heap* heap, CppGameLogicEntityComponent* component);
+	CppGameLogicClass* createComponent(CppClassNameHash classNameHash, Heap* heap, CppGameLogicEntityComponent* component);
 };
 
 template <typename ClassType>
-CppGameLogicEntityComponent* createCppLogicClass(Heap* heap) {
-	return (CppGameLogicEntityComponent*)(heap->allocate(sizeof(ClassType)));
+CppGameLogicClass* createCppLogicClass(Heap* heap, CppGameLogicEntityComponent* component) {
+	return new (heap->allocate(sizeof(ClassType))) ClassType();
 }
 
 template <typename ClassType>
@@ -62,4 +60,4 @@ inline ClassRegister<ClassType>& ClassRegister<ClassType>::registry(const char* 
 	return uniqueClassRegister;
 }
 
-#define CPPGameLogicClassRegistry(ClassName, ClassType) const ClassRegister<ClassType>& classRegister = ClassRegister<ClassType>::registry(ClassName);
+#define CPPGameLogicClassRegistry(ClassName, ClassType) const ClassRegister<ClassType>& classRegister_##ClassType = ClassRegister<ClassType>::registry(ClassName);

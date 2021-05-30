@@ -17,6 +17,8 @@ public:
 	EntityComponent() = default;
 	virtual ~EntityComponent() {}
 
+	virtual void release() {}
+
 	EntityComponentHandler* getHandler() const { return handler; }
 	EntityComponentID getID() const;
 	Entity* getParent() const { return entity; }

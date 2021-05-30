@@ -67,6 +67,7 @@ void Core::run() {
 		Level* level = levelManager.getCurrentLevel();
 		if (level) {
 			//Logic
+			level->update(deltaTime);
 
 			//Rendering
 			RenderingData renderingData = level->getRenderingData();

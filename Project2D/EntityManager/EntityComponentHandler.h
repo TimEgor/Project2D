@@ -34,5 +34,7 @@ public:
 	EntityComponentReference getReference();
 	EntityComponentReferenceHandler* getReferenceHandler() { return reference; }
 
+	Level* getLevel() { return level; }
+
 	size_t getComponentAllocatorID() { return allocatorID; }
 };
