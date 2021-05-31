@@ -1,7 +1,8 @@
 #pragma once
 
-#include <MemoryManager/Heap.h>
+#include <MemoryManager/MemoryManager.h>
 
+#include <type_traits>
 
 constexpr size_t bigAllocationAligment = 32;
 constexpr size_t bigAllocationAdditionalData = sizeof(void*) + bigAllocationAligment - 1;
@@ -56,13 +57,22 @@ public:
     using reference = T&;
     using const_reference = const T&;
 
-    CustomHeapAllocator() = delete;
+    using propagate_on_container_move_assignment = std::true_type;
+
+    CustomHeapAllocator() : CustomHeapAllocator(MemoryManager::get().getDefaultHeap()) {}
     explicit CustomHeapAllocator(Heap *heap) : heap(heap) {}
     CustomHeapAllocator(const CustomHeapAllocator&) = default;
     CustomHeapAllocator& operator=(const CustomHeapAllocator&) = default;
 
     template<class U>
     CustomHeapAllocator(const CustomHeapAllocator<U>& allocator) : heap(allocator.heap) {}
+
+    template<class U> bool operator==(const CustomHeapAllocator<U> &allocator) const noexcept {
+        return heap == allocator.heap;
+    }
+    template<class U> bool operator!=(const CustomHeapAllocator<U> &allocator) const noexcept {
+        return heap != allocator.heap;
+    }
 
     T* allocate(size_t n) {
         return (T*)(heapAllocate(sizeof(T) * n));

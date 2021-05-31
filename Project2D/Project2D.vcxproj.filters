@@ -61,6 +61,9 @@
     <Filter Include="GameLogic\CPP">
       <UniqueIdentifier>{f72b8371-d6aa-49be-8033-d1dcafdd2350}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utilities\CustomHeapContainers">
+      <UniqueIdentifier>{021ffb37-1f7c-442e-baec-763f302cbdb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MemoryManager\Heap.cpp">
@@ -456,6 +459,9 @@
     </ClInclude>
     <ClInclude Include="GameLogic\CPP\CppGameLogicClass.h">
       <Filter>GameLogic\CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\CustomHeapContainers\CustomHeapContainers.h">
+      <Filter>Utilities\CustomHeapContainers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

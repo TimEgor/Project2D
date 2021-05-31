@@ -334,6 +334,7 @@
     <ClInclude Include="ResourceManager\Zip\ZipFileSystem.h" />
     <ClInclude Include="UserInterfaces\Input.h" />
     <ClInclude Include="UserInterfaces\UserInterfaces.h" />
+    <ClInclude Include="Utilities\CustomHeapContainers\CustomHeapContainers.h" />
     <ClInclude Include="Utilities\HashFunction\CRC32.h" />
     <ClInclude Include="Utilities\HashFunction\SpookyV2.h" />
     <ClInclude Include="Utilities\PugiXML\pugiconfig.hpp" />
