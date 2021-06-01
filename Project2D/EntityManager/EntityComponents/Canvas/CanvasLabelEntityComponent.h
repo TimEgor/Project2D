@@ -9,7 +9,7 @@
 #include <string>
 
 typedef char LabelTextChar;
-typedef std::basic_string<LabelTextChar, std::char_traits<LabelTextChar>, CustomHeapAllocator<LabelTextChar>> LabelText;
+typedef std::basic_string<LabelTextChar, std::char_traits<LabelTextChar>> LabelText;
 
 struct LabelRect final {
 	float x = 0.0f;
