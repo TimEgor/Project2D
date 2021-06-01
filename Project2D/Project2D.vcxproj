@@ -245,6 +245,7 @@
     <ClCompile Include="MemoryManager\Allocators\LinkingPoolAllocator.cpp" />
     <ClCompile Include="MemoryManager\Allocators\PoolAllocator.cpp" />
     <ClCompile Include="MemoryManager\Heap.cpp" />
+    <ClCompile Include="MemoryManager\MemoryCore.cpp" />
     <ClCompile Include="MemoryManager\MemoryManager.cpp" />
     <ClCompile Include="Multithreading\Thread.cpp" />
     <ClCompile Include="ResourceManager\NativeFileSystem.cpp" />
@@ -316,6 +317,7 @@
     <ClInclude Include="MemoryManager\Allocators\PoolAllocatorVector.h" />
     <ClInclude Include="MemoryManager\CustomHeapAllocator.h" />
     <ClInclude Include="MemoryManager\Heap.h" />
+    <ClInclude Include="MemoryManager\MemoryCore.h" />
     <ClInclude Include="MemoryManager\MemoryManager.h" />
     <ClInclude Include="Multithreading\Thread.h" />
     <ClInclude Include="Multithreading\ThreadItemQueue.h" />

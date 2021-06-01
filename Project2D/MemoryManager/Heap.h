@@ -2,6 +2,8 @@
 
 #include <Windows.h>
 
+#include <cassert>
+
 class HeapReference;
 
 class Heap final {
@@ -20,9 +22,22 @@ public:
 	bool init();
 	void release();
 
-	void* allocate(size_t elementNum);
-	void* reallocate(void* mem, size_t elementNum);
-	void deallocate(void* mem);
+	inline void* allocate(size_t elementNum) {
+		//assert(handle);
+		void* m = HeapAlloc(handle, NULL, elementNum);
+		return m;
+	}
+
+	inline void* reallocate(void* mem, size_t elementNum) {
+		assert(handle);
+		return HeapReAlloc(handle, NULL, mem, elementNum);
+	}
+
+	inline void deallocate(void* mem) {
+		//assert(handle);
+		bool deallocatingResult = HeapFree(handle, NULL, mem);
+		assert(deallocatingResult);
+	}
 
 	size_t getMemSize(void* mem);
 };

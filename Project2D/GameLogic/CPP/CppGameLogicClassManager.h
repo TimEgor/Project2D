@@ -1,14 +1,12 @@
 #pragma once
 
-#include <MemoryManager/Heap.h>
+#include <MemoryManager/MemoryCore.h>
 #include <GameLogic/CPP/CppGameLogicClass.h>
 
 #include <unordered_map>
 #include <string>
 
-class Heap;
-
-typedef CppGameLogicClass* (*CppGameLogicEntityComponentCreatingFunc)(Heap*, CppGameLogicEntityComponent* component);
+typedef CppGameLogicClass* (*CppGameLogicEntityComponentCreatingFunc)();
 
 class CppGameLogicClassManager final {
 	template <typename ClassType>
@@ -28,13 +26,13 @@ public:
 	bool init();
 	void release();
 
-	CppGameLogicClass* createComponent(const char* className, Heap* heap, CppGameLogicEntityComponent* component);
-	CppGameLogicClass* createComponent(CppClassNameHash classNameHash, Heap* heap, CppGameLogicEntityComponent* component);
+	CppGameLogicClass* createComponent(const char* className, CppGameLogicEntityComponent* component);
+	CppGameLogicClass* createComponent(CppClassNameHash classNameHash, CppGameLogicEntityComponent* component);
 };
 
 template <typename ClassType>
-CppGameLogicClass* createCppLogicClass(Heap* heap, CppGameLogicEntityComponent* component) {
-	return new (heap->allocate(sizeof(ClassType))) ClassType();
+CppGameLogicClass* createCppLogicClass() {
+	return new (memAllocate(sizeof(ClassType))) ClassType();
 }
 
 template <typename ClassType>

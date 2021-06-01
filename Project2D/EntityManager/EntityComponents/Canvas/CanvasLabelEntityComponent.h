@@ -23,16 +23,16 @@ protected:
 	LabelText text = "";
 	ResourceReference materialResource;
 
-	Heap* heap = nullptr;
 	SpriteVertex* verteces = nullptr;
 	uint16_t* indeces = nullptr;
 
 	ResourceID fontID = ResourceName("Fonts/Arial").hash();
 	LabelRect rect;
 
+	size_t allocatedCharSize = 0;
+
 	uint16_t vertecesCount = 0;
 	uint16_t indecesCount = 0;
-	uint16_t allocatedCharSize = 0;
 
 	bool isDirty = false;
 
@@ -41,9 +41,7 @@ protected:
 
 public:
 	CanvasLabelEntityComponent();
-	CanvasLabelEntityComponent(Heap* heap);
 	CanvasLabelEntityComponent(const char* text);
-	CanvasLabelEntityComponent(const char* text, Heap* heap);
 	~CanvasLabelEntityComponent();
 
 	void setText(const char* newText);

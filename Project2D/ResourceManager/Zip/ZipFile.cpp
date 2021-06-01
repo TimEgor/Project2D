@@ -1,6 +1,6 @@
 #include "ZipFile.h"
 
-#include <MemoryManager/MemoryManager.h>
+#include <MemoryManager/MemoryCore.h>
 
 #include <zlib.h>
 
@@ -41,8 +41,7 @@ bool ZipFile::init(const ResourceName& archiveName) {
     ZipDirHeader info;
     fread(&info, sizeof(ZipDirHeader), 1, zipFile);
 
-    Heap *defHeap = MemoryManager::get().getDefaultHeap();
-    centralDir = defHeap->allocate(sizeof(ZipDirFileHeader*) * info.nDirEntries + info.dirSize);
+    centralDir = memAllocate(sizeof(ZipDirFileHeader*) * info.nDirEntries + info.dirSize);
 
     centralDirEntryHeaders = (ZipDirFileHeader**)((uint8_t*)(centralDir) + info.dirSize);
 
@@ -84,7 +83,7 @@ bool ZipFile::init(const ResourceName& archiveName) {
 
 void ZipFile::release() {
     if (centralDir) {
-        MemoryManager::get().getDefaultHeap()->deallocate(centralDir);
+        memRelease(centralDir);
         centralDir = nullptr;
     }
 
@@ -125,8 +124,7 @@ bool ZipFile::readFileData(ResourceID fileNameHash, void* data, size_t fileSize)
     if (fileHeader.compression == Z_DEFLATED) {
         size_t compressedSize = fileHeader.cSize;
 
-        Heap* defHeap = MemoryManager::get().getDefaultHeap();
-        uint8_t* compressedData = (uint8_t*)(defHeap->allocate(compressedSize));
+        uint8_t* compressedData = (uint8_t*)(memAllocate(compressedSize));
         assert(compressedData);
 
         fread(compressedData, compressedSize, 1, zipFile);
@@ -151,7 +149,7 @@ bool ZipFile::readFileData(ResourceID fileNameHash, void* data, size_t fileSize)
         }
         assert(uncompressingResult == Z_OK);
 
-        defHeap->deallocate(compressedData);
+        memRelease(compressedData);
         return true;
     }
 

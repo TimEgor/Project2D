@@ -4,12 +4,13 @@
 
 class MemoryManager final {
 private:
-	Heap defaultHeap;
-
 	MemoryManager();
 
 public:
 	static MemoryManager& get();
 
-	Heap* getDefaultHeap() { return &defaultHeap; }
+	static inline Heap* getDefaultHeap() {
+		static Heap defaultHeap = GetProcessHeap();
+		return &defaultHeap;
+	}
 };

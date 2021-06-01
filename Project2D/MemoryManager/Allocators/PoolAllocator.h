@@ -1,15 +1,11 @@
 #pragma once
 
-class Heap;
-
 class PoolAllocator final {
 	struct FreeBucketInfo final {
 		FreeBucketInfo* nextFree;
 	};
 
 private:
-	Heap* heap;
-
 	void* buckets;
 
 	FreeBucketInfo* firstFreeBucket;
@@ -27,15 +23,13 @@ public:
 	PoolAllocator& operator=(const PoolAllocator&) = delete;
 	PoolAllocator& operator=(PoolAllocator&& allocator);
 
-	bool init(Heap *heap, size_t bucketSize, size_t bucketsNum);
+	bool init(size_t bucketSize, size_t bucketsNum);
 	void release();
 
 	void* allocate();
 	void deallocate(void* bucket);
 
 	void clear();
-
-	Heap* getHeap() { return heap; }
 
 	size_t size() const { return usingBucketsNum; }
 

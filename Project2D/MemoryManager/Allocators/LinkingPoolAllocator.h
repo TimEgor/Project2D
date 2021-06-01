@@ -1,7 +1,5 @@
 #pragma once
 
-class Heap;
-
 class LinkingPoolAllocator {
 private:
 	struct FreeBucketInfo final {
@@ -12,8 +10,6 @@ private:
 		UsingBucketInfo* nextBucket;
 		UsingBucketInfo* prevBucket;
 	};
-
-	Heap* heap;
 
 	void* buckets;
 
@@ -30,15 +26,13 @@ public:
 	LinkingPoolAllocator() : lastBucketInfo(nullptr), firstUsingBucketInfo(nullptr) {}
 	~LinkingPoolAllocator() { release(); }
 
-	bool init(Heap* heap, size_t bucketSize, size_t bucketsNum);
+	bool init(size_t bucketSize, size_t bucketsNum);
 	void release();
 
 	void* allocate();
 	void deallocate(void* bucket);
 
 	void clear();
-
-	Heap* getHeap() { return heap; }
 
 	size_t size() const { return usingBucketsNum; }
 

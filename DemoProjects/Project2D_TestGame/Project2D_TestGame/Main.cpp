@@ -7,6 +7,8 @@
 #include <Graphics/Node.h>
 #include <ResourceManager/ResourceManager.h>
 #include <GameLogic/CPP/CppGameLogicClassManager.h>
+#include <UserInterfaces/Input.h>
+#include <UserInterfaces/UserInterfaces.h>
 
 #include <Windows.h>
 
@@ -17,6 +19,29 @@ public:
 	virtual void update(float deltaTime) override {
 		Node* node = getComponent()->getParent()->getNode();
 		node->setRotation(node->getRotation() + 10.0f * deltaTime);
+
+		float rot = node->getRotation();
+		if (rot >= 360.0f) {
+			rot -= 360.0f;
+		}
+		else if (rot <= -360.0f) {
+			rot += 360.0f;
+		}
+
+		Input* input = UserInterfaces::get().getInput();
+		if (input->isKeyDown(KeysMap::W)) {
+			node->setPositionY(node->getPositionY() + 10.0f * deltaTime);
+		}
+		if (input->isKeyDown(KeysMap::S)) {
+			node->setPositionY(node->getPositionY() - 10.0f * deltaTime);
+		}
+		if (input->isKeyDown(KeysMap::D)) {
+			node->setPositionX(node->getPositionX() + 10.0f * deltaTime);
+		}
+		if (input->isKeyDown(KeysMap::A)) {
+			node->setPositionX(node->getPositionX() - 10.0f * deltaTime);
+		}
+
 	}
 };
 

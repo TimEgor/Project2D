@@ -59,7 +59,7 @@ public:
 
     using propagate_on_container_move_assignment = std::true_type;
 
-    CustomHeapAllocator() : CustomHeapAllocator(MemoryManager::get().getDefaultHeap()) {}
+    CustomHeapAllocator() : CustomHeapAllocator(MemoryManager::getDefaultHeap()) {}
     explicit CustomHeapAllocator(Heap *heap) : heap(heap) {}
     CustomHeapAllocator(const CustomHeapAllocator&) = default;
     CustomHeapAllocator& operator=(const CustomHeapAllocator&) = default;

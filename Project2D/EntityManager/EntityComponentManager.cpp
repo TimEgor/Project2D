@@ -43,14 +43,12 @@ void EntityComponentManager::releaseReference(EntityComponentReferenceHandler* r
 }
 
 bool EntityComponentManager::init(Level* currentLevel) {
-    Heap* defaultHeap = MemoryManager::get().getDefaultHeap();
+    componentAllocators[SpriteRendererEntityComponentType].init(sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+    componentAllocators[CanvasSpriteRendererEntityComponentType].init(sizeof(CanvasSpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+    componentAllocators[CanvasLabelEntityComponentType].init(sizeof(CanvasLabelEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
+    componentAllocators[CppGameLogicEntityComponentType].init(sizeof(CppGameLogicEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
 
-    componentAllocators[SpriteRendererEntityComponentType].init(defaultHeap, sizeof(SpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
-    componentAllocators[CanvasSpriteRendererEntityComponentType].init(defaultHeap, sizeof(CanvasSpriteRendererEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
-    componentAllocators[CanvasLabelEntityComponentType].init(defaultHeap, sizeof(CanvasLabelEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
-    componentAllocators[CppGameLogicEntityComponentType].init(defaultHeap, sizeof(CppGameLogicEntityComponent), ENTITIES_COMPONENTS_ALLOCATOR_SIZE);
-
-    referenceAllocators.init(defaultHeap, sizeof(EntityComponentReferenceHandler), 512);
+    referenceAllocators.init(sizeof(EntityComponentReferenceHandler), 512);
 
     level = currentLevel;
 

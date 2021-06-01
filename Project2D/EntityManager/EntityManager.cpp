@@ -4,7 +4,7 @@
 
 bool EntityManager::init(Level* currentLevel) {
     entities.reserve(ENTITIES_ALLOCATOR_SIZE);
-    if (!allocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Entity), ENTITIES_ALLOCATOR_SIZE)) {
+    if (!allocators.init(sizeof(Entity), ENTITIES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
