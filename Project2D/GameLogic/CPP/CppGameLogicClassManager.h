@@ -32,7 +32,7 @@ public:
 
 template <typename ClassType>
 CppGameLogicClass* createCppLogicClass() {
-	return new (memAllocate(sizeof(ClassType))) ClassType();
+	return new ClassType();
 }
 
 template <typename ClassType>

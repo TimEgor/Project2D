@@ -13,7 +13,7 @@ bool LinkingPoolAllocator::init(size_t _bucketSize, size_t _bucketsNum) {
     assert(requiredBucketSize > sizeof(FreeBucketInfo));
 
     size_t requiredSize = requiredBucketSize * _bucketsNum;
-    buckets = memAllocate(requiredSize);
+    buckets = new uint8_t [requiredSize];
     if (!buckets) {
         return false;
     }
@@ -45,7 +45,7 @@ void LinkingPoolAllocator::clear() {
 
 void LinkingPoolAllocator::release() {
     if (buckets) {
-        memRelease(buckets);
+        delete[] buckets;
         buckets = nullptr;
     }
 

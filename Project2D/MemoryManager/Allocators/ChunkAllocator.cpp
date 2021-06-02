@@ -49,7 +49,7 @@ ChunkAllocator& ChunkAllocator::operator=(ChunkAllocator&& allocator) {
 
 bool ChunkAllocator::init(size_t _chunkSize, size_t _chunksNum) {
     size_t requiredSize = (_chunkSize + sizeof(SectorInfo)) * _chunksNum;
-    chunks = memAllocate(requiredSize);
+    chunks = new uint8_t[requiredSize];
     if (!chunks) {
         return false;
     }
@@ -62,7 +62,7 @@ bool ChunkAllocator::init(size_t _chunkSize, size_t _chunksNum) {
 
 void ChunkAllocator::release() {
     if (chunks) {
-        memRelease(chunks);
+        delete[] chunks;
         chunks = nullptr;
     }
 

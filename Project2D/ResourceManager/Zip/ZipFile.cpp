@@ -41,7 +41,7 @@ bool ZipFile::init(const ResourceName& archiveName) {
     ZipDirHeader info;
     fread(&info, sizeof(ZipDirHeader), 1, zipFile);
 
-    centralDir = memAllocate(sizeof(ZipDirFileHeader*) * info.nDirEntries + info.dirSize);
+    centralDir = new uint8_t [sizeof(ZipDirFileHeader*) * info.nDirEntries + info.dirSize];
 
     centralDirEntryHeaders = (ZipDirFileHeader**)((uint8_t*)(centralDir) + info.dirSize);
 
@@ -83,7 +83,7 @@ bool ZipFile::init(const ResourceName& archiveName) {
 
 void ZipFile::release() {
     if (centralDir) {
-        memRelease(centralDir);
+        delete[] centralDir;
         centralDir = nullptr;
     }
 
@@ -124,7 +124,7 @@ bool ZipFile::readFileData(ResourceID fileNameHash, void* data, size_t fileSize)
     if (fileHeader.compression == Z_DEFLATED) {
         size_t compressedSize = fileHeader.cSize;
 
-        uint8_t* compressedData = (uint8_t*)(memAllocate(compressedSize));
+        uint8_t* compressedData = new uint8_t[compressedSize];
         assert(compressedData);
 
         fread(compressedData, compressedSize, 1, zipFile);
@@ -149,7 +149,7 @@ bool ZipFile::readFileData(ResourceID fileNameHash, void* data, size_t fileSize)
         }
         assert(uncompressingResult == Z_OK);
 
-        memRelease(compressedData);
+        delete[] compressedData;
         return true;
     }
 

@@ -45,7 +45,7 @@ void* ArrayPoolAllocator::operator[](size_t index) {
 
 bool ArrayPoolAllocator::init(size_t _bucketSize, size_t _bucketsNum) {
     size_t requiredSize = _bucketSize * _bucketsNum;
-    buckets = memAllocate(requiredSize);
+    buckets = new uint8_t[requiredSize];
     if (!buckets) {
         return false;
     }
@@ -60,7 +60,7 @@ bool ArrayPoolAllocator::init(size_t _bucketSize, size_t _bucketsNum) {
 
 void ArrayPoolAllocator::release() {
     if (buckets) {
-        memRelease(buckets);
+        delete[] buckets;
         buckets = nullptr;
     }
 

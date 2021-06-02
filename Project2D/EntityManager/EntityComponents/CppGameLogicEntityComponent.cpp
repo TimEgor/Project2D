@@ -17,7 +17,7 @@ CppGameLogicEntityComponent::CppGameLogicEntityComponent(CppClassNameHash hash) 
 
 void CppGameLogicEntityComponent::release() {
 	assert(gameLogicClass);
-	memRelease(gameLogicClass);
+	delete gameLogicClass;
 }
 
 void CppGameLogicEntityComponent::update(float deltaTime) {

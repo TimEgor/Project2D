@@ -46,7 +46,7 @@ bool PoolAllocator::init(size_t _bucketSize, size_t _bucketsNum) {
     assert(_bucketSize > sizeof(FreeBucketInfo));
 
     size_t requiredSize = _bucketSize * _bucketsNum;
-    buckets = memAllocate(requiredSize);
+    buckets = new uint8_t [requiredSize];
     if (!buckets) {
         return false;
     }
@@ -61,7 +61,7 @@ bool PoolAllocator::init(size_t _bucketSize, size_t _bucketsNum) {
 
 void PoolAllocator::release() {
     if (buckets) {
-        memRelease(buckets);
+        delete[] buckets;
         buckets = nullptr;
     }
 

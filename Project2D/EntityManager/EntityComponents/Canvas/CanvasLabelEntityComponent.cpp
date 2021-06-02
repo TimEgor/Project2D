@@ -42,12 +42,12 @@ void CanvasLabelEntityComponent::update() {
 
 void CanvasLabelEntityComponent::release() {
 	if (verteces) {
-		memRelease(verteces);
+		delete[] verteces;
 		verteces = nullptr;
 	}
 
 	if (indeces) {
-		memRelease(indeces);
+		delete[] indeces;
 		indeces = nullptr;
 	}
 }
@@ -61,8 +61,8 @@ void CanvasLabelEntityComponent::updateBuffers() {
 	if (textSize > allocatedCharSize) {
 		release();
 
-		verteces = (SpriteVertex*)(memAllocate(textSize * 4 * sizeof(SpriteVertex)));
-		indeces = (uint16_t*)(memAllocate(textSize * 6 * sizeof(uint16_t)));
+		verteces = new SpriteVertex[textSize * 4];
+		indeces = new uint16_t[textSize * 6];
 		allocatedCharSize = textSize;
 	}
 
