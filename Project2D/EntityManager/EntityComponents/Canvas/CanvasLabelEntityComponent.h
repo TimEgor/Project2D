@@ -40,8 +40,8 @@ protected:
 	void updateBuffers();
 
 public:
-	CanvasLabelEntityComponent();
-	CanvasLabelEntityComponent(const char* text);
+	CanvasLabelEntityComponent(EntityComponentHandler* handler);
+	CanvasLabelEntityComponent(EntityComponentHandler* handler, const char* text);
 	~CanvasLabelEntityComponent();
 
 	void setText(const char* newText);

@@ -16,7 +16,7 @@ private:
 	Node* node = nullptr;
 
 public:
-	Entity() = default;
+	Entity(EntityHandler* handler) : handler(handler) {}
 
 	void addComponent(EntityComponentID id);
 	void removeComponent(EntityComponentID id);

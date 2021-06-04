@@ -9,6 +9,7 @@
 
 class EntityManager;
 class EntityComponentManager;
+class CppGameLogicClassGroupManager;
 
 typedef uint32_t LevelID;
 
@@ -20,6 +21,8 @@ private:
 
 	RenderingOrder* sceneRenderingOrder;
 	RenderingOrder* canvasRenderingOrder;
+
+	CppGameLogicClassGroupManager* cppGameLogicClassGroupManager;
 
 	LevelID levelID;
 
@@ -62,9 +65,10 @@ public:
 
 	RenderingData getRenderingData();
 
-	EntityManager* getEntityManager() { return entityManager; }
-	EntityComponentManager* getEntityComponentManager() { return entityComponentManager; }
-	Scene* getScene() { return scene; }
+	inline EntityManager* getEntityManager() { return entityManager; }
+	inline EntityComponentManager* getEntityComponentManager() { return entityComponentManager; }
+	inline Scene* getScene() { return scene; }
+	inline CppGameLogicClassGroupManager* getCppGameLogicClassGroupManager() { return cppGameLogicClassGroupManager; }
 };
 
 template<typename ComponentType, typename... Args>

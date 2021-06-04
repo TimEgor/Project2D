@@ -1,6 +1,5 @@
 #pragma once
 
-#include <MemoryManager/MemoryCore.h>
 #include <GameLogic/CPP/CppGameLogicClass.h>
 
 #include <unordered_map>

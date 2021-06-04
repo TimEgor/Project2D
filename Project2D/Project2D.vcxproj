@@ -217,6 +217,8 @@
     <ClCompile Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroup.cpp" />
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroupManager.cpp" />
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassManager.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp" />
@@ -281,6 +283,8 @@
     <ClInclude Include="EntityManager\EntityManager.h" />
     <ClInclude Include="EntityManager\EntityManagerTypes.h" />
     <ClInclude Include="GameLogic\CPP\CppGameLogicClass.h" />
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroup.h" />
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroupManager.h" />
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassManager.h" />
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />

@@ -57,15 +57,6 @@ public:
 	size_t getEntityComponentsNum(EntityComponentType type) const;
 };
 
-template <typename ComponentType>
-class ComponentCreator final {
-public:
-	template <typename... Args>
-	static ComponentType* createComponent(ComponentAllocators::AllocationInfo allocationInfo, Args... args) {
-		return new (allocationInfo.allocationAddress) ComponentType(args...);
-	}
-};
-
 template<typename ComponentType, typename ...Args>
 inline ComponentType* EntityComponentManager::createComponent(Args... args) {
 	EntityComponentType type = ComponentType::getType();
@@ -75,10 +66,10 @@ inline ComponentType* EntityComponentManager::createComponent(Args... args) {
 
 	assert(allocationInfo.allocationAddress);
 	if (allocationInfo.allocationAddress) {
-		newComponent = ComponentCreator<ComponentType>::createComponent(allocationInfo, args...);
+		auto newHandlerIter = components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
+			std::forward_as_tuple(nextEntityComponentID, (ComponentType*)(allocationInfo.allocationAddress), allocationInfo.allocatorID, level));
 
-		components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
-			std::forward_as_tuple(nextEntityComponentID, newComponent, allocationInfo.allocatorID, level));
+		newComponent = new (allocationInfo.allocationAddress) ComponentType(&newHandlerIter.first->second, args...);
 
 		++nextEntityComponentID;
 		++counters[type];

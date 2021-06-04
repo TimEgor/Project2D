@@ -1,9 +1,9 @@
 #include "Level.h"
 
 #include <EntityManager/EntityComponents/SpriteRendererEntityComponent.h>
-#include <EntityManager/EntityComponents/CppGameLogicEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasSpriteRendererEntityComponent.h>
 #include <EntityManager/EntityComponents/Canvas/CanvasLabelEntityComponent.h>
+#include <GameLogic/CPP/CppGameLogicClassGroupManager.h>
 #include <Graphics/Scene.h>
 #include <Graphics/FontManager.h>
 #include <MemoryManager/MemoryManager.h>
@@ -43,6 +43,12 @@ bool Level::init() {
         return false;
     }
 
+    cppGameLogicClassGroupManager = new CppGameLogicClassGroupManager();
+    if (!cppGameLogicClassGroupManager) {
+        release();
+        return false;
+    }
+
     return true;
 }
 
@@ -76,21 +82,16 @@ void Level::release() {
         delete canvasRenderingOrder;
         canvasRenderingOrder = nullptr;
     }
+
+    if (cppGameLogicClassGroupManager) {
+        delete cppGameLogicClassGroupManager;
+        cppGameLogicClassGroupManager = nullptr;
+    }
 }
 
 void Level::update(float deltaTime) {
-    ComponentAllocators* cppGameLogicComponentsAllocators = entityComponentManager->getEntityComponents(CppGameLogicEntityComponentType);
-    if (cppGameLogicComponentsAllocators) {
-        size_t allocatorsNum = cppGameLogicComponentsAllocators->size();
-        for (size_t allocatorIndex = 0; allocatorIndex < allocatorsNum; ++allocatorIndex) {
-            ArrayPoolAllocator& allocator = (*cppGameLogicComponentsAllocators)[allocatorIndex];
-            size_t allocatorSize = allocator.size();
-
-            for (size_t componentIndex = 0; componentIndex < allocatorSize; ++componentIndex) {
-                CppGameLogicEntityComponent& component = allocator.getElement<CppGameLogicEntityComponent>(componentIndex);
-                component.update(deltaTime);
-            }
-        }
+    if (cppGameLogicClassGroupManager) {
+        cppGameLogicClassGroupManager->update(deltaTime);
     }
 }
 

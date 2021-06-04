@@ -1,6 +1,5 @@
 #include "PoolAllocator.h"
 
-#include <MemoryManager/MemoryCore.h>
 #include <MemoryManager/Allocators/AllocatorsUtilities.h>
 
 #include <cassert>

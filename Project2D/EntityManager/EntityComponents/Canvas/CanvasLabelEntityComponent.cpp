@@ -1,6 +1,5 @@
 #include "CanvasLabelEntityComponent.h"
 
-#include <MemoryManager/MemoryCore.h>
 #include <ResourceManager/ResourceManager.h>
 #include <Graphics/FontManager.h>
 #include <Graphics/TextureResource.h>
@@ -8,9 +7,10 @@
 #include <cmath>
 #include <cassert>
 
-CanvasLabelEntityComponent::CanvasLabelEntityComponent() : CanvasLabelEntityComponent("") {}
+CanvasLabelEntityComponent::CanvasLabelEntityComponent(EntityComponentHandler* handler) : CanvasLabelEntityComponent(handler, "") {}
 
-CanvasLabelEntityComponent::CanvasLabelEntityComponent(const char* text) {
+CanvasLabelEntityComponent::CanvasLabelEntityComponent(EntityComponentHandler* handler, const char* text)
+	: EntityComponent(handler) {
     setText(text);
     setMaterialResource(nullptr);
 }

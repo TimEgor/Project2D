@@ -4,7 +4,7 @@
 
 class GameLogicEntityComponent : public EntityComponent {
 public:
-	GameLogicEntityComponent() = default;
+	GameLogicEntityComponent(EntityComponentHandler* handler) : EntityComponent(handler) {}
 
 	virtual void update(float deltaTime) = 0;
 };

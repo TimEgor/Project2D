@@ -1,7 +1,5 @@
 #include "ZipFile.h"
 
-#include <MemoryManager/MemoryCore.h>
-
 #include <zlib.h>
 
 #include <cassert>

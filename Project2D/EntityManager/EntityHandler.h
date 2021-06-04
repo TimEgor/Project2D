@@ -19,9 +19,7 @@ private:
 
 public:
 	EntityHandler(EntityID id, Entity* entity, size_t entityAllocatorID, Level* level)
-		: entity(entity), level(level), allocatorID(entityAllocatorID), id(id) {
-		entity->handler = this;
-	}
+		: entity(entity), level(level), allocatorID(entityAllocatorID), id(id) {}
 	EntityHandler(const EntityHandler&) = delete;
 	EntityHandler(EntityHandler&&) = delete;
 

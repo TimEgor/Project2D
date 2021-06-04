@@ -65,8 +65,8 @@ private:
 	//CustomMaterialProperties customMaterialProperties;
 
 public:
-	SpriteRendererEntityComponent();
-	SpriteRendererEntityComponent(ResourceReference spriteResource, ResourceReference materialResource = nullptr);
+	SpriteRendererEntityComponent(EntityComponentHandler* handler);
+	SpriteRendererEntityComponent(EntityComponentHandler* handler, ResourceReference spriteResource, ResourceReference materialResource = nullptr);
 
 	ResourceReference getSpriteResource() const { return sprite; }
 	void setSpriteResource(ResourceReference newSpriteResource) { sprite = newSpriteResource; }

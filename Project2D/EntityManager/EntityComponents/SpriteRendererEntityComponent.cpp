@@ -51,11 +51,12 @@ void CustomShaderPropertiesReference::releasePropertiesData() {
 //  SpriteRenderer
 //
 
-SpriteRendererEntityComponent::SpriteRendererEntityComponent() : sprite(nullptr) {
+SpriteRendererEntityComponent::SpriteRendererEntityComponent(EntityComponentHandler* handler) : EntityComponent(handler), sprite(nullptr) {
     setMaterialResource(nullptr);
 }
 
-SpriteRendererEntityComponent::SpriteRendererEntityComponent(ResourceReference spriteResource, ResourceReference materialResource) : sprite(spriteResource) {
+SpriteRendererEntityComponent::SpriteRendererEntityComponent(EntityComponentHandler* handler, ResourceReference spriteResource, ResourceReference materialResource)
+    : EntityComponent(handler), sprite(spriteResource) {
     setMaterialResource(materialResource);
 }
 

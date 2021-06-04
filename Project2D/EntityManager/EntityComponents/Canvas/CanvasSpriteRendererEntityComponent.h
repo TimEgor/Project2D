@@ -9,8 +9,8 @@ private:
 	ResourceReference material;
 
 public:
-	CanvasSpriteRendererEntityComponent();
-	CanvasSpriteRendererEntityComponent(ResourceReference spriteResource, ResourceReference materialResource = nullptr);
+	CanvasSpriteRendererEntityComponent(EntityComponentHandler* handler);
+	CanvasSpriteRendererEntityComponent(EntityComponentHandler* handler, ResourceReference spriteResource, ResourceReference materialResource = nullptr);
 
 	ResourceReference getSpriteResource() const { return sprite; }
 	void setSpriteResource(ResourceReference newSpriteResource) { sprite = newSpriteResource; }

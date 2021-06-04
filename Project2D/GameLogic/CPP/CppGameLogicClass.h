@@ -21,4 +21,5 @@ public:
 	CppGameLogicEntityComponent* getComponent() { return component; }
 
 	virtual void update(float deltaTime) = 0;
+	virtual int getOrderIndex() { return 0; }
 };
