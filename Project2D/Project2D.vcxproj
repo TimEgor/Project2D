@@ -27,14 +27,14 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -42,14 +42,14 @@
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
-    <EnableASAN>true</EnableASAN>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -78,7 +78,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)</OutDir>
     <IntDir>$(SolutionDir)tmp\$(Platform)</IntDir>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)_Core_$(Configuration)</TargetName>
     <IncludePath>$(SolutionDir)Libs\zlib\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libs\zlib\lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -86,7 +86,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)</OutDir>
     <IntDir>$(SolutionDir)tmp\$(Platform)</IntDir>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)_Core_$(Configuration)</TargetName>
     <IncludePath>$(SolutionDir)Libs\zlib\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libs\zlib\lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -94,7 +94,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)</OutDir>
     <IntDir>$(SolutionDir)tmp\$(Platform)</IntDir>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)_Core_$(Configuration)</TargetName>
     <IncludePath>$(SolutionDir)Libs\zlib\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libs\zlib\lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -102,7 +102,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)</OutDir>
     <IntDir>$(SolutionDir)tmp\$(Platform)</IntDir>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)_Core_$(Configuration)</TargetName>
     <IncludePath>$(SolutionDir)Libs\zlib\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libs\zlib\lib\$(PlatformTarget);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -124,6 +124,13 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libz-static.lib</AdditionalDependencies>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>
+      </LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -143,6 +150,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libz-static.lib</AdditionalDependencies>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>
+      </LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -158,6 +172,13 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libz-static.lib</AdditionalDependencies>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>
+      </LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -176,10 +197,16 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libz-static.lib</AdditionalDependencies>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>
+      </LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseGameLogic\Level.cpp" />
-    <ClCompile Include="BaseGameLogic\LevelManager.cpp" />
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="EntityManager\Entity.cpp" />
     <ClCompile Include="EntityManager\EntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponentHandler.cpp" />
@@ -187,8 +214,12 @@
     <ClCompile Include="EntityManager\EntityComponentReference.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.cpp" />
+    <ClCompile Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp" />
     <ClCompile Include="EntityManager\EntityManager.cpp" />
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroup.cpp" />
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroupManager.cpp" />
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassManager.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Sprite.cpp" />
@@ -208,13 +239,15 @@
     <ClCompile Include="Graphics\RenderingOrder.cpp" />
     <ClCompile Include="Graphics\Scene.cpp" />
     <ClCompile Include="Graphics\Transform.cpp" />
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="LevelManager\Level.cpp" />
+    <ClCompile Include="LevelManager\LevelManager.cpp" />
     <ClCompile Include="MemoryManager\Allocators\AllocatorsUtilities.cpp" />
     <ClCompile Include="MemoryManager\Allocators\ArrayPoolAllocator.cpp" />
     <ClCompile Include="MemoryManager\Allocators\ChunkAllocator.cpp" />
     <ClCompile Include="MemoryManager\Allocators\LinkingPoolAllocator.cpp" />
     <ClCompile Include="MemoryManager\Allocators\PoolAllocator.cpp" />
     <ClCompile Include="MemoryManager\Heap.cpp" />
+    <ClCompile Include="MemoryManager\MemoryCore.cpp" />
     <ClCompile Include="MemoryManager\MemoryManager.cpp" />
     <ClCompile Include="Multithreading\Thread.cpp" />
     <ClCompile Include="ResourceManager\NativeFileSystem.cpp" />
@@ -234,8 +267,7 @@
     <ClCompile Include="Utilities\XML_TypesReader\XML_TypesReader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseGameLogic\Level.h" />
-    <ClInclude Include="BaseGameLogic\LevelManager.h" />
+    <ClInclude Include="Core.h" />
     <ClInclude Include="EntityManager\Entity.h" />
     <ClInclude Include="EntityManager\EntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentHandler.h" />
@@ -243,11 +275,17 @@
     <ClInclude Include="EntityManager\EntityComponentReference.h" />
     <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasSpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.h" />
+    <ClInclude Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.h" />
+    <ClInclude Include="EntityManager\EntityComponents\GameLogicEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.h" />
     <ClInclude Include="EntityManager\EntityComponentType.h" />
     <ClInclude Include="EntityManager\EntityHandler.h" />
     <ClInclude Include="EntityManager\EntityManager.h" />
     <ClInclude Include="EntityManager\EntityManagerTypes.h" />
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClass.h" />
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroup.h" />
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroupManager.h" />
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassManager.h" />
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Sprite.h" />
@@ -273,6 +311,8 @@
     <ClInclude Include="Graphics\Transform.h" />
     <ClInclude Include="Graphics\TransformHandler.h" />
     <ClInclude Include="Graphics\Verteces.h" />
+    <ClInclude Include="LevelManager\Level.h" />
+    <ClInclude Include="LevelManager\LevelManager.h" />
     <ClInclude Include="MemoryManager\Allocators\AllocatorsUtilities.h" />
     <ClInclude Include="MemoryManager\Allocators\ArrayPoolAllocator.h" />
     <ClInclude Include="MemoryManager\Allocators\ChunkAllocator.h" />
@@ -281,6 +321,7 @@
     <ClInclude Include="MemoryManager\Allocators\PoolAllocatorVector.h" />
     <ClInclude Include="MemoryManager\CustomHeapAllocator.h" />
     <ClInclude Include="MemoryManager\Heap.h" />
+    <ClInclude Include="MemoryManager\MemoryCore.h" />
     <ClInclude Include="MemoryManager\MemoryManager.h" />
     <ClInclude Include="Multithreading\Thread.h" />
     <ClInclude Include="Multithreading\ThreadItemQueue.h" />
@@ -299,6 +340,7 @@
     <ClInclude Include="ResourceManager\Zip\ZipFileSystem.h" />
     <ClInclude Include="UserInterfaces\Input.h" />
     <ClInclude Include="UserInterfaces\UserInterfaces.h" />
+    <ClInclude Include="Utilities\CustomHeapContainers\CustomHeapContainers.h" />
     <ClInclude Include="Utilities\HashFunction\CRC32.h" />
     <ClInclude Include="Utilities\HashFunction\SpookyV2.h" />
     <ClInclude Include="Utilities\PugiXML\pugiconfig.hpp" />

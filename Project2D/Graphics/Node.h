@@ -41,6 +41,22 @@ public:
 
 	void updateTransform();
 
+	float getPositionX() const;
+	float getPositionY() const;
+	void setPositionX(float X);
+	void setPositionY(float Y);
+
+	float getScaleX() const;
+	float getScaleY() const;
+	void setScaleX(float X);
+	void setScaleY(float Y);
+
+	float getRotation() const;
+	void setRotation(float rot);
+
+	float getDepth() const;
+	void setDepth(float dph);
+
 	Transform* getTransform() { return transform; }
 
 	Entity* getEntity() { return entity; }
@@ -56,22 +72,6 @@ public:
 	SceneNode(SceneTransform* transform, Entity* entity)
 		: Node((Transform*)(transform), entity) {}
 
-	float getPositionX() const;
-	float getPositionY() const;
-	void setPositionX(float X);
-	void setPositionY(float Y);
-
-	float getScaleX() const;
-	float getScaleY() const;
-	void setScaleX(float X);
-	void setScaleY(float Y);
-
-	float getRotation() const;
-	void setRotation(float rot);
-
-	float getDepth() const;
-	void setDepth(float dph);
-
 	SceneTransform* getTransform();
 
 	virtual NodeType getNodeType() const override { return SceneNodeType; }
@@ -82,17 +82,6 @@ public:
 	CanvasNode(CanvasTransform* transform, Entity* entity)
 		: Node((Transform*)(transform), entity) {}
 
-	float getScaleX() const;
-	float getScaleY() const;
-	void setScaleX(float X);
-	void setScaleY(float Y);
-
-	float getRotation() const;
-	void setRotation(float rot);
-
-	float getDepth() const;
-	void setDepth(float dph);
-
 	float getPivotX() const;
 	float getPivotY() const;
 	void setPivotX(float X);
@@ -102,11 +91,6 @@ public:
 	float getAnchorY() const;
 	void setAnchorX(float X);
 	void setAnchorY(float Y);
-
-	float getPositionX() const;
-	float getPositionY() const;
-	void setPositionX(float X);
-	void setPositionY(float Y);
 
 	float getWidth() const;
 	float getHeight() const;

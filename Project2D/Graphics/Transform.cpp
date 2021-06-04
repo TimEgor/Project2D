@@ -19,36 +19,6 @@ void SceneTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) {
 	matrix = DirectX::XMMatrixMultiply(rotationMatrix, translatingMatrix);
 }
 
-void SceneTransform::setPositionX(float X) {
-	posX = X;
-	isDirty = true;
-}
-
-void SceneTransform::setPositionY(float Y) {
-	posY = Y;
-	isDirty = true;
-}
-
-void SceneTransform::setScaleX(float X) {
-	scaleX = X;
-	isDirty = true;
-}
-
-void SceneTransform::setScaleY(float Y) {
-	scaleY = Y;
-	isDirty = true;
-}
-
-void SceneTransform::setRotation(float rot) {
-	rotation = rot;
-	isDirty = true;
-}
-
-void SceneTransform::setDepth(float dph) {
-	depth = dph;
-	isDirty = true;
-}
-
 void CanvasTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix, const SceneTransform* parentTransform) {
 	float currentPosX = (width * scaleX) * (0.5f - pivotX);
 	float currentPosY = (height * scaleY) * (0.5f - pivotY);
@@ -88,26 +58,6 @@ void CanvasTransform::calculateLocalTransfomMatrix(DirectX::XMMATRIX& matrix) {
 	matrix = DirectX::XMMatrixMultiply(rotationMatrix, translatingMatrix);
 }
 
-void CanvasTransform::setScaleX(float X) {
-	scaleX = X;
-	isDirty = true;
-}
-
-void CanvasTransform::setScaleY(float Y) {
-	scaleY = Y;
-	isDirty = true;
-}
-
-void CanvasTransform::setRotation(float rot) {
-	rotation = rot;
-	isDirty = true;
-}
-
-void CanvasTransform::setDepth(float dph) {
-	depth = dph;
-	isDirty = true;
-}
-
 void CanvasTransform::setPivotX(float X) {
 	pivotX = X;
 	isDirty = true;
@@ -125,16 +75,6 @@ void CanvasTransform::setAnchorX(float X) {
 
 void CanvasTransform::setAnchorY(float Y) {
 	anchorY = Y;
-	isDirty = true;
-}
-
-void CanvasTransform::setPositionX(float X) {
-	posX = X;
-	isDirty = true;
-}
-
-void CanvasTransform::setPositionY(float Y) {
-	posY = Y;
 	isDirty = true;
 }
 
@@ -177,4 +117,34 @@ void Transform::updateWorldTransformMatrix() {
 	DirectX::XMStoreFloat4x4(worldTransformation, transformMatrix);
 
 	isDirty = false;
+}
+
+void Transform::setPositionX(float X) {
+	posX = X;
+	isDirty = true;
+}
+
+void Transform::setPositionY(float Y) {
+	posY = Y;
+	isDirty = true;
+}
+
+void Transform::setScaleX(float X) {
+	scaleX = X;
+	isDirty = true;
+}
+
+void Transform::setScaleY(float Y) {
+	scaleY = Y;
+	isDirty = true;
+}
+
+void Transform::setRotation(float rot) {
+	rotation = rot;
+	isDirty = true;
+}
+
+void Transform::setDepth(float dph) {
+	depth = dph;
+	isDirty = true;
 }

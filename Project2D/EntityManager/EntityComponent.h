@@ -14,8 +14,10 @@ protected:
 	Entity* entity = nullptr;
 
 public:
-	EntityComponent() = default;
+	EntityComponent(EntityComponentHandler* handler) : handler(handler) {}
 	virtual ~EntityComponent() {}
+
+	virtual void release() {}
 
 	EntityComponentHandler* getHandler() const { return handler; }
 	EntityComponentID getID() const;

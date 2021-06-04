@@ -16,12 +16,12 @@ class CanvasSpriteRendererEntityComponent;
 class EntityComponentReferenceHandler;
 class EntityComponentReference;
 
+typedef PoolAllocatorVector<ArrayPoolAllocator> ComponentAllocators;
+typedef PoolAllocatorVector<PoolAllocator> ReferenceAllocators;
+
 class EntityComponentManager final {
 	friend EntityComponentReference;
 	friend EntityComponentHandler;
-
-	typedef PoolAllocatorVector<ArrayPoolAllocator> ComponentAllocators;
-	typedef PoolAllocatorVector<PoolAllocator> ReferenceAllocators;
 
 private:
 	std::unordered_map<EntityComponentID, EntityComponentHandler> components;
@@ -45,8 +45,8 @@ public:
 	bool init(Level* level);
 	void release();
 
-	template <typename ComponentType>
-	ComponentType* createComponent(EntityComponentType type);
+	template <typename ComponentType, typename ...Args>
+	ComponentType* createComponent(Args... args);
 
 	void deleteEntityComponent(EntityComponentID id);
 	void deleteEntityComponent(EntityComponent* component);
@@ -56,3 +56,24 @@ public:
 
 	size_t getEntityComponentsNum(EntityComponentType type) const;
 };
+
+template<typename ComponentType, typename ...Args>
+inline ComponentType* EntityComponentManager::createComponent(Args... args) {
+	EntityComponentType type = ComponentType::getType();
+
+	ComponentAllocators::AllocationInfo allocationInfo = allocateComponent(type);
+	ComponentType* newComponent = nullptr;
+
+	assert(allocationInfo.allocationAddress);
+	if (allocationInfo.allocationAddress) {
+		auto newHandlerIter = components.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityComponentID),
+			std::forward_as_tuple(nextEntityComponentID, (ComponentType*)(allocationInfo.allocationAddress), allocationInfo.allocatorID, level));
+
+		newComponent = new (allocationInfo.allocationAddress) ComponentType(&newHandlerIter.first->second, args...);
+
+		++nextEntityComponentID;
+		++counters[type];
+	}
+
+	return newComponent;
+}

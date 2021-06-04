@@ -4,7 +4,7 @@
 
 bool EntityManager::init(Level* currentLevel) {
     entities.reserve(ENTITIES_ALLOCATOR_SIZE);
-    if (!allocators.init(MemoryManager::get().getDefaultHeap(), sizeof(Entity), ENTITIES_ALLOCATOR_SIZE)) {
+    if (!allocators.init(sizeof(Entity), ENTITIES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
@@ -23,15 +23,17 @@ Entity* EntityManager::createEntity() {
     size_t oldAllocatorCount = allocators.size();
 
     EntityAllocators::AllocationInfo allocationInfo = allocators.allocate();
-    Entity* newEntity = new (allocationInfo.allocationAddress) Entity();
 
     size_t newAllocatorCount = allocators.size();
     if (oldAllocatorCount < newAllocatorCount) {
         entities.reserve(newAllocatorCount * ENTITIES_ALLOCATOR_SIZE);
     }
+    Entity* newEntity = nullptr;
 
-    entities.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityID),
-        std::forward_as_tuple(nextEntityID, newEntity, allocationInfo.allocatorID, level));
+    auto newHandlerIter = entities.emplace(std::piecewise_construct, std::forward_as_tuple(nextEntityID),
+        std::forward_as_tuple(nextEntityID, (Entity*)(allocationInfo.allocationAddress), allocationInfo.allocatorID, level));
+
+    newEntity = new (allocationInfo.allocationAddress) Entity(&newHandlerIter.first->second);
 
     ++nextEntityID;
 

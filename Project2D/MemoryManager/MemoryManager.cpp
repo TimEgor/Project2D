@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-MemoryManager::MemoryManager() : defaultHeap(GetProcessHeap()) {
+MemoryManager::MemoryManager() {
 }
 
 MemoryManager& MemoryManager::get() {

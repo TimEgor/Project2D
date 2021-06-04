@@ -2,12 +2,8 @@
 
 #include <cstdint>
 
-class Heap;
-
 class ArrayPoolAllocator final {
 private:
-	Heap* heap;
-
 	void* buckets;
 
 	size_t usingBucketsNum;
@@ -35,15 +31,12 @@ public:
 		return *(T*)((uint8_t*)(buckets) + index * bucketSize);
 	}
 
-	bool init(Heap* heap, size_t bucketSize, size_t bucketsNum);
+	bool init(size_t bucketSize, size_t bucketsNum);
 	void release();
 
 	void* allocate();
 	void deallocate(void* bucket);
-
 	void clear();
-
-	Heap* getHeap() { return heap; }
 
 	size_t size() const { return usingBucketsNum; }
 

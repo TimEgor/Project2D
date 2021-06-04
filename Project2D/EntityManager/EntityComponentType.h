@@ -7,5 +7,6 @@ class CanvasLabelEntityComponent;
 enum EntityComponentType {
 	SpriteRendererEntityComponentType,
 	CanvasSpriteRendererEntityComponentType,
-	CanvasLabelEntityComponentType
+	CanvasLabelEntityComponentType,
+	CppGameLogicEntityComponentType
 };

@@ -9,7 +9,7 @@
 #include <string>
 
 typedef char LabelTextChar;
-typedef std::basic_string<LabelTextChar, std::char_traits<LabelTextChar>, CustomHeapAllocator<LabelTextChar>> LabelText;
+typedef std::basic_string<LabelTextChar, std::char_traits<LabelTextChar>> LabelText;
 
 struct LabelRect final {
 	float x = 0.0f;
@@ -23,16 +23,16 @@ protected:
 	LabelText text = "";
 	ResourceReference materialResource;
 
-	Heap* heap = nullptr;
 	SpriteVertex* verteces = nullptr;
 	uint16_t* indeces = nullptr;
 
 	ResourceID fontID = ResourceName("Fonts/Arial").hash();
 	LabelRect rect;
 
+	size_t allocatedCharSize = 0;
+
 	uint16_t vertecesCount = 0;
 	uint16_t indecesCount = 0;
-	uint16_t allocatedCharSize = 0;
 
 	bool isDirty = false;
 
@@ -40,10 +40,8 @@ protected:
 	void updateBuffers();
 
 public:
-	CanvasLabelEntityComponent();
-	CanvasLabelEntityComponent(Heap* heap);
-	CanvasLabelEntityComponent(const char* text);
-	CanvasLabelEntityComponent(const char* text, Heap* heap);
+	CanvasLabelEntityComponent(EntityComponentHandler* handler);
+	CanvasLabelEntityComponent(EntityComponentHandler* handler, const char* text);
 	~CanvasLabelEntityComponent();
 
 	void setText(const char* newText);
@@ -69,4 +67,5 @@ public:
 	uint16_t getIndecesCount() const { return indecesCount; }
 
 	virtual EntityComponentType getEntityComponentType() const override { return CanvasLabelEntityComponentType; }
+	static EntityComponentType getType() { return CanvasLabelEntityComponentType; }
 };

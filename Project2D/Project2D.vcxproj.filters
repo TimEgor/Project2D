@@ -34,9 +34,6 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{da0af92a-49bb-46f9-9a8c-fcc4ac78d98c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BaseGameLogic">
-      <UniqueIdentifier>{a2a49a0c-0062-4ea2-b778-a6210a627016}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UserInterfaces">
       <UniqueIdentifier>{4c04422e-4e6f-4796-b51a-042c054847e1}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,18 @@
     </Filter>
     <Filter Include="EntityManager\EntityComponents\Canvas">
       <UniqueIdentifier>{4c324dd9-17af-4c5c-a4c2-d60fa8e4922d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LevelManager">
+      <UniqueIdentifier>{a2a49a0c-0062-4ea2-b778-a6210a627016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameLogic">
+      <UniqueIdentifier>{bd474045-82fe-46f1-81ea-bdbbab43207d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameLogic\CPP">
+      <UniqueIdentifier>{f72b8371-d6aa-49be-8033-d1dcafdd2350}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\CustomHeapContainers">
+      <UniqueIdentifier>{021ffb37-1f7c-442e-baec-763f302cbdb2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,7 +102,6 @@
     <ClCompile Include="ResourceManager\Zip\ZipFileSystem.cpp">
       <Filter>ResourceManager\Zip</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="ResourceManager\ResourceAsyncLoader.cpp">
       <Filter>ResourceManager</Filter>
     </ClCompile>
@@ -123,12 +131,6 @@
     </ClCompile>
     <ClCompile Include="EntityManager\EntityComponentManager.cpp">
       <Filter>EntityManager</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseGameLogic\Level.cpp">
-      <Filter>BaseGameLogic</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseGameLogic\LevelManager.cpp">
-      <Filter>BaseGameLogic</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Node.cpp">
       <Filter>Graphics</Filter>
@@ -216,6 +218,28 @@
     </ClCompile>
     <ClCompile Include="Graphics\FontManager.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="LevelManager\Level.cpp">
+      <Filter>LevelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager\LevelManager.cpp">
+      <Filter>LevelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassManager.cpp">
+      <Filter>GameLogic\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.cpp">
+      <Filter>EntityManager\EntityComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager\MemoryCore.cpp">
+      <Filter>MemoryManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroup.cpp">
+      <Filter>GameLogic\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroupManager.cpp">
+      <Filter>GameLogic\CPP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,12 +348,6 @@
     <ClInclude Include="Graphics\Transform.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="BaseGameLogic\Level.h">
-      <Filter>BaseGameLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseGameLogic\LevelManager.h">
-      <Filter>BaseGameLogic</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\NodeHandler.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -431,6 +449,37 @@
     </ClInclude>
     <ClInclude Include="Graphics\TextureResource.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="LevelManager\Level.h">
+      <Filter>LevelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager\LevelManager.h">
+      <Filter>LevelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassManager.h">
+      <Filter>GameLogic\CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponents\GameLogicEntityComponent.h">
+      <Filter>EntityManager\EntityComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager\EntityComponents\CppGameLogicEntityComponent.h">
+      <Filter>EntityManager\EntityComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClass.h">
+      <Filter>GameLogic\CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\CustomHeapContainers\CustomHeapContainers.h">
+      <Filter>Utilities\CustomHeapContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager\MemoryCore.h">
+      <Filter>MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroup.h">
+      <Filter>GameLogic\CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroupManager.h">
+      <Filter>GameLogic\CPP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

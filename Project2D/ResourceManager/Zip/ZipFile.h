@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma comment(lib, "libz-static.lib")
-
 #include <ResourceManager/Resource.h>
 #include <ResourceManager/ResourceName.h>
 

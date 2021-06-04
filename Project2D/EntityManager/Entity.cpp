@@ -2,7 +2,7 @@
 
 #include <EntityManager/EntityHandler.h>
 #include <EntityManager/EntityComponentManager.h>
-#include <BaseGameLogic/LevelManager.h>
+#include <LevelManager/LevelManager.h>
 
 #include <cassert>
 

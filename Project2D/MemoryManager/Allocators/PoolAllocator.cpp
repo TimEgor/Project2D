@@ -1,24 +1,21 @@
 #include "PoolAllocator.h"
 
-#include <MemoryManager/Heap.h>
 #include <MemoryManager/Allocators/AllocatorsUtilities.h>
 
 #include <cassert>
 #include <memory>
 
 PoolAllocator::PoolAllocator()
-    : heap(nullptr), buckets(nullptr), firstFreeBucket(nullptr),
+    : buckets(nullptr), firstFreeBucket(nullptr),
     usingBucketsNum(0), bucketSize(0), bucketsNum(0) {}
 
 PoolAllocator::PoolAllocator(PoolAllocator&& allocator) {
-    heap = allocator.heap;
     buckets = allocator.buckets;
     firstFreeBucket = allocator.firstFreeBucket;
     usingBucketsNum = allocator.usingBucketsNum;
     bucketSize = allocator.bucketSize;
     bucketsNum = allocator.bucketsNum;
 
-    allocator.heap = nullptr;
     allocator.buckets = nullptr;
     allocator.firstFreeBucket = nullptr;
     allocator.usingBucketsNum = 0;
@@ -29,14 +26,12 @@ PoolAllocator::PoolAllocator(PoolAllocator&& allocator) {
 PoolAllocator& PoolAllocator::operator=(PoolAllocator&& allocator) {
     release();
 
-    heap = allocator.heap;
     buckets = allocator.buckets;
     firstFreeBucket = allocator.firstFreeBucket;
     usingBucketsNum = allocator.usingBucketsNum;
     bucketSize = allocator.bucketSize;
     bucketsNum = allocator.bucketsNum;
 
-    allocator.heap = nullptr;
     allocator.buckets = nullptr;
     allocator.firstFreeBucket = nullptr;
     allocator.usingBucketsNum = 0;
@@ -46,16 +41,14 @@ PoolAllocator& PoolAllocator::operator=(PoolAllocator&& allocator) {
     return *this;
 }
 
-bool PoolAllocator::init(Heap* _heap, size_t _bucketSize, size_t _bucketsNum) {
+bool PoolAllocator::init(size_t _bucketSize, size_t _bucketsNum) {
     assert(_bucketSize > sizeof(FreeBucketInfo));
 
     size_t requiredSize = _bucketSize * _bucketsNum;
-    buckets = _heap->allocate(requiredSize);
+    buckets = new uint8_t [requiredSize];
     if (!buckets) {
         return false;
     }
-
-    heap = _heap;
 
     bucketSize = _bucketSize;
     bucketsNum = _bucketsNum;
@@ -67,11 +60,10 @@ bool PoolAllocator::init(Heap* _heap, size_t _bucketSize, size_t _bucketsNum) {
 
 void PoolAllocator::release() {
     if (buckets) {
-        heap->deallocate(buckets);
+        delete[] buckets;
         buckets = nullptr;
     }
 
-    heap = nullptr;
     firstFreeBucket = nullptr;
 
     usingBucketsNum = 0;

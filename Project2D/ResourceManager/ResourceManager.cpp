@@ -40,6 +40,11 @@ bool ResourceManager::init() {
 }
 
 void ResourceManager::release() {
+    for (auto& resHandler : resources) {
+        delete resHandler.second.getResource();
+    }
+    resources = std::unordered_map<ResourceID, ResourceHandler>();
+
     if (zipFileSystem) {
         zipFileSystem->release();
         delete zipFileSystem;

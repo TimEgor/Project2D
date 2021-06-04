@@ -1,6 +1,5 @@
 #include "ChunkAllocator.h"
 
-#include <MemoryManager/Heap.h>
 #include <MemoryManager/Allocators/AllocatorsUtilities.h>
 
 #include <cassert>
@@ -9,12 +8,11 @@
 #include <cstdint>
 
 ChunkAllocator::ChunkAllocator()
-    : heap(nullptr), chunks(nullptr), firstFreeSector(nullptr),
+    : chunks(nullptr), firstFreeSector(nullptr),
     usingChunksNum(0), usingSectorsNum(0), chunkSize(0), chunksNum(0) {
 }
 
 ChunkAllocator::ChunkAllocator(ChunkAllocator&& allocator) {
-    heap = allocator.heap;
     chunks = allocator.chunks;
     firstFreeSector = allocator.firstFreeSector;
     usingChunksNum = allocator.usingChunksNum;
@@ -22,7 +20,6 @@ ChunkAllocator::ChunkAllocator(ChunkAllocator&& allocator) {
     chunkSize = allocator.chunkSize;
     chunksNum = allocator.chunksNum;
 
-    allocator.heap = nullptr;
     allocator.chunks = nullptr;
     allocator.firstFreeSector = nullptr;
     allocator.usingChunksNum = 0;
@@ -33,7 +30,6 @@ ChunkAllocator::ChunkAllocator(ChunkAllocator&& allocator) {
 ChunkAllocator& ChunkAllocator::operator=(ChunkAllocator&& allocator) {
     release();
 
-    heap = allocator.heap;
     chunks = allocator.chunks;
     firstFreeSector = allocator.firstFreeSector;
     usingChunksNum = allocator.usingChunksNum;
@@ -41,7 +37,6 @@ ChunkAllocator& ChunkAllocator::operator=(ChunkAllocator&& allocator) {
     chunkSize = allocator.chunkSize;
     chunksNum = allocator.chunksNum;
 
-    allocator.heap = nullptr;
     allocator.chunks = nullptr;
     allocator.firstFreeSector = nullptr;
     allocator.usingChunksNum = 0;
@@ -51,14 +46,12 @@ ChunkAllocator& ChunkAllocator::operator=(ChunkAllocator&& allocator) {
     return *this;
 }
 
-bool ChunkAllocator::init(Heap* _heap, size_t _chunkSize, size_t _chunksNum) {
+bool ChunkAllocator::init(size_t _chunkSize, size_t _chunksNum) {
     size_t requiredSize = (_chunkSize + sizeof(SectorInfo)) * _chunksNum;
-    chunks = _heap->allocate(requiredSize);
+    chunks = new uint8_t[requiredSize];
     if (!chunks) {
         return false;
     }
-
-    heap = _heap;
 
     chunkSize = _chunkSize;
     chunksNum = _chunksNum;
@@ -68,11 +61,10 @@ bool ChunkAllocator::init(Heap* _heap, size_t _chunkSize, size_t _chunksNum) {
 
 void ChunkAllocator::release() {
     if (chunks) {
-        heap->deallocate(chunks);
+        delete[] chunks;
         chunks = nullptr;
     }
 
-    heap = nullptr;
     firstFreeSector = nullptr;
 
     usingChunksNum = 0;

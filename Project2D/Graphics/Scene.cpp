@@ -1,33 +1,33 @@
 #include "Scene.h"
 
 #include <MemoryManager/MemoryManager.h>
-#include <BaseGameLogic/Level.h>
+#include <LevelManager/Level.h>
 #include <EntityManager/Entity.h>
 
 bool Scene::init(Level* level) {
     nodes.reserve(SCENE_NODES_ALLOCATOR_SIZE + CANVAS_NODES_ALLOCATOR_SIZE);
-    if (!sceneNodeAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(SceneNode), SCENE_NODES_ALLOCATOR_SIZE)) {
+    if (!sceneNodeAllocators.init(sizeof(SceneNode), SCENE_NODES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
 
-    if (!canvasNodeAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(CanvasNode), CANVAS_NODES_ALLOCATOR_SIZE)) {
+    if (!canvasNodeAllocators.init(sizeof(CanvasNode), CANVAS_NODES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
 
-    if (!sceneTransformAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(SceneTransform), SCENE_NODES_ALLOCATOR_SIZE)) {
+    if (!sceneTransformAllocators.init(sizeof(SceneTransform), SCENE_NODES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
 
-    if (!canvasTransformAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(CanvasTransform), CANVAS_NODES_ALLOCATOR_SIZE)) {
+    if (!canvasTransformAllocators.init(sizeof(CanvasTransform), CANVAS_NODES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }
 
 
-    if (!worldTransformsMatrixAllocators.init(MemoryManager::get().getDefaultHeap(), sizeof(TransformMatrix), SCENE_NODES_ALLOCATOR_SIZE + CANVAS_NODES_ALLOCATOR_SIZE)) {
+    if (!worldTransformsMatrixAllocators.init(sizeof(TransformMatrix), SCENE_NODES_ALLOCATOR_SIZE + CANVAS_NODES_ALLOCATOR_SIZE)) {
         release();
         return false;
     }

@@ -18,10 +18,8 @@ private:
 	EntityComponentID id = 0;
 
 public:
-	EntityComponentHandler(EntityComponentID id, EntityComponent *component, size_t componentAllocatorID, Level* level)
-		: component(component), level(level), allocatorID(componentAllocatorID), id(id) {
-		component->handler = this;
-	}
+	EntityComponentHandler(EntityComponentID id, EntityComponent* component, size_t componentAllocatorID, Level* level)
+		: component(component), level(level), allocatorID(componentAllocatorID), id(id) {}
 	EntityComponentHandler(const EntityComponentHandler&) = delete;
 	EntityComponentHandler(EntityComponentHandler&&) = delete;
 
@@ -33,6 +31,8 @@ public:
 
 	EntityComponentReference getReference();
 	EntityComponentReferenceHandler* getReferenceHandler() { return reference; }
+
+	Level* getLevel() { return level; }
 
 	size_t getComponentAllocatorID() { return allocatorID; }
 };

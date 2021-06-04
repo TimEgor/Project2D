@@ -1,24 +1,21 @@
 #include "ArrayPoolAllocator.h"
 
-#include <MemoryManager/Heap.h>
 #include <MemoryManager/Allocators/AllocatorsUtilities.h>
 
 #include <cassert>
 #include <memory>
 
 ArrayPoolAllocator::ArrayPoolAllocator()
-    : heap(nullptr), buckets(nullptr),
+    : buckets(nullptr),
     usingBucketsNum(0), bucketSize(0), bucketsNum(0) {
 }
 
 ArrayPoolAllocator::ArrayPoolAllocator(ArrayPoolAllocator&& allocator) {
-    heap = allocator.heap;
     buckets = allocator.buckets;
     usingBucketsNum = allocator.usingBucketsNum;
     bucketSize = allocator.bucketSize;
     bucketsNum = allocator.bucketsNum;
 
-    allocator.heap = nullptr;
     allocator.buckets = nullptr;
     allocator.usingBucketsNum = 0;
     allocator.bucketSize = 0;
@@ -28,13 +25,11 @@ ArrayPoolAllocator::ArrayPoolAllocator(ArrayPoolAllocator&& allocator) {
 ArrayPoolAllocator& ArrayPoolAllocator::operator=(ArrayPoolAllocator&& allocator) {
     release();
 
-    heap = allocator.heap;
     buckets = allocator.buckets;
     usingBucketsNum = allocator.usingBucketsNum;
     bucketSize = allocator.bucketSize;
     bucketsNum = allocator.bucketsNum;
 
-    allocator.heap = nullptr;
     allocator.buckets = nullptr;
     allocator.usingBucketsNum = 0;
     allocator.bucketSize = 0;
@@ -47,14 +42,12 @@ void* ArrayPoolAllocator::operator[](size_t index) {
     return (uint8_t*)(buckets) + index * bucketSize;
 }
 
-bool ArrayPoolAllocator::init(Heap* _heap, size_t _bucketSize, size_t _bucketsNum) {
+bool ArrayPoolAllocator::init(size_t _bucketSize, size_t _bucketsNum) {
     size_t requiredSize = _bucketSize * _bucketsNum;
-    buckets = _heap->allocate(requiredSize);
+    buckets = new uint8_t[requiredSize];
     if (!buckets) {
         return false;
     }
-
-    heap = _heap;
 
     bucketSize = _bucketSize;
     bucketsNum = _bucketsNum;
@@ -66,11 +59,9 @@ bool ArrayPoolAllocator::init(Heap* _heap, size_t _bucketSize, size_t _bucketsNu
 
 void ArrayPoolAllocator::release() {
     if (buckets) {
-        heap->deallocate(buckets);
+        delete[] buckets;
         buckets = nullptr;
     }
-
-    heap = nullptr;
 
     usingBucketsNum = 0;
     bucketSize = 0;

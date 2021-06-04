@@ -9,13 +9,14 @@ private:
 	ResourceReference material;
 
 public:
-	CanvasSpriteRendererEntityComponent();
-	CanvasSpriteRendererEntityComponent(ResourceReference spriteResource, ResourceReference materialResource = nullptr);
+	CanvasSpriteRendererEntityComponent(EntityComponentHandler* handler);
+	CanvasSpriteRendererEntityComponent(EntityComponentHandler* handler, ResourceReference spriteResource, ResourceReference materialResource = nullptr);
 
 	ResourceReference getSpriteResource() const { return sprite; }
 	void setSpriteResource(ResourceReference newSpriteResource) { sprite = newSpriteResource; }
 	ResourceReference getMaterialResource() const { return material; }
 	void setMaterialResource(ResourceReference newMaterialResource);
 
-	virtual EntityComponentType getEntityComponentType() const override { return CanvasSpriteRendererEntityComponentType; };
+	virtual EntityComponentType getEntityComponentType() const override { return CanvasSpriteRendererEntityComponentType; }
+	static EntityComponentType getType() { return CanvasSpriteRendererEntityComponentType; }
 };

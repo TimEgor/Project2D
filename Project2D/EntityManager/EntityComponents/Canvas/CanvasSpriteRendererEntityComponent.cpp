@@ -2,12 +2,12 @@
 
 #include <ResourceManager/ResourceManager.h>
 
-CanvasSpriteRendererEntityComponent::CanvasSpriteRendererEntityComponent() : sprite(nullptr) {
+CanvasSpriteRendererEntityComponent::CanvasSpriteRendererEntityComponent(EntityComponentHandler* handler) : EntityComponent(handler), sprite(nullptr) {
 	setMaterialResource(nullptr);
 }
 
-CanvasSpriteRendererEntityComponent::CanvasSpriteRendererEntityComponent(ResourceReference spriteResource, ResourceReference materialResource)
-	: sprite(spriteResource) {
+CanvasSpriteRendererEntityComponent::CanvasSpriteRendererEntityComponent(EntityComponentHandler* handler, ResourceReference spriteResource, ResourceReference materialResource)
+	: EntityComponent(handler), sprite(spriteResource) {
 	setMaterialResource(materialResource);
 }
 

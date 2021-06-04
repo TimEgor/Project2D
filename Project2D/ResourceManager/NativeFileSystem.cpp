@@ -17,7 +17,7 @@ bool NativeFileSystem::loadRawDataBase(const ResourceName& resourceName, void* d
 }
 
 bool NativeFileSystem::getResourceSize(const ResourceName& resourceName, size_t& resourceSize) {
-    resourceSize = std::filesystem::file_size(resourceName.c_str());
+    resourceSize = (size_t)(std::filesystem::file_size(resourceName.c_str()));
     return true;
 }
 

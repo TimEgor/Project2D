@@ -4,16 +4,14 @@
 #include <unordered_map>
 #include <cassert>
 
-class Heap;
-
 typedef size_t AllocatorID;
 
 template <typename AllocatorType>
 class PoolAllocatorVector final {
 public:
 	struct AllocationInfo final {
-		void* allocationAddress;
-		AllocatorID allocatorID;
+		void* allocationAddress = nullptr;
+		AllocatorID allocatorID = 0;
 	};
 
 private:
@@ -44,8 +42,6 @@ private:
 	std::vector<VectorNode> allocators;
 	std::unordered_map<size_t, size_t> indeces;
 
-	Heap* heap;
-
 	size_t elementSize;
 	size_t elementsNum;
 
@@ -56,7 +52,7 @@ private:
 
 	VectorNode& createAllocator() {
 		AllocatorType newAllocator;
-		newAllocator.init(heap, elementSize, elementsNum);
+		newAllocator.init(elementSize, elementsNum);
 
 		allocators.emplace_back();
 		VectorNode& newNode = *allocators.rbegin();
@@ -121,7 +117,7 @@ public:
 	PoolAllocatorVector() = default;
 	PoolAllocatorVector(const PoolAllocatorVector&) = delete;
 	PoolAllocatorVector(PoolAllocatorVector&& vector)
-		: allocators(std::move(vector.allocators)), heap(vector.heap),
+		: allocators(std::move(vector.allocators)),
 		elementSize(vector.elementSize), elementsNum(vector.elementsNum) {}
 
 	~PoolAllocatorVector() { release(); }
@@ -130,7 +126,6 @@ public:
 	PoolAllocatorVector& operator=(PoolAllocatorVector&& vector) {
 		allocators = std::move(vector.allocators);
 
-		heap = vector.heap;
 		elementSize = vector.elementSize;
 		elementsNum = vector.elementsNum;
 
@@ -148,8 +143,7 @@ public:
 		return allocators[index].allocator;
 	}
 
-	bool init(Heap* allocatorHeap, size_t allocatorElementSize, size_t allocatorElementsNum, size_t maxEmptyStoringAllocatorsNum = 1, size_t preInitAllocatorNum = 1) {
-		heap = allocatorHeap;
+	bool init(size_t allocatorElementSize, size_t allocatorElementsNum, size_t maxEmptyStoringAllocatorsNum = 1, size_t preInitAllocatorNum = 1) {
 		elementSize = allocatorElementSize;
 		elementsNum = allocatorElementsNum;
 
@@ -203,7 +197,7 @@ public:
 			}
 
 			if (!allocator.isInit()) {
-				allocator.init(heap, elementSize, elementsNum);
+				allocator.init(elementSize, elementsNum);
 				choosenVectorNode = &node;
 				break;
 			}

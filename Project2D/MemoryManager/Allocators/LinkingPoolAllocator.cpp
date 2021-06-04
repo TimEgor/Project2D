@@ -1,24 +1,21 @@
 #include "LinkingPoolAllocator.h"
 
-#include <MemoryManager/Heap.h>
 #include <MemoryManager/Allocators/AllocatorsUtilities.h>
 
 #include <cassert>
 #include <memory>
 #include <cstdint>
 
-bool LinkingPoolAllocator::init(Heap* _heap, size_t _bucketSize, size_t _bucketsNum) {
+bool LinkingPoolAllocator::init(size_t _bucketSize, size_t _bucketsNum) {
     size_t requiredBucketSize = _bucketSize + sizeof(UsingBucketInfo);
 
     assert(requiredBucketSize > sizeof(FreeBucketInfo));
 
     size_t requiredSize = requiredBucketSize * _bucketsNum;
-    buckets = _heap->allocate(requiredSize);
+    buckets = new uint8_t [requiredSize];
     if (!buckets) {
         return false;
     }
-
-    heap = _heap;
 
     bucketSize = _bucketSize;
     bucketsNum = _bucketsNum;
@@ -47,11 +44,10 @@ void LinkingPoolAllocator::clear() {
 
 void LinkingPoolAllocator::release() {
     if (buckets) {
-        heap->deallocate(buckets);
+        delete[] buckets;
         buckets = nullptr;
     }
 
-    heap = nullptr;
     firstFreeBucket = nullptr;
 
     usingBucketsNum = 0;

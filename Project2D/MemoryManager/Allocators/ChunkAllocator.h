@@ -1,7 +1,5 @@
 #pragma once
 
-class Heap;
-
 class ChunkAllocator final {
 public:
 	struct SectorInfo final {
@@ -14,8 +12,6 @@ public:
 	};
 
 protected:
-	Heap* heap;
-
 	void* chunks;
 
 	SectorInfo* firstFreeSector;
@@ -34,15 +30,13 @@ public:
 	ChunkAllocator& operator=(const ChunkAllocator&) = delete;
 	ChunkAllocator& operator=(ChunkAllocator&& allocator);
 
-	bool init(Heap* heap, size_t chunkSize, size_t chunksNum);
+	bool init(size_t chunkSize, size_t chunksNum);
 	void release();
 
 	void* allocate(size_t size);
 	void deallocate(void* sector);
 
 	void clean();
-
-	Heap* getHeap() { return heap; }
 
 	size_t size() const { return usingChunksNum; }
 	size_t getUsingSectorsNum() const { return usingSectorsNum; }

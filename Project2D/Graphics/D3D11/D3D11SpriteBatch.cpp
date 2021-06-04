@@ -54,8 +54,8 @@ size_t D3D11SpriteBatch::buildData(const std::vector<RenderingOrderNode*>& nodes
     const D3D11SpriteVertex* spriteVerteces = D3D11Sprite::verteces;
     const uint16_t* spriteIndeces = D3D11Sprite::indeces;
 
-    size_t vertNum = 0;
-    size_t indexNum = 0;
+    uint16_t vertNum = 0;
+    uint16_t indexNum = 0;
 
     size_t startIndex = currentIndex;
     size_t count = nodes.size();
@@ -71,7 +71,7 @@ size_t D3D11SpriteBatch::buildData(const std::vector<RenderingOrderNode*>& nodes
         if (currentNode->getType() == BatchSpriteOrderNodeType) {
             BatchRenderingOrderNode* batchNode = static_cast<BatchRenderingOrderNode*>(currentNode);
 
-            if ((vertNum + batchNode->vertecesCount >= vertCapacity) && (indexNum + batchNode->indecesCount >= indexCapacity)) {
+            if (((size_t)(vertNum + batchNode->vertecesCount) >= vertCapacity) && ((size_t)(indexNum + batchNode->indecesCount) >= indexCapacity)) {
                 break;
             }
 
@@ -110,7 +110,7 @@ size_t D3D11SpriteBatch::buildData(const std::vector<RenderingOrderNode*>& nodes
             spriteCount += batchNode->indecesCount / 6;
         }
         else {
-            if ((vertNum + 4 >= vertCapacity) && (indexNum + 6 >= indexCapacity)) {
+            if ((vertNum + 4u >= vertCapacity) && (indexNum + 6u >= indexCapacity)) {
                 break;
             }
 

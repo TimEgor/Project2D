@@ -1,6 +1,5 @@
 #include "CanvasLabelEntityComponent.h"
 
-#include <MemoryManager/MemoryManager.h>
 #include <ResourceManager/ResourceManager.h>
 #include <Graphics/FontManager.h>
 #include <Graphics/TextureResource.h>
@@ -8,14 +7,10 @@
 #include <cmath>
 #include <cassert>
 
-CanvasLabelEntityComponent::CanvasLabelEntityComponent() : CanvasLabelEntityComponent("") {}
+CanvasLabelEntityComponent::CanvasLabelEntityComponent(EntityComponentHandler* handler) : CanvasLabelEntityComponent(handler, "") {}
 
-CanvasLabelEntityComponent::CanvasLabelEntityComponent(Heap* heap) : CanvasLabelEntityComponent("", heap) {}
-
-CanvasLabelEntityComponent::CanvasLabelEntityComponent(const char* text) : CanvasLabelEntityComponent(text, MemoryManager::get().getDefaultHeap()) {}
-
-CanvasLabelEntityComponent::CanvasLabelEntityComponent(const char* text, Heap* heap)
-    : text(CustomHeapAllocator<LabelTextChar>(heap)), heap(heap) {
+CanvasLabelEntityComponent::CanvasLabelEntityComponent(EntityComponentHandler* handler, const char* text)
+	: EntityComponent(handler) {
     setText(text);
     setMaterialResource(nullptr);
 }
@@ -47,12 +42,12 @@ void CanvasLabelEntityComponent::update() {
 
 void CanvasLabelEntityComponent::release() {
 	if (verteces) {
-		heap->deallocate(verteces);
+		delete[] verteces;
 		verteces = nullptr;
 	}
 
 	if (indeces) {
-		heap->deallocate(indeces);
+		delete[] indeces;
 		indeces = nullptr;
 	}
 }
@@ -66,15 +61,15 @@ void CanvasLabelEntityComponent::updateBuffers() {
 	if (textSize > allocatedCharSize) {
 		release();
 
-		verteces = (SpriteVertex*)(heap->allocate(textSize * 4 * sizeof(SpriteVertex)));
-		indeces = (uint16_t*)(heap->allocate(textSize * 6 * sizeof(uint16_t)));
+		verteces = new SpriteVertex[textSize * 4];
+		indeces = new uint16_t[textSize * 6];
 		allocatedCharSize = textSize;
 	}
 
 	const FontInfo* fontInfo = FontManager::get().getFontInfo(fontID);
 	if (fontInfo) {
-		size_t vertexPos = 0;
-		size_t indexPos = 0;
+		uint16_t vertexPos = 0;
+		uint16_t indexPos = 0;
 
 		float posX = 0.0f;
 		float maxPosY = 0.0f;
@@ -99,8 +94,8 @@ void CanvasLabelEntityComponent::updateBuffers() {
 
 				posX += charInfo.xoffset + kerning;
 
-				float posYTop = -charInfo.yoffset;
-				float posYDown = -(charInfo.yoffset + charInfo.height);
+				float posYTop = (float)(-charInfo.yoffset);
+				float posYDown = (float)(-(charInfo.yoffset + charInfo.height));
 
 				float bitmapU = charInfo.x / (float)(bitmapWight);
 				float bitmapV = charInfo.y / (float)(bitmapHeight);
@@ -138,11 +133,11 @@ void CanvasLabelEntityComponent::updateBuffers() {
 				verteces[vertexPos + 3].texV = bitmapV;
 
 				indeces[indexPos] = vertexPos;
-				indeces[indexPos + 1] = vertexPos + 1;
-				indeces[indexPos + 2] = vertexPos + 2;
+				indeces[indexPos + 1] = vertexPos + 1u;
+				indeces[indexPos + 2] = vertexPos + 2u;
 				indeces[indexPos + 3] = vertexPos;
-				indeces[indexPos + 4] = vertexPos + 2;
-				indeces[indexPos + 5] = vertexPos + 3;
+				indeces[indexPos + 4] = vertexPos + 2u;
+				indeces[indexPos + 5] = vertexPos + 3u;
 
 				vertexPos += 4;
 				indexPos += 6;
