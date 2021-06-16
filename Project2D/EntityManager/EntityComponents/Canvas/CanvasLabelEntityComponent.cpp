@@ -2,7 +2,7 @@
 
 #include <ResourceManager/ResourceManager.h>
 #include <Graphics/FontManager.h>
-#include <Graphics/TextureResource.h>
+#include <Graphics/Resources/TextureResource.h>
 
 #include <cmath>
 #include <cassert>

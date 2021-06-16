@@ -3,8 +3,9 @@
 #include <ResourceManager/Resource.h>
 #include <ResourceManager/ResourceReference.h>
 #include <Graphics/D3D11/D3D11.h>
+#include <Graphics/Resources/MaterialResource.h>
 
-class D3D11MaterialResource final : public Resource {
+class D3D11MaterialResource final : public MaterialResource {
 private:
 	ResourceReference pixelShader;
 	ResourceReference vertexShader;

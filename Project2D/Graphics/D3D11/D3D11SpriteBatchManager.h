@@ -15,7 +15,7 @@ public:
 	D3D11SpriteBatchManager();
 	~D3D11SpriteBatchManager() { release(); }
 
-	void prepareRenderingData(const std::vector<RenderingOrderNode*>& nodes, RenderingOrderType nodesType, size_t vertecesCount, size_t indecesCount);
+	//void prepareRenderingData(const std::vector<RenderingOrderNode*>& nodes, RenderingOrderType nodesType, size_t vertecesCount, size_t indecesCount);
 
 	void releaseUselessBranches();
 	void release();

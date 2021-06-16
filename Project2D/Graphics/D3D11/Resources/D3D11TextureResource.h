@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Graphics/D3D11/D3D11.h>
-#include <Graphics/TextureResource.h>
+#include <Graphics/Resources/TextureResource.h>
 
 class D3D11TextureResource final : public TextureResource {
 private:

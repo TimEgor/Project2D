@@ -40,8 +40,8 @@ private:
 	void changeMaterial(ResourceReference materialResource, ID3D11DeviceContext* context);
 	void changeSprite(ResourceReference spriteResource, ID3D11DeviceContext* context);
 
-	void drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOrder* order, ID3D11DeviceContext* context);
-	void drawSprite(RenderingOrderNode* node, size_t indexPos, size_t indexCount, ID3D11DeviceContext* context);
+	/*void drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOrder* order, ID3D11DeviceContext* context);
+	void drawSprite(RenderingOrderNode* node, size_t indexPos, size_t indexCount, ID3D11DeviceContext* context);*/
 
 public:
 	~D3D11Renderer() { release(); }
@@ -54,5 +54,5 @@ public:
 	void beginDrawing();
 	void endDrawing();
 
-	void draw(RenderingData data);
+	void draw(RenderingData& data);
 };

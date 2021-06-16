@@ -64,6 +64,9 @@
     <Filter Include="Utilities\CustomHeapContainers">
       <UniqueIdentifier>{021ffb37-1f7c-442e-baec-763f302cbdb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Resources">
+      <UniqueIdentifier>{18e9ed16-8cb5-49bf-9726-63f41e3ae0e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MemoryManager\Heap.cpp">
@@ -189,9 +192,6 @@
     <ClCompile Include="MemoryManager\Allocators\ArrayPoolAllocator.cpp">
       <Filter>MemoryManager\Allocators</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\RenderingOrder.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterfaces\Input.cpp">
       <Filter>UserInterfaces</Filter>
     </ClCompile>
@@ -240,6 +240,12 @@
     </ClCompile>
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroupManager.cpp">
       <Filter>GameLogic\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RenderingOrderNode.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RenderingOrderManager.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -447,9 +453,6 @@
     <ClInclude Include="Graphics\FontManager.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\TextureResource.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Core.h" />
     <ClInclude Include="LevelManager\Level.h">
       <Filter>LevelManager</Filter>
@@ -481,10 +484,17 @@
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroupManager.h">
       <Filter>GameLogic\CPP</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="RenderingOrder.natvis">
+    <ClInclude Include="Graphics\RenderingOrderManager.h">
       <Filter>Graphics</Filter>
-    </Natvis>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderingOrderNode.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Resources\MaterialResource.h">
+      <Filter>Graphics\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Resources\TextureResource.h">
+      <Filter>Graphics\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

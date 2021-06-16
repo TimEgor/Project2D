@@ -15,6 +15,8 @@ public:
 	~ResourceReference();
 
 	ResourceReference& operator=(const ResourceReference& reference);
+	inline bool operator==(const ResourceReference& reference) const { return handler == reference.handler; }
+	inline bool operator!=(const ResourceReference& reference) const { return handler != reference.handler; }
 
 	bool isNull() const { return handler == nullptr; }
 	bool isResourceReady() const { return handler->getResource(); }

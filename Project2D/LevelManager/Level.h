@@ -19,8 +19,7 @@ private:
 	EntityComponentManager* entityComponentManager;
 	Scene* scene;
 
-	RenderingOrder* sceneRenderingOrder;
-	RenderingOrder* canvasRenderingOrder;
+	RenderingData* renderingData;
 
 	CppGameLogicClassGroupManager* cppGameLogicClassGroupManager;
 
@@ -63,7 +62,7 @@ public:
 	void deleteEntityWithoutNode(Entity* entity);
 	void deleteEntityWithoutNode(EntityID id);
 
-	RenderingData getRenderingData();
+	RenderingData& getRenderingData();
 
 	inline EntityManager* getEntityManager() { return entityManager; }
 	inline EntityComponentManager* getEntityComponentManager() { return entityComponentManager; }

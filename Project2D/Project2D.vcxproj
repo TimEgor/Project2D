@@ -236,7 +236,8 @@
     <ClCompile Include="Graphics\D3D11\WICTextureLoader11.cpp" />
     <ClCompile Include="Graphics\FontManager.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
-    <ClCompile Include="Graphics\RenderingOrder.cpp" />
+    <ClCompile Include="Graphics\RenderingOrderManager.cpp" />
+    <ClCompile Include="Graphics\RenderingOrderNode.cpp" />
     <ClCompile Include="Graphics\Scene.cpp" />
     <ClCompile Include="Graphics\Transform.cpp" />
     <ClCompile Include="LevelManager\Level.cpp" />
@@ -305,9 +306,12 @@
     <ClInclude Include="Graphics\NodeHandler.h" />
     <ClInclude Include="Graphics\RenderingData.h" />
     <ClInclude Include="Graphics\RenderingOrder.h" />
+    <ClInclude Include="Graphics\RenderingOrderManager.h" />
+    <ClInclude Include="Graphics\RenderingOrderNode.h" />
+    <ClInclude Include="Graphics\Resources\MaterialResource.h" />
+    <ClInclude Include="Graphics\Resources\TextureResource.h" />
     <ClInclude Include="Graphics\Scene.h" />
     <ClInclude Include="Graphics\SceneTypes.h" />
-    <ClInclude Include="Graphics\TextureResource.h" />
     <ClInclude Include="Graphics\Transform.h" />
     <ClInclude Include="Graphics\TransformHandler.h" />
     <ClInclude Include="Graphics\Verteces.h" />
@@ -347,9 +351,6 @@
     <ClInclude Include="Utilities\PugiXML\pugixml.hpp" />
     <ClInclude Include="Utilities\WildcardMatch\WildcardMatch.h" />
     <ClInclude Include="Utilities\XML_TypesReader\XML_TypesReader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="RenderingOrder.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

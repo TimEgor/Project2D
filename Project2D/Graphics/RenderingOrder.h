@@ -1,82 +1,47 @@
 #pragma once
 
-#include <ResourceManager/ResourceReference.h>
-#include <EntityManager/EntityManagerTypes.h>
-#include <Graphics/Transform.h>
-#include <Graphics/Verteces.h>
-
 #include <vector>
+#include <algorithm>
 
-enum RenderingOrderType {
-	SceneOrderType,
-	CanvasOrderType
-};
-
-enum RenderingOrderNodeType {
-	SpriteOrderNodeType,
-	BatchSpriteOrderNodeType
-};
-
-struct RenderingOrderNode {
-	ResourceReference materialResource = nullptr;
-	ResourceReference spriteResource = nullptr;
-	TransformMatrix* transform = nullptr;
-
-	RenderingOrderNode() = default;
-	virtual ~RenderingOrderNode() {}
-
-	virtual RenderingOrderNodeType getType() const { return SpriteOrderNodeType; }
-};
-
-struct BatchRenderingOrderNode final : public RenderingOrderNode {
-	SpriteVertex* verteces = nullptr;
-	uint16_t* indeces = nullptr;
-	uint16_t vertecesCount = 0;
-	uint16_t indecesCount = 0;
-
-	BatchRenderingOrderNode() = default;
-
-	virtual RenderingOrderNodeType getType() const override { return BatchSpriteOrderNodeType; }
-};
-
+template <typename OrderNodeType>
 class RenderingOrder final {
 private:
-	std::vector<RenderingOrderNode*> nodes;
-	std::vector<RenderingOrderNode> spritesNodes;
-	std::vector<BatchRenderingOrderNode> batchSpritesNode;
-	std::vector<TransformMatrix> transforms;
-
-	size_t vertecesCount;
-	size_t indecesCount;
-
-	RenderingOrderType type;
+	std::vector<OrderNodeType> nodes;
 
 public:
-	RenderingOrder(RenderingOrderType type);
-	RenderingOrder(const RenderingOrder&) = delete;
-	~RenderingOrder() { release(); }
-
-	RenderingOrder& operator=(const RenderingOrder&) = delete;
-	RenderingOrderNode* operator[](size_t index);
-	const RenderingOrderNode* operator[](size_t index) const;
-
-	const std::vector<RenderingOrderNode*>& getNodes() const { return nodes; }
-
-	size_t getVertecesCount() const { return vertecesCount; }
-	size_t getIndecesCount() const { return indecesCount; }
+	RenderingOrder() = default;
 
 	void release();
-
 	void clear();
 
 	void reserve(size_t size);
-	void pushNode(ResourceReference materialResource, ResourceReference spriteResource, const TransformMatrix* transform);
-	void pushBatchNode(ResourceReference materialResource, ResourceReference spriteResource, const TransformMatrix* transform,
-		uint16_t vertecesCount, SpriteVertex* verteces, uint16_t indecesCount, uint16_t* indeces);
+
+	void pushRenderingNode(const OrderNodeType& node);
 
 	void sort();
-
-	size_t size() const { return nodes.size(); }
-
-	RenderingOrderType getType() const { return type; }
 };
+
+template<typename OrderNodeType>
+inline void RenderingOrder<OrderNodeType>::release() {
+	nodes = std::vector<OrderNodeType>();
+}
+
+template<typename OrderNodeType>
+inline void RenderingOrder<OrderNodeType>::clear() {
+	nodes.clear();
+}
+
+template<typename OrderNodeType>
+inline void RenderingOrder<OrderNodeType>::reserve(size_t size) {
+	nodes.reserve(size);
+}
+
+template<typename OrderNodeType>
+inline void RenderingOrder<OrderNodeType>::pushRenderingNode(const OrderNodeType& node) {
+	nodes.push_back(node);
+}
+
+template<typename OrderNodeType>
+inline void RenderingOrder<OrderNodeType>::sort() {
+	std::stable_sort(nodes.begin(), nodes.end(), OrderNodeType::sortPredicate);
+}

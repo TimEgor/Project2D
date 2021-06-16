@@ -1,22 +1,19 @@
 #pragma once
 
-#include <Graphics/RenderingOrder.h>
+#include <Graphics/RenderingOrderManager.h>
 
 class Scene;
 
 class RenderingData final {
 private:
+	SceneRenderingOrderManager sceneOrderManager;
+	CanvasRenderingOrderManager canvasOrderManager;
 	Scene* scene = nullptr;
-	RenderingOrder* sceneOrder = nullptr;
-	RenderingOrder* canvasOrder = nullptr;
 
 public:
-	RenderingData() = default;
-	
-	void setScene(Scene* renderingScene) { scene = renderingScene; }
+	RenderingData(Scene* scene) : scene(scene) {}
+
 	Scene* getScene() { return scene; }
-	void setSceneRenderingOrder(RenderingOrder* renderingOrder) { sceneOrder = renderingOrder; }
-	RenderingOrder* getSceneRedneringOrder() { return sceneOrder; }
-	void setCanvasRenderingOrder(RenderingOrder* renderingOrder) { canvasOrder = renderingOrder; }
-	RenderingOrder* getCanvasRedneringOrder() { return canvasOrder; }
+	SceneRenderingOrderManager& getSceneRedneringOrderManager() { return sceneOrderManager; }
+	CanvasRenderingOrderManager& getCanvasRedneringOrderManager() { return canvasOrderManager; }
 };

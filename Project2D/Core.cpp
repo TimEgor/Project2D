@@ -7,6 +7,7 @@
 #include <Graphics/D3D11/D3D11.h>
 #include <Graphics/D3D11/D3D11Renderer.h>
 #include <Graphics/FontManager.h>
+#include <Graphics/RenderingData.h>
 
 #include <chrono>
 
@@ -70,9 +71,9 @@ void Core::run() {
 			level->update(deltaTime);
 
 			//Rendering
-			RenderingData renderingData = level->getRenderingData();
-			renderingData.getSceneRedneringOrder()->sort();
-			renderingData.getCanvasRedneringOrder()->sort();
+			RenderingData& renderingData = level->getRenderingData();
+			renderingData.getSceneRedneringOrderManager().sortNodes();
+			renderingData.getCanvasRedneringOrderManager().sortNodes();
 
 			d3d11Renderer.beginDrawing();
 			d3d11Renderer.draw(renderingData);
