@@ -72,8 +72,8 @@ void Core::run() {
 
 			//Rendering
 			RenderingData& renderingData = level->getRenderingData();
-			renderingData.getSceneRedneringOrderManager().sortNodes();
-			renderingData.getCanvasRedneringOrderManager().sortNodes();
+			renderingData.getSceneRedneringOrderManager().sortForwardNodes();
+			renderingData.getCanvasRedneringOrderManager().sortForwardNodes();
 
 			d3d11Renderer.beginDrawing();
 			d3d11Renderer.draw(renderingData);

@@ -34,6 +34,8 @@ public:
 	bool init(size_t bucketSize, size_t bucketsNum);
 	void release();
 
+	void resize(size_t size);
+
 	void* allocate();
 	void deallocate(void* bucket);
 	void clear();

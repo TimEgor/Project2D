@@ -241,12 +241,6 @@
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroupManager.cpp">
       <Filter>GameLogic\CPP</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\RenderingOrderNode.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\RenderingOrderManager.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -420,12 +414,6 @@
     <ClInclude Include="EntityManager\EntityManagerTypes.h">
       <Filter>EntityManager</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\RenderingOrder.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\RenderingData.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterfaces\Input.h">
       <Filter>UserInterfaces</Filter>
     </ClInclude>
@@ -484,17 +472,17 @@
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroupManager.h">
       <Filter>GameLogic\CPP</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\RenderingOrderManager.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\RenderingOrderNode.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Resources\MaterialResource.h">
       <Filter>Graphics\Resources</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Resources\TextureResource.h">
       <Filter>Graphics\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Renderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Graphics.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -220,14 +220,14 @@ RenderingData& Level::getRenderingData() {
                             SpriteRenderingOrderNode renderingNode(renderingNodeTransformMatrix, materialResource, spriteResource);
                             order.pushRenderingNode(renderingNode);
 
-                            sceneRedneringOrderManager.pushRevertedNode(renderingNode);
+                            sceneRedneringOrderManager.pushReverseNode(renderingNode);
                         }
                         else {
                             TransformMatrix* renderingNodeTransformMatrix = sceneRedneringOrderManager.pushTransformMatrix(*worldTransform);
                             SpriteRenderingOrderNode renderingNode(renderingNodeTransformMatrix, materialResource, spriteResource);
                             order.pushRenderingNode(renderingNode);
 
-                            sceneRedneringOrderManager.pushNode(renderingNode);
+                            sceneRedneringOrderManager.pushForwardNode(renderingNode);
                         }
                     }
                 }

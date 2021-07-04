@@ -14,7 +14,7 @@
 D3D11Renderer::D3D11Renderer() : renderTargetView(nullptr),
     depthStencilBuffer(nullptr), depthStencilView(nullptr),
     rasterizerState(nullptr),
-    perObjectTransformBuffer(nullptr), spriteSamplerState(nullptr) {}
+    globalTransformBuffer(nullptr), spriteSamplerState(nullptr) {}
 
 D3D11Renderer& D3D11Renderer::get() {
     static D3D11Renderer uniqueD3D11Renderer;
@@ -58,13 +58,16 @@ bool D3D11Renderer::init() {
 
     D3D11_BUFFER_DESC perObjectTransformBufferDesc{};
     perObjectTransformBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-    perObjectTransformBufferDesc.ByteWidth = sizeof(PerObjectTransforms);
     perObjectTransformBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     perObjectTransformBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     perObjectTransformBufferDesc.MiscFlags = 0;
     perObjectTransformBufferDesc.StructureByteStride = 0;
 
-    device->CreateBuffer(&perObjectTransformBufferDesc, nullptr, &perObjectTransformBuffer);
+    perObjectTransformBufferDesc.ByteWidth = sizeof(GlobalTransforms);
+    device->CreateBuffer(&perObjectTransformBufferDesc, nullptr, &globalTransformBuffer);
+
+    perObjectTransformBufferDesc.ByteWidth = sizeof(PerNodeTransform);
+    device->CreateBuffer(&perObjectTransformBufferDesc, nullptr, &perNodeTransformBuffer);
 
     D3D11_SAMPLER_DESC spriteSamplerDesc{};
     spriteSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -105,9 +108,6 @@ bool D3D11Renderer::init() {
     currentMaterialID = 0;
     currentSpriteID = 0;
 
-    sceneBatchManager = new D3D11SpriteBatchManager();
-    canvasBatchManager = new D3D11SpriteBatchManager();
-
     return true;
 }
 
@@ -119,19 +119,10 @@ void D3D11Renderer::release() {
 
     D3D11ObjectRelease(rasterizerState);
 
-    D3D11ObjectRelease(perObjectTransformBuffer);
+    D3D11ObjectRelease(globalTransformBuffer);
+    D3D11ObjectRelease(perNodeTransformBuffer);
     D3D11ObjectRelease(spriteSamplerState);
     D3D11ObjectRelease(spriteBlendState);
-
-    if (sceneBatchManager) {
-        delete sceneBatchManager;
-        sceneBatchManager = nullptr;
-    }
-
-    if (canvasBatchManager) {
-        delete canvasBatchManager;
-        canvasBatchManager = nullptr;
-    }
 
     D3D11Sprite::get().release();
 }
@@ -170,14 +161,6 @@ void D3D11Renderer::beginDrawing() {
 void D3D11Renderer::endDrawing() {
     IDXGISwapChain* swapChain = D3D11::get().getSwapChain();
     swapChain->Present(0, 0);
-
-    if (sceneBatchManager) {
-        sceneBatchManager->releaseUselessBranches();
-    }
-
-    if (canvasBatchManager) {
-        canvasBatchManager->releaseUselessBranches();
-    }
 }
 
 void D3D11Renderer::changeMaterial(ResourceReference materialResource, ID3D11DeviceContext* context) {
@@ -198,6 +181,41 @@ void D3D11Renderer::changeSprite(ResourceReference spriteResource, ID3D11DeviceC
     context->PSSetShaderResources(0, 1, &spriteShaderResourceView);
 
     currentSpriteID = spriteResource.getResourceID();
+}
+
+void D3D11Renderer::drawSceneOrders(SceneRenderingOrderManager& orderManager, ID3D11DeviceContext* context) {
+    PerNodeTransform* mappedTransforms;
+    D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
+
+    D3D11Sprite& sprite = D3D11Sprite::get();
+
+    context->VSSetConstantBuffers(2, 1, &perNodeTransformBuffer);
+
+    UINT strides = sizeof(D3D11SpriteVertex);
+    UINT offsets = 0;
+    ID3D11Buffer* verteces = sprite.getVertecesBuffer();
+    context->IASetVertexBuffers(0, 1, &verteces, &strides, &offsets);
+    context->IASetIndexBuffer(sprite.getIndecesBuffer(), DXGI_FORMAT_R16_UINT, 0);
+
+    RenderingOrder<SpriteRenderingOrderNode>& spriteOrder = orderManager.getSpriteRenderingOrder();
+    for (auto& node : spriteOrder) {
+        if (node.materialResource.getResourceID() != currentMaterialID) {
+            changeMaterial(node.materialResource, context);
+        }
+
+        if (node.spriteResource.getResourceID() != currentSpriteID) {
+            changeSprite(node.spriteResource, context);
+        }
+
+        context->Map(perNodeTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+
+        mappedTransforms = (PerNodeTransform*)(mappedSubresource.pData);
+        mappedTransforms->worldTransformMatrix = DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(node.transform));
+
+        context->Unmap(perNodeTransformBuffer, 0);
+
+        context->DrawIndexed(sprite.getIndecesNum(), 0, 0);
+    }
 }
 
 //void D3D11Renderer::drawOrder(D3D11SpriteBatchManager* batchManager, RenderingOrder* order, ID3D11DeviceContext* deviceContext) {
@@ -303,7 +321,7 @@ void D3D11Renderer::draw(RenderingData& data) {
     deviceContext->RSSetState(rasterizerState);
     deviceContext->RSSetViewports(1, &viewport);
     deviceContext->PSSetSamplers(0, 1, &spriteSamplerState);
-    deviceContext->VSSetConstantBuffers(1, 1, &perObjectTransformBuffer);
+    deviceContext->VSSetConstantBuffers(1, 1, &globalTransformBuffer);
 
     DirectX::XMMATRIX projTransformMatrix;
     DirectX::XMMATRIX viewTransformMatrix;
@@ -313,35 +331,34 @@ void D3D11Renderer::draw(RenderingData& data) {
 
     Scene* scene = data.getScene();
 
-    PerObjectTransforms* mappedTransforms;
+    GlobalTransforms* mappedTransforms;
     D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
 
     //
 
     prepareSceneProjTransformMatrix(projTransformMatrix);
 
-    deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+    deviceContext->Map(globalTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
 
-    mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
+    mappedTransforms = (GlobalTransforms*)(mappedSubresource.pData);
     mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransformMatrix);
     mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransformMatrix);
 
-    deviceContext->Unmap(perObjectTransformBuffer, 0);
+    deviceContext->Unmap(globalTransformBuffer, 0);
 
-    //drawOrder(sceneBatchManager, data.getSceneRedneringOrder(), deviceContext);
-
+    drawSceneOrders(data.getSceneRedneringOrderManager(), deviceContext);
 
     //
 
     prepareCanvasProjTransformMatrix(projTransformMatrix);
 
-    deviceContext->Map(perObjectTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+    deviceContext->Map(globalTransformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
 
-    mappedTransforms = (PerObjectTransforms*)(mappedSubresource.pData);
+    mappedTransforms = (GlobalTransforms*)(mappedSubresource.pData);
     mappedTransforms->viewTransformMatrix = DirectX::XMMatrixTranspose(viewTransformMatrix);
     mappedTransforms->projTransformMatrix = DirectX::XMMatrixTranspose(projTransformMatrix);
 
-    deviceContext->Unmap(perObjectTransformBuffer, 0);
+    deviceContext->Unmap(globalTransformBuffer, 0);
 
     //drawOrder(canvasBatchManager, data.getCanvasRedneringOrder(), deviceContext);
 }
