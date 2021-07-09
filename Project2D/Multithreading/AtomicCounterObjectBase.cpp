@@ -13,7 +13,17 @@ void AtomicCounterObjectBase::tryDestroy() {
 	guard.unlock();
 }
 
-AtomicCounterObjectBase* AtomicCounterObjectBase::getObject() {
+void AtomicCounterObjectBase::incrementCounter() {
+	++counter;
+}
+
+void AtomicCounterObjectBase::decrementCounter() {
+	if (--counter) {
+		tryDestroy();
+	}
+}
+
+AtomicCounterObjectBase* AtomicCounterObjectBase::getReferenceObject() {
 	LockStateGuard guard(lockState);
 
 	if (counter > 0 || isAlive) {
@@ -26,44 +36,6 @@ AtomicCounterObjectBase* AtomicCounterObjectBase::getObject() {
 	return nullptr;
 }
 
-void AtomicCounterObjectBase::incrementCounter() {
-	++counter;
-}
-
-void AtomicCounterObjectBase::decrementCounter() {
-	if (--counter) {
-		tryDestroy();
-	}
-}
-
-AtomicCounterObjetcBaseReference::AtomicCounterObjetcBaseReference(AtomicCounterObjectBase* objectRef) {
-	if (objectRef) {
-		object = objectRef->getObject();
-	}
-}
-
-AtomicCounterObjetcBaseReference::AtomicCounterObjetcBaseReference(const AtomicCounterObjetcBaseReference& reference) {
-	if (reference.object) {
-		object = reference.object->getObject();
-	}
-}
-
-AtomicCounterObjetcBaseReference& AtomicCounterObjetcBaseReference::operator=(AtomicCounterObjectBase* objectRef) {
-	if (object) {
-		object->decrementCounter();
-	}
-
-	if (objectRef) {
-		object = objectRef->getObject();
-	}
-}
-
-AtomicCounterObjetcBaseReference& AtomicCounterObjetcBaseReference::operator=(const AtomicCounterObjetcBaseReference& reference) {
-	if (object) {
-		object->decrementCounter();
-	}
-
-	if (reference.object) {
-		object = reference.object->getObject();
-	}
+void AtomicCounterObjectBase::releaseReferenceObject() {
+	decrementCounter();
 }

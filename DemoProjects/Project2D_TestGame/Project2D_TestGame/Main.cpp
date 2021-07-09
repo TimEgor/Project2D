@@ -52,15 +52,15 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR args, int show) 
 
 	core.init();
 
-	Level* level = LevelManager::get().createLevel();
+	//Level* level = LevelManager::get().createLevel();
 
-	Entity* entity = level->createSceneEntity();
-	SpriteRendererEntityComponent* spriteComponent = level->createEntityComponent<SpriteRendererEntityComponent>(entity, ResourceManager::get().getResourceFromArchive("testTexture.png"));
+	//Entity* entity = level->createSceneEntity();
+	//SpriteRendererEntityComponent* spriteComponent = level->createEntityComponent<SpriteRendererEntityComponent>(entity, ResourceManager::get().getResourceFromArchive("testTexture.png"));
 
-	SceneNode* node = (SceneNode*)(entity->getNode());
-	node->setPositionX(2.0f);
+	//SceneNode* node = (SceneNode*)(entity->getNode());
+	//node->setPositionX(2.0f);
 
-	TestClass* testLogicClass = (TestClass*)(level->createEntityComponent<CppGameLogicEntityComponent>(entity, "TestClass"));
+	//TestClass* testLogicClass = (TestClass*)(level->createEntityComponent<CppGameLogicEntityComponent>(entity, "TestClass"));
 
 	core.run();
 	core.release();

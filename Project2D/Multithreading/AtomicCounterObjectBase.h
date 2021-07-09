@@ -13,45 +13,74 @@ private:
 protected:
 	virtual void selfDestroy() = 0; 
 
+	void incrementCounter();
+	void decrementCounter();
+
 public:
 	AtomicCounterObjectBase()
 		: counter(0), isAlive(true) {}
 	virtual ~AtomicCounterObjectBase() {}
 
-	AtomicCounterObjectBase* getObject();
-
-	void incrementCounter();
-	void decrementCounter(); //returning true when counter is null
+	AtomicCounterObjectBase* getReferenceObject();
+	void releaseReferenceObject();
 };
 
+template <typename T>
 class AtomicCounterObjetcBaseReference {
 private:
-	AtomicCounterObjectBase* object = nullptr;
+	T* object = nullptr;
 
 public:
 	AtomicCounterObjetcBaseReference() = default;
-	AtomicCounterObjetcBaseReference(AtomicCounterObjectBase* object);
-	AtomicCounterObjetcBaseReference(const AtomicCounterObjetcBaseReference& reference);
+	AtomicCounterObjetcBaseReference(T* object);
+	AtomicCounterObjetcBaseReference(const AtomicCounterObjetcBaseReference<T>& reference);
 	virtual ~AtomicCounterObjetcBaseReference() {}
 
-	AtomicCounterObjetcBaseReference& operator=(AtomicCounterObjectBase* object);
-	AtomicCounterObjetcBaseReference& operator=(const AtomicCounterObjetcBaseReference& reference);
+	AtomicCounterObjetcBaseReference& operator=(T* object);
+	AtomicCounterObjetcBaseReference& operator=(const AtomicCounterObjetcBaseReference<T>& reference);
 
 	bool isNull() const { return object == nullptr; }
 
-	template <typename T>
-	T& getObject();
-
-	template <typename T>
-	T& getObject() const;
+	T& getObject() { return object; }
+	const T& getObject() const { return object; }
 };
 
 template<typename T>
-inline T& AtomicCounterObjetcBaseReference::getObject() {
-	return *(T*)(object);
+inline AtomicCounterObjetcBaseReference<T>::AtomicCounterObjetcBaseReference(T* objectRef) {
+	if (objectRef) {
+		object = (T*)(objectRef->getReferenceObject());
+	}
 }
 
 template<typename T>
-inline T& AtomicCounterObjetcBaseReference::getObject() const {
-	return *(T*)(object);
+inline AtomicCounterObjetcBaseReference<T>::AtomicCounterObjetcBaseReference(const AtomicCounterObjetcBaseReference<T>& reference) {
+	if (reference.object) {
+		object = (T*)(reference.object->getReferenceObject());
+	}
+}
+
+template<typename T>
+inline AtomicCounterObjetcBaseReference<T>& AtomicCounterObjetcBaseReference<T>::operator=(T* objectRef) {
+	if (object) {
+		object->releaseReferenceObject();
+	}
+
+	if (objectRef) {
+		object = (T*)(objectRef->getReferenceObject());
+	}
+
+	return *this;
+}
+
+template<typename T>
+inline AtomicCounterObjetcBaseReference<T>& AtomicCounterObjetcBaseReference<T>::operator=(const AtomicCounterObjetcBaseReference<T>& reference) {
+	if (object) {
+		object->releaseReferenceObject();
+	}
+
+	if (reference.object) {
+		object = (T*)(reference.object->getReferenceObject());
+	}
+
+	return *this;
 }

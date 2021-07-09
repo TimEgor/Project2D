@@ -18,6 +18,6 @@ void D3D11_PNG_TextureResourceCreator::createResourceFromZipFileSystem(ResourceH
 }
 
 void D3D11_PNG_TextureResourceCreator::createResourceFromMemory(ResourceHandler& handler, void* data, size_t dataSize) {
-	D3D11TextureResource* resource = new D3D11TextureResource(data, dataSize);
-	handler.setResource(resource);
+	//D3D11TextureResource* resource = new D3D11TextureResource(data, dataSize);
+	//handler.setResource(resource);
 }

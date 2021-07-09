@@ -37,20 +37,20 @@ struct MaterialProperty final {
 
 class D3D11ShaderMaterialProperties final {
 public:
-	typedef std::unordered_map<uint32_t, MaterialProperty> PropertiesMap;
-	typedef std::unordered_map<uint32_t, uint32_t> TexturesMap;
-
-private:
-	PropertiesMap properties;
-	TexturesMap textures;
-
-	size_t propertyDataSize;
-
-public:
-	D3D11ShaderMaterialProperties(void* sourceData, size_t sourceDataSize);
-
-	const PropertiesMap& getPropertiesMap() { return properties; }
-	const TexturesMap& getTextureMap() { return textures; }
-
-	size_t getPropertyDataSize() { return propertyDataSize; }
+//	typedef std::unordered_map<uint32_t, MaterialProperty> PropertiesMap;
+//	typedef std::unordered_map<uint32_t, uint32_t> TexturesMap;
+//
+//private:
+//	PropertiesMap properties;
+//	TexturesMap textures;
+//
+//	size_t propertyDataSize;
+//
+//public:
+//	D3D11ShaderMaterialProperties(void* sourceData, size_t sourceDataSize);
+//
+//	const PropertiesMap& getPropertiesMap() { return properties; }
+//	const TexturesMap& getTextureMap() { return textures; }
+//
+//	size_t getPropertyDataSize() { return propertyDataSize; }
 };

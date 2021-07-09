@@ -110,7 +110,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DYNAMIC_RENDERING_LOADING;D3D11</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
@@ -138,7 +138,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DYNAMIC_RENDERING_LOADING;D3D11</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -162,7 +162,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DYNAMIC_RENDERING_LOADING;D3D11</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/D CPP_LOGIC="logic.dll" %(AdditionalOptions)</AdditionalOptions>
@@ -186,7 +186,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DYNAMIC_RENDERING_LOADING;D3D11</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/D CPP_LOGIC="logic.dll" %(AdditionalOptions)</AdditionalOptions>
@@ -220,11 +220,9 @@
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroup.cpp" />
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroupManager.cpp" />
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassManager.cpp" />
-    <ClCompile Include="Graphics\D3D11\D3D11.cpp" />
+    <ClCompile Include="Graphics\D3D11\D3D11Device.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp" />
-    <ClCompile Include="Graphics\D3D11\D3D11Sprite.cpp" />
-    <ClCompile Include="Graphics\D3D11\D3D11SpriteBatch.cpp" />
-    <ClCompile Include="Graphics\D3D11\D3D11SpriteBatchManager.cpp" />
+    <ClCompile Include="Graphics\D3D11\D3D11Textures.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Verteces.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResource.cpp" />
@@ -235,6 +233,7 @@
     <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\WICTextureLoader11.cpp" />
     <ClCompile Include="Graphics\FontManager.cpp" />
+    <ClCompile Include="Graphics\GraphicDeviceManager.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
     <ClCompile Include="Graphics\Scene.cpp" />
     <ClCompile Include="Graphics\Transform.cpp" />
@@ -248,6 +247,8 @@
     <ClCompile Include="MemoryManager\Heap.cpp" />
     <ClCompile Include="MemoryManager\MemoryCore.cpp" />
     <ClCompile Include="MemoryManager\MemoryManager.cpp" />
+    <ClCompile Include="Multithreading\AtomicCounterObjectBase.cpp" />
+    <ClCompile Include="Multithreading\LockState.cpp" />
     <ClCompile Include="Multithreading\Thread.cpp" />
     <ClCompile Include="ResourceManager\NativeFileSystem.cpp" />
     <ClCompile Include="ResourceManager\ResourceAsyncLoader.cpp" />
@@ -285,11 +286,10 @@
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroup.h" />
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroupManager.h" />
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassManager.h" />
+    <ClInclude Include="Graphics\D3D11\D3D11Device.h" />
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />
-    <ClInclude Include="Graphics\D3D11\D3D11Sprite.h" />
-    <ClInclude Include="Graphics\D3D11\D3D11SpriteBatch.h" />
-    <ClInclude Include="Graphics\D3D11\D3D11SpriteBatchManager.h" />
+    <ClInclude Include="Graphics\D3D11\D3D11Textures.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Verteces.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResource.h" />
@@ -300,10 +300,12 @@
     <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.h" />
     <ClInclude Include="Graphics\D3D11\WICTextureLoader11.h" />
     <ClInclude Include="Graphics\FontManager.h" />
-    <ClInclude Include="Graphics\Graphics.h" />
+    <ClInclude Include="Graphics\GraphicDeviceManager.h" />
+    <ClInclude Include="Graphics\GraphicTypes.h" />
     <ClInclude Include="Graphics\Node.h" />
     <ClInclude Include="Graphics\NodeHandler.h" />
     <ClInclude Include="Graphics\Renderer.h" />
+    <ClInclude Include="Graphics\GraphicDevice.h" />
     <ClInclude Include="Graphics\Resources\MaterialResource.h" />
     <ClInclude Include="Graphics\Resources\TextureResource.h" />
     <ClInclude Include="Graphics\Scene.h" />
@@ -323,6 +325,8 @@
     <ClInclude Include="MemoryManager\Heap.h" />
     <ClInclude Include="MemoryManager\MemoryCore.h" />
     <ClInclude Include="MemoryManager\MemoryManager.h" />
+    <ClInclude Include="Multithreading\AtomicCounterObjectBase.h" />
+    <ClInclude Include="Multithreading\LockState.h" />
     <ClInclude Include="Multithreading\Thread.h" />
     <ClInclude Include="Multithreading\ThreadItemQueue.h" />
     <ClInclude Include="ResourceManager\FileSystem.h" />

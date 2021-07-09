@@ -76,10 +76,10 @@ void ResourceManager::release() {
 bool ResourceManager::initResourceCreators() {
     defaultResourceCreator = new DefaultResourceCreator();
 
-    resourceCreators.insert(std::make_pair(D3D11PixelShaderResourceCreatorType, new D3D11PixelShaderResourceCreator()));
-    resourceCreators.insert(std::make_pair(D3D11VertexShaderResourceCreatorType, new D3D11VertexShaderResourceCreator()));
-    resourceCreators.insert(std::make_pair(D3D11MaterialResourceCreatorType, new D3D11MaterialResourceCreator()));
-    resourceCreators.insert(std::make_pair(D3D11_PNG_TextureResourceCreatorType, new D3D11_PNG_TextureResourceCreator()));
+    //resourceCreators.insert(std::make_pair(D3D11PixelShaderResourceCreatorType, new D3D11PixelShaderResourceCreator()));
+    //resourceCreators.insert(std::make_pair(D3D11VertexShaderResourceCreatorType, new D3D11VertexShaderResourceCreator()));
+    //resourceCreators.insert(std::make_pair(D3D11MaterialResourceCreatorType, new D3D11MaterialResourceCreator()));
+    //resourceCreators.insert(std::make_pair(D3D11_PNG_TextureResourceCreatorType, new D3D11_PNG_TextureResourceCreator()));
 
     return defaultResourceCreator;
 }

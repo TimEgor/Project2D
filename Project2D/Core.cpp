@@ -4,10 +4,7 @@
 #include <UserInterfaces/UserInterfaces.h>
 #include <UserInterfaces/Input.h>
 #include <LevelManager/LevelManager.h>
-#include <Graphics/D3D11/D3D11.h>
-#include <Graphics/D3D11/D3D11Renderer.h>
-#include <Graphics/FontManager.h>
-#include <Graphics/RenderingData.h>
+#include <Graphics/GraphicDeviceManager.h>
 
 #include <chrono>
 
@@ -24,19 +21,15 @@ Core& Core::get() {
 bool Core::init() {
 	CHECK_INITIALIZATION(ResourceManager::get().init())
 	CHECK_INITIALIZATION(UserInterfaces::get().init());
-	CHECK_INITIALIZATION(D3D11::get().init());
-	CHECK_INITIALIZATION(D3D11Renderer::get().init());
-	CHECK_INITIALIZATION(FontManager::get().init());
 
 	return true;
 }
 
 void Core::release() {
 	ResourceManager::get().release();
-	FontManager::get().release();
-	D3D11Renderer::get().release();
-	D3D11::get().release();
 	UserInterfaces::get().release();
+
+	GraphicDeviceManager::get().releaseCurrentDevice();
 }
 
 void Core::run() {
@@ -50,7 +43,8 @@ void Core::run() {
 	UserInterfaces& userInterfaces = UserInterfaces::get();
 	Input* input = UserInterfaces::get().getInput();	
 	LevelManager& levelManager = LevelManager::get();
-	D3D11Renderer& d3d11Renderer = D3D11Renderer::get();
+
+	GraphicDeviceManager::get().initNewDevice(D3D11_GraphicalDeviceType);
 
 	MSG msg{ 0 };
 	while (msg.message != WM_QUIT) {
@@ -71,13 +65,13 @@ void Core::run() {
 			level->update(deltaTime);
 
 			//Rendering
-			RenderingData& renderingData = level->getRenderingData();
-			renderingData.getSceneRedneringOrderManager().sortForwardNodes();
-			renderingData.getCanvasRedneringOrderManager().sortForwardNodes();
+			//RenderingData& renderingData = level->getRenderingData();
+			//renderingData.getSceneRedneringOrderManager().sortForwardNodes();
+			//renderingData.getCanvasRedneringOrderManager().sortForwardNodes();
 
-			d3d11Renderer.beginDrawing();
-			d3d11Renderer.draw(renderingData);
-			d3d11Renderer.endDrawing();
+			//d3d11Renderer.beginDrawing();
+			//d3d11Renderer.draw(renderingData);
+			//d3d11Renderer.endDrawing();
 		}
 
 		lastFrameStartTime = currentTime;

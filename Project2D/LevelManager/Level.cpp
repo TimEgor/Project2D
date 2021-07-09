@@ -37,12 +37,6 @@ bool Level::init() {
         return false;
     }
 
-    renderingData = new RenderingData(scene);
-    if (!renderingData) {
-        release();
-        return false;
-    }
-
     cppGameLogicClassGroupManager = new CppGameLogicClassGroupManager();
     if (!cppGameLogicClassGroupManager) {
         release();
@@ -69,11 +63,6 @@ void Level::release() {
         scene->release();
         delete scene;
         scene = nullptr;
-    }
-
-    if (renderingData) {
-        delete renderingData;
-        renderingData = nullptr;
     }
 
     if (cppGameLogicClassGroupManager) {
@@ -180,63 +169,63 @@ void Level::deleteEntityComponentsFromEntity(Entity* entity) {
     }
 }
 
-RenderingData& Level::getRenderingData() {
-    SceneRenderingOrderManager& sceneRedneringOrderManager = renderingData->getSceneRedneringOrderManager();
-    CanvasRenderingOrderManager& canvasRedneringOrderManager = renderingData->getCanvasRedneringOrderManager();
-
-    sceneRedneringOrderManager.clear();
-    canvasRedneringOrderManager.clear();
-
-    size_t sceneRenderingNodeNum = entityComponentManager->getEntityComponentsNum(SpriteRendererEntityComponentType);
-    if (sceneRenderingNodeNum != 0) {
-        sceneRedneringOrderManager.reserve(sceneRenderingNodeNum);
-
-        if (auto spritesAllocators = entityComponentManager->getEntityComponents(SpriteRendererEntityComponentType)) {
-            RenderingOrder<SpriteRenderingOrderNode>& order = sceneRedneringOrderManager.getSpriteRenderingOrder();
-            order.reserve(entityComponentManager->getEntityComponentsNum(SpriteRendererEntityComponentType));
-
-            size_t forwardNodeIndex = sceneRedneringOrderManager.getForwardNodeIndex();
-            size_t reverseNodeIndex = sceneRedneringOrderManager.getReverseNodeIndex();
-
-            size_t allocatorsNum = spritesAllocators->size();
-            for (size_t allocatorIndex = 0; allocatorIndex < allocatorsNum; ++allocatorIndex) {
-                const ArrayPoolAllocator& allocator = (*spritesAllocators)[allocatorIndex];
-                size_t allocatorSize = allocator.size();
-
-                for (size_t componentIndex = 0; componentIndex < allocatorSize; ++componentIndex) {
-                    const SpriteRendererEntityComponent& component = allocator.getElement<SpriteRendererEntityComponent>(componentIndex);
-
-                    ResourceReference spriteResource = component.getSpriteResource();
-                    if (!spriteResource.isNull()) {
-                        Node* node = component.getParent()->getNode();
-                        node->updateTransform();
-
-                        TransformMatrix* worldTransform = node->getTransform()->getWorldTransformMatrix();
-
-                        ResourceReference materialResource = component.getMaterialResource();
-
-                        if (materialResource.getResource<MaterialResource>().getSortingMode() == ReverseMaterialSortingModeType) {
-                            TransformMatrix* renderingNodeTransformMatrix = sceneRedneringOrderManager.pushReversedTransformMatrix(*worldTransform);
-                            SpriteRenderingOrderNode renderingNode(renderingNodeTransformMatrix, materialResource, spriteResource);
-                            order.pushRenderingNode(renderingNode);
-
-                            sceneRedneringOrderManager.pushReverseNode(renderingNode);
-                        }
-                        else {
-                            TransformMatrix* renderingNodeTransformMatrix = sceneRedneringOrderManager.pushTransformMatrix(*worldTransform);
-                            SpriteRenderingOrderNode renderingNode(renderingNodeTransformMatrix, materialResource, spriteResource);
-                            order.pushRenderingNode(renderingNode);
-
-                            sceneRedneringOrderManager.pushForwardNode(renderingNode);
-                        }
-                    }
-                }
-            }
-
-            sceneRedneringOrderManager.sortRenderingNodes(forwardNodeIndex, sceneRedneringOrderManager.getForwardNodeIndex(), SpriteRenderingOrderNode::sortPredicate);
-            sceneRedneringOrderManager.sortRenderingNodes(sceneRedneringOrderManager.getReverseNodeIndex(), reverseNodeIndex, SpriteRenderingOrderNode::sortPredicate);
-        }
-    }
+//RenderingData& Level::getRenderingData() {
+//    SceneRenderingOrderManager& sceneRedneringOrderManager = renderingData->getSceneRedneringOrderManager();
+//    CanvasRenderingOrderManager& canvasRedneringOrderManager = renderingData->getCanvasRedneringOrderManager();
+//
+//    sceneRedneringOrderManager.clear();
+//    canvasRedneringOrderManager.clear();
+//
+//    size_t sceneRenderingNodeNum = entityComponentManager->getEntityComponentsNum(SpriteRendererEntityComponentType);
+//    if (sceneRenderingNodeNum != 0) {
+//        sceneRedneringOrderManager.reserve(sceneRenderingNodeNum);
+//
+//        if (auto spritesAllocators = entityComponentManager->getEntityComponents(SpriteRendererEntityComponentType)) {
+//            RenderingOrder<SpriteRenderingOrderNode>& order = sceneRedneringOrderManager.getSpriteRenderingOrder();
+//            order.reserve(entityComponentManager->getEntityComponentsNum(SpriteRendererEntityComponentType));
+//
+//            size_t forwardNodeIndex = sceneRedneringOrderManager.getForwardNodeIndex();
+//            size_t reverseNodeIndex = sceneRedneringOrderManager.getReverseNodeIndex();
+//
+//            size_t allocatorsNum = spritesAllocators->size();
+//            for (size_t allocatorIndex = 0; allocatorIndex < allocatorsNum; ++allocatorIndex) {
+//                const ArrayPoolAllocator& allocator = (*spritesAllocators)[allocatorIndex];
+//                size_t allocatorSize = allocator.size();
+//
+//                for (size_t componentIndex = 0; componentIndex < allocatorSize; ++componentIndex) {
+//                    const SpriteRendererEntityComponent& component = allocator.getElement<SpriteRendererEntityComponent>(componentIndex);
+//
+//                    ResourceReference spriteResource = component.getSpriteResource();
+//                    if (!spriteResource.isNull()) {
+//                        Node* node = component.getParent()->getNode();
+//                        node->updateTransform();
+//
+//                        TransformMatrix* worldTransform = node->getTransform()->getWorldTransformMatrix();
+//
+//                        ResourceReference materialResource = component.getMaterialResource();
+//
+//                        if (materialResource.getResource<MaterialResource>().getSortingMode() == ReverseMaterialSortingModeType) {
+//                            TransformMatrix* renderingNodeTransformMatrix = sceneRedneringOrderManager.pushReversedTransformMatrix(*worldTransform);
+//                            SpriteRenderingOrderNode renderingNode(renderingNodeTransformMatrix, materialResource, spriteResource);
+//                            order.pushRenderingNode(renderingNode);
+//
+//                            sceneRedneringOrderManager.pushReverseNode(renderingNode);
+//                        }
+//                        else {
+//                            TransformMatrix* renderingNodeTransformMatrix = sceneRedneringOrderManager.pushTransformMatrix(*worldTransform);
+//                            SpriteRenderingOrderNode renderingNode(renderingNodeTransformMatrix, materialResource, spriteResource);
+//                            order.pushRenderingNode(renderingNode);
+//
+//                            sceneRedneringOrderManager.pushForwardNode(renderingNode);
+//                        }
+//                    }
+//                }
+//            }
+//
+//            sceneRedneringOrderManager.sortRenderingNodes(forwardNodeIndex, sceneRedneringOrderManager.getForwardNodeIndex(), SpriteRenderingOrderNode::sortPredicate);
+//            sceneRedneringOrderManager.sortRenderingNodes(sceneRedneringOrderManager.getReverseNodeIndex(), reverseNodeIndex, SpriteRenderingOrderNode::sortPredicate);
+//        }
+//    }
 
     //spritesNum = entityComponentManager->getEntityComponentsNum(CanvasSpriteRendererEntityComponentType);
     //spritesNum += entityComponentManager->getEntityComponentsNum(CanvasLabelEntityComponentType);
@@ -301,5 +290,5 @@ RenderingData& Level::getRenderingData() {
     //    }
     //}
 
-    return *renderingData;
-}
+//    return *renderingData;
+//}

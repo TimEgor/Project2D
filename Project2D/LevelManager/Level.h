@@ -2,7 +2,6 @@
 
 #include <EntityManager/EntityManager.h>
 #include <EntityManager/EntityComponentManager.h>
-#include <Graphics/RenderingData.h>
 #include <Graphics/SceneTypes.h>
 
 #include <cstdint>
@@ -18,8 +17,6 @@ private:
 	EntityManager* entityManager;
 	EntityComponentManager* entityComponentManager;
 	Scene* scene;
-
-	RenderingData* renderingData;
 
 	CppGameLogicClassGroupManager* cppGameLogicClassGroupManager;
 
@@ -61,8 +58,6 @@ public:
 	//using for deleting children nodes
 	void deleteEntityWithoutNode(Entity* entity);
 	void deleteEntityWithoutNode(EntityID id);
-
-	RenderingData& getRenderingData();
 
 	inline EntityManager* getEntityManager() { return entityManager; }
 	inline EntityComponentManager* getEntityComponentManager() { return entityComponentManager; }

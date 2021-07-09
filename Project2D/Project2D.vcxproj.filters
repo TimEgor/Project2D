@@ -144,16 +144,10 @@
     <ClCompile Include="UserInterfaces\UserInterfaces.cpp">
       <Filter>UserInterfaces</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\D3D11\D3D11.cpp">
-      <Filter>Graphics\D3D11</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp">
       <Filter>Graphics\D3D11</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\D3D11\D3D11Verteces.cpp">
-      <Filter>Graphics\D3D11</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\D3D11\D3D11Sprite.cpp">
       <Filter>Graphics\D3D11</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderMaterialProperties.cpp">
@@ -207,12 +201,6 @@
     <ClCompile Include="EntityManager\EntityComponentHandler.cpp">
       <Filter>EntityManager</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\D3D11\D3D11SpriteBatch.cpp">
-      <Filter>Graphics\D3D11</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\D3D11\D3D11SpriteBatchManager.cpp">
-      <Filter>Graphics\D3D11</Filter>
-    </ClCompile>
     <ClCompile Include="EntityManager\EntityComponents\Canvas\CanvasLabelEntityComponent.cpp">
       <Filter>EntityManager\EntityComponents\Canvas</Filter>
     </ClCompile>
@@ -240,6 +228,21 @@
     </ClCompile>
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassGroupManager.cpp">
       <Filter>GameLogic\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="Multithreading\AtomicCounterObjectBase.cpp">
+      <Filter>Multithreading</Filter>
+    </ClCompile>
+    <ClCompile Include="Multithreading\LockState.cpp">
+      <Filter>Multithreading</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\D3D11Device.cpp">
+      <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\D3D11\D3D11Textures.cpp">
+      <Filter>Graphics\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\GraphicDeviceManager.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -357,13 +360,7 @@
     <ClInclude Include="UserInterfaces\UserInterfaces.h">
       <Filter>UserInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\D3D11\D3D11.h">
-      <Filter>Graphics\D3D11</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h">
-      <Filter>Graphics\D3D11</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\D3D11\D3D11Sprite.h">
       <Filter>Graphics\D3D11</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\D3D11\D3D11Verteces.h">
@@ -426,12 +423,6 @@
     <ClInclude Include="Graphics\SceneTypes.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\D3D11\D3D11SpriteBatch.h">
-      <Filter>Graphics\D3D11</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\D3D11\D3D11SpriteBatchManager.h">
-      <Filter>Graphics\D3D11</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Verteces.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -481,7 +472,28 @@
     <ClInclude Include="Graphics\Renderer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Graphics.h">
+    <ClInclude Include="Graphics\GraphicTypes.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Multithreading\AtomicCounterObjectBase.h">
+      <Filter>Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="Multithreading\LockState.h">
+      <Filter>Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GraphicDevice.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11Device.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11Textures.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GraphicDeviceManager.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
