@@ -2,7 +2,7 @@
 
 #include <ResourceManager/ResourceManager.h>
 #include <Graphics/FontManager.h>
-#include <Graphics/Resources/TextureResource.h>
+#include <Graphics/Resources/TextureResources.h>
 
 #include <cmath>
 #include <cassert>
@@ -74,10 +74,13 @@ void CanvasLabelEntityComponent::updateBuffers() {
 		float posX = 0.0f;
 		float maxPosY = 0.0f;
 
-		const TextureResource& bitmap = fontInfo->bitmapTexture.getResource<TextureResource>();
+		//const Texture2DReference bitmap = fontInfo->bitmapTexture.getResource<TextureResource>();
 
-		size_t bitmapWight = bitmap.getWidth();
-		size_t bitmapHeight = bitmap.getHeight();
+		//size_t bitmapWight = bitmap.getWidth();
+		//size_t bitmapHeight = bitmap.getHeight();
+
+		size_t bitmapWight = 0;
+		size_t bitmapHeight = 0;
 
 		for (size_t i = 0; i < textSize; ++i) {
 			LabelTextChar currentChar = text[i];

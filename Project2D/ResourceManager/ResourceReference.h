@@ -2,40 +2,27 @@
 
 #include <ResourceManager/ResourceHandler.h>
 
-class ResourceReference final {
-private:
-	ResourceHandler* handler;
-
-	void unloadResource();
+class ResourceReference final : public AtomicCounterObjetcBaseReference<ResourceHandler> {
+	typedef AtomicCounterObjetcBaseReference<ResourceHandler> ReferenceBaseType;
 
 public:
-	ResourceReference() : handler(nullptr) {}
-	ResourceReference(ResourceHandler* handler);
-	ResourceReference(const ResourceReference& reference);
-	~ResourceReference();
+	ResourceReference() = default;
+	ResourceReference(ResourceHandler* handler) : ReferenceBaseType(handler) {}
+	ResourceReference(const ResourceReference& reference) : ReferenceBaseType(reference.object) {}
 
 	ResourceReference& operator=(const ResourceReference& reference);
-	inline bool operator==(const ResourceReference& reference) const { return handler == reference.handler; }
-	inline bool operator!=(const ResourceReference& reference) const { return handler != reference.handler; }
 
-	bool isNull() const { return handler == nullptr; }
-	bool isResourceReady() const { return handler->getResource(); }
+	bool isResourceReady() const { return ((ResourceHandler*)(object))->getResource(); }
 
-	ResourceID getResourceID() const { return handler->getResourceID(); }
+	ResourceID getResourceID() const { return ((ResourceHandler*)(object))->getResourceID(); }
 
 	template <typename T>
-	T& getResource();
+	T* getResource() {
+		return (T*)(object);
+	}
 
 	template <typename T>
-	const T& getResource() const;
+	const T* getResource() const {
+		return (T*)(object);
+	}
 };
-
-template<typename T>
-inline T& ResourceReference::getResource() {
-	return *(T*)(handler->getResource());
-}
-
-template<typename T>
-inline const T& ResourceReference::getResource() const {
-	return *(T*)(handler->getResource());
-}

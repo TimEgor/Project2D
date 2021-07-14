@@ -16,7 +16,7 @@ class NativeFileSystem;
 
 class ResourceManager final {
 	friend ResourceAsyncLoader;
-	friend ResourceReference;
+	friend ResourceHandler;
 
 private:
 	std::unordered_map<ResourceID, ResourceHandler> resources;

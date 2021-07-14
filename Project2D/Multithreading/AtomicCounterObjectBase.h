@@ -27,7 +27,7 @@ public:
 
 template <typename T>
 class AtomicCounterObjetcBaseReference {
-private:
+protected:
 	T* object = nullptr;
 
 public:
@@ -38,6 +38,8 @@ public:
 
 	AtomicCounterObjetcBaseReference& operator=(T* object);
 	AtomicCounterObjetcBaseReference& operator=(const AtomicCounterObjetcBaseReference<T>& reference);
+	inline bool operator==(const AtomicCounterObjetcBaseReference<T>& reference) const;
+	inline bool operator!=(const AtomicCounterObjetcBaseReference<T>& reference) const;
 
 	bool isNull() const { return object == nullptr; }
 
@@ -83,4 +85,14 @@ inline AtomicCounterObjetcBaseReference<T>& AtomicCounterObjetcBaseReference<T>:
 	}
 
 	return *this;
+}
+
+template<typename T>
+inline bool AtomicCounterObjetcBaseReference<T>::operator==(const AtomicCounterObjetcBaseReference<T>& reference) const {
+	return object == reference.object;
+}
+
+template<typename T>
+inline bool AtomicCounterObjetcBaseReference<T>::operator!=(const AtomicCounterObjetcBaseReference<T>& reference) const {
+	return object != reference.object;;
 }

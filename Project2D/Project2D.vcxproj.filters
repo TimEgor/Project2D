@@ -65,7 +65,7 @@
       <UniqueIdentifier>{021ffb37-1f7c-442e-baec-763f302cbdb2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Graphics\Resources">
-      <UniqueIdentifier>{18e9ed16-8cb5-49bf-9726-63f41e3ae0e3}</UniqueIdentifier>
+      <UniqueIdentifier>{9a72580a-5117-4802-80f2-42fb110ac05e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,12 +174,6 @@
     <ClCompile Include="Graphics\D3D11\WICTextureLoader11.cpp">
       <Filter>Graphics\D3D11</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResource.cpp">
-      <Filter>Graphics\D3D11\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.cpp">
-      <Filter>Graphics\D3D11\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="EntityManager\EntityComponents\SpriteRendererEntityComponent.cpp">
       <Filter>EntityManager\EntityComponents</Filter>
     </ClCompile>
@@ -238,11 +232,14 @@
     <ClCompile Include="Graphics\D3D11\D3D11Device.cpp">
       <Filter>Graphics\D3D11</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\D3D11\D3D11Textures.cpp">
-      <Filter>Graphics\D3D11</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\GraphicDeviceManager.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\ResourceHandler.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Resources\TextureResourceCreators.cpp">
+      <Filter>Graphics\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -390,12 +387,6 @@
     <ClInclude Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.h">
       <Filter>Graphics\D3D11\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.h">
-      <Filter>Graphics\D3D11\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResource.h">
-      <Filter>Graphics\D3D11\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\D3D11\WICTextureLoader11.h">
       <Filter>Graphics\D3D11</Filter>
     </ClInclude>
@@ -463,12 +454,6 @@
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroupManager.h">
       <Filter>GameLogic\CPP</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Resources\MaterialResource.h">
-      <Filter>Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Resources\TextureResource.h">
-      <Filter>Graphics\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Renderer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -495,6 +480,15 @@
     </ClInclude>
     <ClInclude Include="Graphics\GraphicDeviceManager.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Resources\TextureResources.h">
+      <Filter>Graphics\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Resources\TextureResourceCreators.h">
+      <Filter>Graphics\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11Buffer.h">
+      <Filter>Graphics\D3D11</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

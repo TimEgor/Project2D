@@ -6,9 +6,7 @@
 #include <ResourceManager/ResourceAsyncLoader.h>
 #include <Utilities/WildcardMatch/WildcardMatch.h>
 
-#include <Graphics/D3D11/Resources/D3D11MaterialResourceCreator.h>
-#include <Graphics/D3D11/Resources/D3D11ShaderResourceCreator.h>
-#include <Graphics/D3D11/Resources/D3D11TextureResourceCreator.h>
+#include <Graphics/Resources/TextureResourceCreators.h>
 
 #include <cassert>
 
@@ -79,7 +77,7 @@ bool ResourceManager::initResourceCreators() {
     //resourceCreators.insert(std::make_pair(D3D11PixelShaderResourceCreatorType, new D3D11PixelShaderResourceCreator()));
     //resourceCreators.insert(std::make_pair(D3D11VertexShaderResourceCreatorType, new D3D11VertexShaderResourceCreator()));
     //resourceCreators.insert(std::make_pair(D3D11MaterialResourceCreatorType, new D3D11MaterialResourceCreator()));
-    //resourceCreators.insert(std::make_pair(D3D11_PNG_TextureResourceCreatorType, new D3D11_PNG_TextureResourceCreator()));
+    resourceCreators.insert(std::make_pair(PNG_TextureResourceCreatorType, new PNG_TextureResourceCreator()));
 
     return defaultResourceCreator;
 }
@@ -111,15 +109,13 @@ ResourceReference ResourceManager::loadNewResourceFromArchive(ResourceHandler& h
 void ResourceManager::unloadResource(ResourceHandler& handler) {
     std::unique_lock<std::mutex> locker(resMutex);
 
-    if (handler.getRefCounter() == 0) {
-        Resource* resource = handler.getResource();
-        resources.erase(handler.getResourceID());
+    Resource* resource = handler.getResource();
+    resources.erase(handler.getResourceID());
 
-        locker.unlock();
+    locker.unlock();
 
-        if (resource) {
-            delete resource;
-        }
+    if (resource) {
+        delete resource;
     }
 }
 
@@ -129,7 +125,7 @@ ResourceReference ResourceManager::getResourceFromArchive(const ResourceName& re
     std::unique_lock<std::mutex> locker(resMutex);
 
     auto findHandlerIter = resources.find(resourceID);
-    if (findHandlerIter == resources.end() || (findHandlerIter->second.getRefCounter() == 0)) {
+    if (findHandlerIter == resources.end()) {
         ResourceHandler& newHandler = createNewHandler(resourceID);
         locker.unlock();
 

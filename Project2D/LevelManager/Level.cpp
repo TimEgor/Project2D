@@ -6,7 +6,6 @@
 #include <GameLogic/CPP/CppGameLogicClassGroupManager.h>
 #include <Graphics/Scene.h>
 #include <Graphics/FontManager.h>
-#include <Graphics/Resources/MaterialResource.h>
 #include <MemoryManager/MemoryManager.h>
 #include <ResourceManager/ResourceManager.h>
 

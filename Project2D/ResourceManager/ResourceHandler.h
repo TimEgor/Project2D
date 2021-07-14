@@ -1,17 +1,17 @@
 #pragma once
 
 #include <ResourceManager/Resource.h>
+#include <Multithreading/AtomicCounterObjectBase.h>
 
-#include <atomic>
-
-class ResourceHandler final {
+class ResourceHandler final : public AtomicCounterObjectBase {
 private:
 	std::atomic<Resource*> resource;
-	std::atomic_size_t refCounter;
 	ResourceID id;
 
+	virtual void selfDestroy() override;
+
 public:
-	ResourceHandler(ResourceID id) : resource(nullptr), refCounter(0), id(id) {}
+	ResourceHandler(ResourceID id) : resource(nullptr), id(id) {}
 	ResourceHandler(const ResourceHandler&) = delete;
 	ResourceHandler(ResourceHandler&& handler) = delete;
 
@@ -19,8 +19,4 @@ public:
 	void setResource(Resource* newResource) { resource = newResource; }
 
 	ResourceID getResourceID() { return id; }
-
-	size_t getRefCounter() { return refCounter; }
-	void incrementRefCounter() { ++refCounter; }
-	void decrementRefCounter() { --refCounter; }
 };

@@ -2,6 +2,8 @@
 
 #include <UserInterfaces/UserInterfaces.h>
 #include <Graphics/D3D11/D3D11Textures.h>
+#include <Graphics/D3D11/D3D11Buffer.h>
+#include <Graphics/D3D11/WICTextureLoader11.h>
 
 #define CheckResult(result) \
     if (FAILED(result)) { \
@@ -9,7 +11,7 @@
         return false; \
     }
 
-DXGI_FORMAT D3D11Device::convertFormat(Format format) {
+DXGI_FORMAT D3D11Device::convertFormatToD3D11(Format format) {
     switch (format) {
     case FORMAT_R32G32B32A32_FLOAT:
         return DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -171,7 +173,160 @@ DXGI_FORMAT D3D11Device::convertFormat(Format format) {
     }
 }
 
-D3D11_USAGE D3D11Device::convertUsage(Usage usage) {
+Format D3D11Device::convertFormatFromD3D11(DXGI_FORMAT format) {
+    switch (format) {
+    case DXGI_FORMAT_R32G32B32A32_FLOAT:
+        return FORMAT_R32G32B32A32_FLOAT;
+        break;
+    case DXGI_FORMAT_R32G32B32A32_UINT:
+        return FORMAT_R32G32B32A32_UINT;
+        break;
+    case DXGI_FORMAT_R32G32B32A32_SINT:
+        return FORMAT_R32G32B32A32_SINT;
+        break;
+    case DXGI_FORMAT_R32G32B32_FLOAT:
+        return FORMAT_R32G32B32_FLOAT;
+        break;
+    case DXGI_FORMAT_R32G32B32_UINT:
+        return FORMAT_R32G32B32_UINT;
+        break;
+    case DXGI_FORMAT_R32G32B32_SINT:
+        return FORMAT_R32G32B32_SINT;
+        break;
+    case DXGI_FORMAT_R16G16B16A16_FLOAT:
+        return FORMAT_R16G16B16A16_FLOAT;
+        break;
+    case DXGI_FORMAT_R16G16B16A16_UNORM:
+        return FORMAT_R16G16B16A16_UNORM;
+        break;
+    case DXGI_FORMAT_R16G16B16A16_UINT:
+        return FORMAT_R16G16B16A16_UINT;
+        break;
+    case DXGI_FORMAT_R16G16B16A16_SNORM:
+        return FORMAT_R16G16B16A16_SNORM;
+        break;
+    case DXGI_FORMAT_R16G16B16A16_SINT:
+        return FORMAT_R16G16B16A16_SINT;
+        break;
+    case DXGI_FORMAT_R32G32_FLOAT:
+        return FORMAT_R32G32_FLOAT;
+        break;
+    case DXGI_FORMAT_R32G32_UINT:
+        return FORMAT_R32G32_UINT;
+        break;
+    case DXGI_FORMAT_R32G32_SINT:
+        return FORMAT_R32G32_SINT;
+        break;
+    case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
+        return FORMAT_D32_FLOAT_S8X24_UINT;
+        break;
+    case DXGI_FORMAT_X32_TYPELESS_G8X24_UINT:
+        return FORMAT_X32_TYPELESS_G8X24_UINT;
+        break;
+    case DXGI_FORMAT_R8G8B8A8_UNORM:
+        return FORMAT_R8G8B8A8_UNORM;
+        break;
+    case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+        return FORMAT_R8G8B8A8_UNORM_SRGB;
+        break;
+    case DXGI_FORMAT_R8G8B8A8_UINT:
+        return FORMAT_R8G8B8A8_UINT;
+        break;
+    case DXGI_FORMAT_R8G8B8A8_SNORM:
+        return FORMAT_R8G8B8A8_SNORM;
+        break;
+    case DXGI_FORMAT_R8G8B8A8_SINT:
+        return FORMAT_R8G8B8A8_SINT;
+        break;
+    case DXGI_FORMAT_R16G16_FLOAT:
+        return FORMAT_R16G16_FLOAT;
+        break;
+    case DXGI_FORMAT_R16G16_UNORM:
+        return FORMAT_R16G16_UNORM;
+        break;
+    case DXGI_FORMAT_R16G16_UINT:
+        return FORMAT_R16G16_UINT;
+        break;
+    case DXGI_FORMAT_R16G16_SNORM:
+        return FORMAT_R16G16_SNORM;
+        break;
+    case DXGI_FORMAT_R16G16_SINT:
+        return FORMAT_R16G16_SINT;
+        break;
+    case DXGI_FORMAT_D32_FLOAT:
+        return FORMAT_D32_FLOAT;
+        break;
+    case DXGI_FORMAT_R32_FLOAT:
+        return FORMAT_R32_FLOAT;
+        break;
+    case DXGI_FORMAT_R32_UINT:
+        return FORMAT_R32_UINT;
+        break;
+    case DXGI_FORMAT_R32_SINT:
+        return FORMAT_R32_SINT;
+        break;
+    case DXGI_FORMAT_D24_UNORM_S8_UINT:
+        return FORMAT_D24_UNORM_S8_UINT;
+        break;
+    case DXGI_FORMAT_R8G8_UNORM:
+        return FORMAT_R8G8_UNORM;
+        break;
+    case DXGI_FORMAT_R8G8_UINT:
+        return FORMAT_R8G8_UINT;
+        break;
+    case DXGI_FORMAT_R8G8_SNORM:
+        return FORMAT_R8G8_SNORM;
+        break;
+    case DXGI_FORMAT_R8G8_SINT:
+        return FORMAT_R8G8_SINT;
+        break;
+    case DXGI_FORMAT_R16_FLOAT:
+        return FORMAT_R16_FLOAT;
+        break;
+    case DXGI_FORMAT_D16_UNORM:
+        return FORMAT_D16_UNORM;
+        break;
+    case DXGI_FORMAT_R16_UNORM:
+        return FORMAT_R16_UNORM;
+        break;
+    case DXGI_FORMAT_R16_UINT:
+        return FORMAT_R16_UINT;
+        break;
+    case DXGI_FORMAT_R16_SNORM:
+        return FORMAT_R16_SNORM;
+        break;
+    case DXGI_FORMAT_R16_SINT:
+        return FORMAT_R16_SINT;
+        break;
+    case DXGI_FORMAT_R8_UNORM:
+        return FORMAT_R8_UNORM;
+        break;
+    case DXGI_FORMAT_R8_UINT:
+        return FORMAT_R8_UINT;
+        break;
+    case DXGI_FORMAT_R8_SNORM:
+        return FORMAT_R8_SNORM;
+        break;
+    case DXGI_FORMAT_R8_SINT:
+        return FORMAT_R8_SINT;
+        break;
+    case DXGI_FORMAT_A8_UNORM:
+        return FORMAT_A8_UNORM;
+        break;
+    case DXGI_FORMAT_R1_UNORM:
+        return FORMAT_R1_UNORM;
+        break;
+    case DXGI_FORMAT_B4G4R4A4_UNORM:
+        return FORMAT_B4G4R4A4_UNORM;
+        break;
+    case DXGI_FORMAT_UNKNOWN:
+    default:
+        return FORMAT_UNKNOWN;
+        break;
+    }
+}
+
+D3D11_USAGE D3D11Device::convertUsageToD3D11(Usage usage) {
     switch (usage) {
     case USAGE_IMMUTABLE:
         return D3D11_USAGE_IMMUTABLE;
@@ -189,7 +344,25 @@ D3D11_USAGE D3D11Device::convertUsage(Usage usage) {
     }
 }
 
-D3D11_BIND_FLAG D3D11Device::convertBindFlags(Bind bindFlag) {
+Usage D3D11Device::convertUsageFromD3D11(D3D11_USAGE usage) {
+    switch (usage) {
+    case D3D11_USAGE_IMMUTABLE:
+        return USAGE_IMMUTABLE;
+        break;
+    case D3D11_USAGE_DYNAMIC:
+        return USAGE_DYNAMIC;
+        break;
+    case D3D11_USAGE_STAGING:
+        return USAGE_STAGING;
+        break;
+    case D3D11_USAGE_DEFAULT:
+    default:
+        return USAGE_DEFAULT;
+        break;
+    }
+}
+
+D3D11_BIND_FLAG D3D11Device::convertBindFlagToD3D11(Bind bindFlag) {
     switch (bindFlag) {
     case BIND_VERTEX_BUFFER:
         return D3D11_BIND_VERTEX_BUFFER;
@@ -222,7 +395,39 @@ D3D11_BIND_FLAG D3D11Device::convertBindFlags(Bind bindFlag) {
     }
 }
 
-D3D11_CPU_ACCESS_FLAG D3D11Device::convertCpuAccessFlag(CPUAccess cpuAccess) {
+Bind D3D11Device::convertBindFlagFromD3D11(D3D11_BIND_FLAG bindFlag) {
+    switch (bindFlag) {
+    case D3D11_BIND_VERTEX_BUFFER:
+        return BIND_VERTEX_BUFFER;
+        break;
+    case D3D11_BIND_INDEX_BUFFER:
+        return BIND_INDEX_BUFFER;
+        break;
+    case D3D11_BIND_CONSTANT_BUFFER:
+        return BIND_CONSTANT_BUFFER;
+        break;
+    case D3D11_BIND_SHADER_RESOURCE:
+        return BIND_SHADER_RESOURCE;
+        break;
+    case D3D11_BIND_STREAM_OUTPUT:
+        return BIND_STREAM_OUTPUT;
+        break;
+    case D3D11_BIND_RENDER_TARGET:
+        return BIND_RENDER_TARGET;
+        break;
+    case D3D11_BIND_DEPTH_STENCIL:
+        return BIND_DEPTH_STENCIL;
+        break;
+    case D3D11_BIND_UNORDERED_ACCESS:
+        return BIND_UNORDERED_ACCESS;
+        break;
+    default:
+        return BIND_UNKNOWN;
+        break;
+    }
+}
+
+D3D11_CPU_ACCESS_FLAG D3D11Device::convertCpuAccessFlagToD3D11(CPUAccess cpuAccess) {
     switch (cpuAccess) {
     case CPU_ACCESS_WRITE: 
         return D3D11_CPU_ACCESS_WRITE;
@@ -235,6 +440,108 @@ D3D11_CPU_ACCESS_FLAG D3D11Device::convertCpuAccessFlag(CPUAccess cpuAccess) {
         return (D3D11_CPU_ACCESS_FLAG)(0);
         break;
     }
+}
+
+CPUAccess D3D11Device::convertCpuAccessFlagFromD3D11(D3D11_CPU_ACCESS_FLAG cpuAccess) {
+    switch (cpuAccess) {
+    case D3D11_CPU_ACCESS_WRITE:
+        return CPU_ACCESS_WRITE;
+        break;
+    case D3D11_CPU_ACCESS_READ:
+        return CPU_ACCESS_READ;
+        break;
+    default:
+        return CPU_ACCESS_NULL;
+        break;
+    }
+}
+
+uint32_t D3D11Device::convertBindFlagsToD3D11(uint32_t bindFlags) {
+    uint32_t flags = 0;
+
+    if (bindFlags || BIND_VERTEX_BUFFER) {
+        flags |= D3D11_BIND_VERTEX_BUFFER;
+    }
+    if (bindFlags || BIND_INDEX_BUFFER) {
+        flags |= D3D11_BIND_INDEX_BUFFER;
+    }
+    if (bindFlags || BIND_CONSTANT_BUFFER) {
+        flags |= D3D11_BIND_CONSTANT_BUFFER;
+    }
+    if (bindFlags || BIND_SHADER_RESOURCE) {
+        flags |= D3D11_BIND_SHADER_RESOURCE;
+    }
+    if (bindFlags || BIND_STREAM_OUTPUT) {
+        flags |= D3D11_BIND_STREAM_OUTPUT;
+    }
+    if (bindFlags || BIND_RENDER_TARGET) {
+        flags |= D3D11_BIND_RENDER_TARGET;
+    }
+    if (bindFlags || BIND_DEPTH_STENCIL) {
+        flags |= D3D11_BIND_DEPTH_STENCIL;
+    }
+    if (bindFlags || BIND_UNORDERED_ACCESS) {
+        flags |= D3D11_BIND_UNORDERED_ACCESS;
+    }
+
+    return flags;
+}
+
+uint32_t D3D11Device::convertBindFlagsFromD3D11(uint32_t bindFlags) {
+    uint32_t flags = 0;
+
+    if (bindFlags || D3D11_BIND_VERTEX_BUFFER) {
+        flags |= BIND_VERTEX_BUFFER;
+    }
+    if (bindFlags || D3D11_BIND_INDEX_BUFFER) {
+        flags |= BIND_INDEX_BUFFER;
+    }
+    if (bindFlags || D3D11_BIND_CONSTANT_BUFFER) {
+        flags |= BIND_CONSTANT_BUFFER;
+    }
+    if (bindFlags || D3D11_BIND_SHADER_RESOURCE) {
+        flags |= BIND_SHADER_RESOURCE;
+    }
+    if (bindFlags || D3D11_BIND_STREAM_OUTPUT) {
+        flags |= BIND_STREAM_OUTPUT;
+    }
+    if (bindFlags || D3D11_BIND_RENDER_TARGET) {
+        flags |= BIND_RENDER_TARGET;
+    }
+    if (bindFlags || D3D11_BIND_DEPTH_STENCIL) {
+        flags |= BIND_DEPTH_STENCIL;
+    }
+    if (bindFlags || D3D11_BIND_UNORDERED_ACCESS) {
+        flags |= BIND_UNORDERED_ACCESS;
+    }
+
+    return flags;
+}
+
+uint32_t D3D11Device::convertCpuAccessFlagsToD3D11(uint32_t cpuAccessFlags) {
+    uint32_t flags = 0;
+
+    if (cpuAccessFlags || CPU_ACCESS_READ) {
+        cpuAccessFlags |= D3D11_CPU_ACCESS_READ;
+    }
+    if (cpuAccessFlags || CPU_ACCESS_WRITE) {
+        cpuAccessFlags |= D3D11_CPU_ACCESS_WRITE;
+    }
+
+    return flags;
+}
+
+uint32_t D3D11Device::convertCpuAccessFlagsFromD3D11(uint32_t cpuAccessFlags) {
+    uint32_t flags = 0;
+
+    if (cpuAccessFlags || D3D11_CPU_ACCESS_READ) {
+        cpuAccessFlags |= CPU_ACCESS_READ;
+    }
+    if (cpuAccessFlags || D3D11_CPU_ACCESS_WRITE) {
+        cpuAccessFlags |= CPU_ACCESS_WRITE;
+    }
+
+    return flags;
 }
 
 bool D3D11Device::init() {
@@ -339,17 +646,17 @@ void D3D11Device::release() {
     }
 }
 
-Texture1D_Reference D3D11Device::createTexture1D(const Texture1DDesc& desc, const SubresourceData* data) {
+Texture1DReference D3D11Device::createTexture1D(const Texture1DDesc& desc, const SubresourceData* data) {
     assert(device);
 
     D3D11_TEXTURE1D_DESC d3d11Desc{};
     d3d11Desc.Width = desc.width;
     d3d11Desc.MipLevels = 1;
     d3d11Desc.ArraySize = 1;
-    d3d11Desc.Format = convertFormat(desc.format);
-    d3d11Desc.Usage = convertUsage(desc.usage);
-    d3d11Desc.BindFlags = convertBindFlags(desc.bind);
-    d3d11Desc.CPUAccessFlags = convertCpuAccessFlag(desc.cpuAccess);
+    d3d11Desc.Format = convertFormatToD3D11(desc.format);
+    d3d11Desc.Usage = convertUsageToD3D11(desc.usage);
+    d3d11Desc.BindFlags = convertBindFlagsToD3D11(desc.bind);
+    d3d11Desc.CPUAccessFlags = convertCpuAccessFlagsToD3D11(desc.cpuAccess);
     d3d11Desc.MiscFlags = 0;
 
     D3D11_SUBRESOURCE_DATA subresourceData{};
@@ -366,7 +673,7 @@ Texture1D_Reference D3D11Device::createTexture1D(const Texture1DDesc& desc, cons
 	return newTexture;
 }
 
-Texture2D_Reference D3D11Device::createTexture2D(const Texture2DDesc& desc, const SubresourceData* data) {
+Texture2DReference D3D11Device::createTexture2D(const Texture2DDesc& desc, const SubresourceData* data) {
     assert(device);
 
     D3D11_TEXTURE2D_DESC d3d11Desc{};
@@ -376,10 +683,10 @@ Texture2D_Reference D3D11Device::createTexture2D(const Texture2DDesc& desc, cons
     d3d11Desc.ArraySize = 1;
     d3d11Desc.SampleDesc.Count = desc.sampleCount;
     d3d11Desc.SampleDesc.Quality = 1;
-    d3d11Desc.Format = convertFormat(desc.format);
-    d3d11Desc.Usage = convertUsage(desc.usage);
-    d3d11Desc.BindFlags = convertBindFlags(desc.bind);
-    d3d11Desc.CPUAccessFlags = convertCpuAccessFlag(desc.cpuAccess);
+    d3d11Desc.Format = convertFormatToD3D11(desc.format);
+    d3d11Desc.Usage = convertUsageToD3D11(desc.usage);
+    d3d11Desc.BindFlags = convertBindFlagsToD3D11(desc.bind);
+    d3d11Desc.CPUAccessFlags = convertCpuAccessFlagsToD3D11(desc.cpuAccess);
     d3d11Desc.MiscFlags = 0;
 
     D3D11_SUBRESOURCE_DATA subresourceData{};
@@ -396,7 +703,7 @@ Texture2D_Reference D3D11Device::createTexture2D(const Texture2DDesc& desc, cons
     return newTexture;
 }
 
-Texture3D_Reference D3D11Device::createTexture3D(const Texture3DDesc& desc, const SubresourceData* data) {
+Texture3DReference D3D11Device::createTexture3D(const Texture3DDesc& desc, const SubresourceData* data) {
     assert(device);
 
     D3D11_TEXTURE3D_DESC d3d11Desc{};
@@ -404,10 +711,10 @@ Texture3D_Reference D3D11Device::createTexture3D(const Texture3DDesc& desc, cons
     d3d11Desc.Height = desc.height;
     d3d11Desc.Depth = desc.depth;
     d3d11Desc.MipLevels = 1;
-    d3d11Desc.Format = convertFormat(desc.format);
-    d3d11Desc.Usage = convertUsage(desc.usage);
-    d3d11Desc.BindFlags = convertBindFlags(desc.bind);
-    d3d11Desc.CPUAccessFlags = convertCpuAccessFlag(desc.cpuAccess);
+    d3d11Desc.Format = convertFormatToD3D11(desc.format);
+    d3d11Desc.Usage = convertUsageToD3D11(desc.usage);
+    d3d11Desc.BindFlags = convertBindFlagsToD3D11(desc.bind);
+    d3d11Desc.CPUAccessFlags = convertCpuAccessFlagsToD3D11(desc.cpuAccess);
     d3d11Desc.MiscFlags = 0;
 
     D3D11_SUBRESOURCE_DATA subresourceData{};
@@ -422,4 +729,51 @@ Texture3D_Reference D3D11Device::createTexture3D(const Texture3DDesc& desc, cons
     device->CreateTexture3D(&d3d11Desc, &subresourceData, newTexture->getTextureNativeHandle());
 
     return newTexture;
+}
+
+Texture2DReference D3D11Device::createTexture2DFromMemory(const SubresourceData* data) {
+    assert(device);
+
+    Texture2DDesc desc{};
+    D3D11Texture2D* newTexture = new D3D11Texture2D(*this, desc);
+
+    ID3D11Resource** nativeTextureObject = (ID3D11Resource**)(newTexture->getTextureNativeHandle());
+    DirectX::CreateWICTextureFromMemory(device, (const uint8_t*)(data->mem), data->memPitch, nativeTextureObject, nullptr);
+
+    D3D11_TEXTURE2D_DESC d3d11Desc{};
+    (*newTexture->getTextureNativeHandle())->GetDesc(&d3d11Desc);
+
+    newTexture->desc.width = d3d11Desc.Width;
+    newTexture->desc.height = d3d11Desc.Height;
+    newTexture->desc.format = convertFormatFromD3D11(d3d11Desc.Format);
+    newTexture->desc.usage = convertUsageFromD3D11(d3d11Desc.Usage);
+    newTexture->desc.bind = convertBindFlagsFromD3D11(d3d11Desc.BindFlags);
+    newTexture->desc.cpuAccess = convertCpuAccessFlagsFromD3D11(d3d11Desc.CPUAccessFlags);
+
+    return newTexture;
+}
+
+GPUBufferReference D3D11Device::createGPUBuffer(const GPUBufferDesc& desc, const SubresourceData* data) {
+    assert(device);
+
+    D3D11_BUFFER_DESC d3d11Desc{};
+    d3d11Desc.ByteWidth = desc.byteSize;
+    d3d11Desc.StructureByteStride = desc.structureByteStride;
+    d3d11Desc.Usage = convertUsageToD3D11(desc.usage);
+    d3d11Desc.BindFlags = convertBindFlagsToD3D11(desc.bind);
+    d3d11Desc.CPUAccessFlags = convertCpuAccessFlagsToD3D11(desc.cpuAccess);
+    d3d11Desc.MiscFlags = 0;
+
+    D3D11_SUBRESOURCE_DATA subresourceData{};
+    if (data) {
+        subresourceData.pSysMem = data->mem;
+        subresourceData.SysMemPitch = data->memPitch;
+        subresourceData.SysMemSlicePitch = data->memSlicePitch;
+    }
+
+    D3D11GpuBuffer* newBuffer = new D3D11GpuBuffer(*this, desc);
+
+    device->CreateBuffer(&d3d11Desc, &subresourceData, newBuffer->getBufferNativeHandle());
+
+    return newBuffer;
 }

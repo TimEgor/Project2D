@@ -222,19 +222,17 @@
     <ClCompile Include="GameLogic\CPP\CppGameLogicClassManager.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Device.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Renderer.cpp" />
-    <ClCompile Include="Graphics\D3D11\D3D11Textures.cpp" />
     <ClCompile Include="Graphics\D3D11\D3D11Verteces.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11MaterialResource.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderResource.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderMaterialProperties.cpp" />
     <ClCompile Include="Graphics\D3D11\Resources\D3D11ShaderResourceCreator.cpp" />
-    <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResource.cpp" />
-    <ClCompile Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.cpp" />
     <ClCompile Include="Graphics\D3D11\WICTextureLoader11.cpp" />
     <ClCompile Include="Graphics\FontManager.cpp" />
     <ClCompile Include="Graphics\GraphicDeviceManager.cpp" />
     <ClCompile Include="Graphics\Node.cpp" />
+    <ClCompile Include="Graphics\Resources\TextureResourceCreators.cpp" />
     <ClCompile Include="Graphics\Scene.cpp" />
     <ClCompile Include="Graphics\Transform.cpp" />
     <ClCompile Include="LevelManager\Level.cpp" />
@@ -253,6 +251,7 @@
     <ClCompile Include="ResourceManager\NativeFileSystem.cpp" />
     <ClCompile Include="ResourceManager\ResourceAsyncLoader.cpp" />
     <ClCompile Include="ResourceManager\ResourceCreator.cpp" />
+    <ClCompile Include="ResourceManager\ResourceHandler.cpp" />
     <ClCompile Include="ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="ResourceManager\ResourceName.cpp" />
     <ClCompile Include="ResourceManager\ResourceReference.cpp" />
@@ -286,6 +285,7 @@
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroup.h" />
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassGroupManager.h" />
     <ClInclude Include="GameLogic\CPP\CppGameLogicClassManager.h" />
+    <ClInclude Include="Graphics\D3D11\D3D11Buffer.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Device.h" />
     <ClInclude Include="Graphics\D3D11\D3D11.h" />
     <ClInclude Include="Graphics\D3D11\D3D11Renderer.h" />
@@ -296,8 +296,6 @@
     <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderResource.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderMaterialProperties.h" />
     <ClInclude Include="Graphics\D3D11\Resources\D3D11ShaderResourceCreator.h" />
-    <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResource.h" />
-    <ClInclude Include="Graphics\D3D11\Resources\D3D11TextureResourceCreator.h" />
     <ClInclude Include="Graphics\D3D11\WICTextureLoader11.h" />
     <ClInclude Include="Graphics\FontManager.h" />
     <ClInclude Include="Graphics\GraphicDeviceManager.h" />
@@ -306,8 +304,8 @@
     <ClInclude Include="Graphics\NodeHandler.h" />
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Graphics\GraphicDevice.h" />
-    <ClInclude Include="Graphics\Resources\MaterialResource.h" />
-    <ClInclude Include="Graphics\Resources\TextureResource.h" />
+    <ClInclude Include="Graphics\Resources\TextureResourceCreators.h" />
+    <ClInclude Include="Graphics\Resources\TextureResources.h" />
     <ClInclude Include="Graphics\Scene.h" />
     <ClInclude Include="Graphics\SceneTypes.h" />
     <ClInclude Include="Graphics\Transform.h" />

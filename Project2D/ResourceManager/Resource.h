@@ -9,7 +9,7 @@ typedef uint32_t ResourceID;
 class Resource {
 public:
 	virtual ~Resource() {}
-	virtual ResourceType getResourceType() = 0;
+	virtual ResourceType getResourceType() const = 0;
 };
 
 class DefaultResource final : public Resource {
@@ -30,5 +30,5 @@ public:
 	void* getData() { return data; }
 	size_t getDataSize() { return dataSize; }
 
-	virtual ResourceType getResourceType() override { return DefaultResourceType; }
+	virtual ResourceType getResourceType() const override { return DefaultResourceType; }
 };

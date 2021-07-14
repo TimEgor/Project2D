@@ -111,8 +111,8 @@ struct Texture1DDesc final {
 	uint32_t width = 0;
 	Format format = FORMAT_UNKNOWN;
 	Usage usage = USAGE_DEFAULT;
-	Bind bind = BIND_UNKNOWN;
-	CPUAccess cpuAccess = CPU_ACCESS_NULL;
+	uint32_t bind = BIND_UNKNOWN;
+	uint32_t cpuAccess = CPU_ACCESS_NULL;
 };
 
 struct Texture2DDesc final {
@@ -121,8 +121,8 @@ struct Texture2DDesc final {
 	uint32_t sampleCount = 1;
 	Format format = FORMAT_UNKNOWN;
 	Usage usage = USAGE_DEFAULT;
-	Bind bind = BIND_UNKNOWN;
-	CPUAccess cpuAccess = CPU_ACCESS_NULL;
+	uint32_t bind = BIND_UNKNOWN;
+	uint32_t cpuAccess = CPU_ACCESS_NULL;
 };
 
 struct Texture3DDesc final {
@@ -132,8 +132,16 @@ struct Texture3DDesc final {
 	uint32_t sampleCount = 1;
 	Format format = FORMAT_UNKNOWN;
 	Usage usage = USAGE_DEFAULT;
-	Bind bind = BIND_UNKNOWN;
-	CPUAccess cpuAccess = CPU_ACCESS_NULL;
+	uint32_t bind = BIND_UNKNOWN;
+	uint32_t cpuAccess = CPU_ACCESS_NULL;
+};
+
+struct GPUBufferDesc final {
+	uint32_t byteSize = 0;
+	Usage usage = USAGE_DEFAULT;
+	uint32_t bind = BIND_UNKNOWN;
+	uint32_t cpuAccess = CPU_ACCESS_NULL;
+	uint32_t structureByteStride = 0;
 };
 
 struct GPUObject : public AtomicCounterObjectBase {
@@ -186,4 +194,15 @@ public:
 		: GPUObject(device), desc(desc) {}
 
 	const Texture3DDesc& getDesc() const { return desc; }
+};
+
+class GPUBuffer : public GPUObject {
+protected:
+	GPUBufferDesc desc;
+
+public:
+	GPUBuffer(GraphicDevice& device, const GPUBufferDesc& desc)
+		: GPUObject(device), desc(desc) {}
+
+	const GPUBufferDesc& getDesc() const { return desc; }
 };

@@ -2,7 +2,6 @@
 
 #include <ResourceManager/Resource.h>
 #include <ResourceManager/ResourceReference.h>
-#include <Graphics/Resources/MaterialResource.h>
 //
 //class D3D11MaterialResource final : public MaterialResource {
 //private:
