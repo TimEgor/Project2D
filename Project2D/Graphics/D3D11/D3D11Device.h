@@ -6,8 +6,14 @@
 
 #include <Graphics/GraphicDevice.h>
 
+#include <unordered_map>
+
+class D3D11InputLayout;
+
 class D3D11Device final : public GraphicDevice {
 private:
+	std::unordered_map<size_t, D3D11InputLayout*> layouts;
+
 	HMODULE d3d11LibHandle = 0;
 	HMODULE d3dCompilerLibHandle = 0;
 	HMODULE dxgiLibHandle = 0;
@@ -30,6 +36,9 @@ private:
 	uint32_t convertCpuAccessFlagsToD3D11(uint32_t cpuAccessFlags);
 	uint32_t convertCpuAccessFlagsFromD3D11(uint32_t cpuAccessFlags);
 
+	DXGI_FORMAT convertInputLayoutTypeToDXGI(InputLayoutElementType type, uint32_t componentsNum);
+	void convertInputLayoutDescToD3D11(const std::vector<InputLayoutElement>& desc, std::vector<D3D11_INPUT_ELEMENT_DESC>& result);
+
 	virtual bool init() override;
 	virtual void release() override;
 
@@ -43,6 +52,15 @@ public:
 	virtual Texture2DReference createTexture2DFromMemory(const SubresourceData* data) override;
 
 	virtual GPUBufferReference createGPUBuffer(const GPUBufferDesc& desc, const SubresourceData* data) override;
+
+	virtual VertexShaderReference createVertexShaderFromCompiledCode(void* data, size_t size) override;
+	virtual PixelShaderReference createPixelShaderFromCompiledCode(void* data, size_t size) override;
+	virtual VertexShaderReference createVertexShaderFromStrSource(void* data, size_t size) override;
+	virtual PixelShaderReference createPixelShaderFromStrSource(void* data, size_t size) override;
+
+	virtual InputLayerReference createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) override;
+
+	virtual PipelineStateReference createPipelineState(const PipelineStateDesc& desc) override;
 
 	virtual GraphicalDeviceType getGraphicalDeviceType() const override { return D3D11_GraphicalDeviceType; };
 };

@@ -1,3 +1,4 @@
+#include "D3D11Renderer.h"
 //#include "D3D11Renderer.h"
 //
 //#include <Graphics/D3D11/D3D11Sprite.h>
@@ -361,3 +362,12 @@
 //
 //    //drawOrder(canvasBatchManager, data.getCanvasRedneringOrder(), deviceContext);
 //}
+
+void D3D11Renderer::beginDrawing() {
+}
+
+void D3D11Renderer::endRendering() {
+}
+
+void D3D11Renderer::testRender() {
+}

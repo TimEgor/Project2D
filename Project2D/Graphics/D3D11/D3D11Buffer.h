@@ -1,10 +1,11 @@
 #pragma once
 
-#include <Graphics/D3D11/D3D11Device.h>
+#include <Graphics/GraphicTypes.h>
+#include <Graphics/D3D11/D3D11.h>
+
+class D3D11Device;
 
 class D3D11GpuBuffer final : public GPUBuffer {
-	friend D3D11Device;
-
 private:
 	ID3D11Buffer* buffer = nullptr;
 

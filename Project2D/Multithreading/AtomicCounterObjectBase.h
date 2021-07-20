@@ -43,8 +43,8 @@ public:
 
 	bool isNull() const { return object == nullptr; }
 
-	T& getObject() { return object; }
-	const T& getObject() const { return object; }
+	T* getObject() { return object; }
+	const T* getObject() const { return object; }
 };
 
 template<typename T>

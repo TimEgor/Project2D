@@ -1,10 +1,11 @@
 #pragma once
 
-#include <Graphics/Graphics.h>
-
-class Renderer final {
+class Renderer {
 public:
 	virtual ~Renderer() {}
 
-	virtual bool createTexture1D() = 0;
+	virtual void beginDrawing() = 0;
+	virtual void endRendering() = 0;
+
+	virtual void testRender() = 0;
 };

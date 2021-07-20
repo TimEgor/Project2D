@@ -3,6 +3,9 @@
 #include <UserInterfaces/UserInterfaces.h>
 #include <Graphics/D3D11/D3D11Textures.h>
 #include <Graphics/D3D11/D3D11Buffer.h>
+#include <Graphics/D3D11/D3D11Shaders.h>
+#include <Graphics/D3D11/D3D11PipelineState.h>
+#include <Graphics/D3D11/D3D11InputLayout.h>
 #include <Graphics/D3D11/WICTextureLoader11.h>
 
 #define CheckResult(result) \
@@ -459,28 +462,28 @@ CPUAccess D3D11Device::convertCpuAccessFlagFromD3D11(D3D11_CPU_ACCESS_FLAG cpuAc
 uint32_t D3D11Device::convertBindFlagsToD3D11(uint32_t bindFlags) {
     uint32_t flags = 0;
 
-    if (bindFlags || BIND_VERTEX_BUFFER) {
+    if (bindFlags & BIND_VERTEX_BUFFER) {
         flags |= D3D11_BIND_VERTEX_BUFFER;
     }
-    if (bindFlags || BIND_INDEX_BUFFER) {
+    if (bindFlags & BIND_INDEX_BUFFER) {
         flags |= D3D11_BIND_INDEX_BUFFER;
     }
-    if (bindFlags || BIND_CONSTANT_BUFFER) {
+    if (bindFlags & BIND_CONSTANT_BUFFER) {
         flags |= D3D11_BIND_CONSTANT_BUFFER;
     }
-    if (bindFlags || BIND_SHADER_RESOURCE) {
+    if (bindFlags & BIND_SHADER_RESOURCE) {
         flags |= D3D11_BIND_SHADER_RESOURCE;
     }
-    if (bindFlags || BIND_STREAM_OUTPUT) {
+    if (bindFlags & BIND_STREAM_OUTPUT) {
         flags |= D3D11_BIND_STREAM_OUTPUT;
     }
-    if (bindFlags || BIND_RENDER_TARGET) {
+    if (bindFlags & BIND_RENDER_TARGET) {
         flags |= D3D11_BIND_RENDER_TARGET;
     }
-    if (bindFlags || BIND_DEPTH_STENCIL) {
+    if (bindFlags & BIND_DEPTH_STENCIL) {
         flags |= D3D11_BIND_DEPTH_STENCIL;
     }
-    if (bindFlags || BIND_UNORDERED_ACCESS) {
+    if (bindFlags & BIND_UNORDERED_ACCESS) {
         flags |= D3D11_BIND_UNORDERED_ACCESS;
     }
 
@@ -490,28 +493,28 @@ uint32_t D3D11Device::convertBindFlagsToD3D11(uint32_t bindFlags) {
 uint32_t D3D11Device::convertBindFlagsFromD3D11(uint32_t bindFlags) {
     uint32_t flags = 0;
 
-    if (bindFlags || D3D11_BIND_VERTEX_BUFFER) {
+    if (bindFlags & D3D11_BIND_VERTEX_BUFFER) {
         flags |= BIND_VERTEX_BUFFER;
     }
-    if (bindFlags || D3D11_BIND_INDEX_BUFFER) {
+    if (bindFlags & D3D11_BIND_INDEX_BUFFER) {
         flags |= BIND_INDEX_BUFFER;
     }
-    if (bindFlags || D3D11_BIND_CONSTANT_BUFFER) {
+    if (bindFlags & D3D11_BIND_CONSTANT_BUFFER) {
         flags |= BIND_CONSTANT_BUFFER;
     }
-    if (bindFlags || D3D11_BIND_SHADER_RESOURCE) {
+    if (bindFlags & D3D11_BIND_SHADER_RESOURCE) {
         flags |= BIND_SHADER_RESOURCE;
     }
-    if (bindFlags || D3D11_BIND_STREAM_OUTPUT) {
+    if (bindFlags & D3D11_BIND_STREAM_OUTPUT) {
         flags |= BIND_STREAM_OUTPUT;
     }
-    if (bindFlags || D3D11_BIND_RENDER_TARGET) {
+    if (bindFlags & D3D11_BIND_RENDER_TARGET) {
         flags |= BIND_RENDER_TARGET;
     }
-    if (bindFlags || D3D11_BIND_DEPTH_STENCIL) {
+    if (bindFlags & D3D11_BIND_DEPTH_STENCIL) {
         flags |= BIND_DEPTH_STENCIL;
     }
-    if (bindFlags || D3D11_BIND_UNORDERED_ACCESS) {
+    if (bindFlags & D3D11_BIND_UNORDERED_ACCESS) {
         flags |= BIND_UNORDERED_ACCESS;
     }
 
@@ -521,10 +524,10 @@ uint32_t D3D11Device::convertBindFlagsFromD3D11(uint32_t bindFlags) {
 uint32_t D3D11Device::convertCpuAccessFlagsToD3D11(uint32_t cpuAccessFlags) {
     uint32_t flags = 0;
 
-    if (cpuAccessFlags || CPU_ACCESS_READ) {
+    if (cpuAccessFlags & CPU_ACCESS_READ) {
         cpuAccessFlags |= D3D11_CPU_ACCESS_READ;
     }
-    if (cpuAccessFlags || CPU_ACCESS_WRITE) {
+    if (cpuAccessFlags & CPU_ACCESS_WRITE) {
         cpuAccessFlags |= D3D11_CPU_ACCESS_WRITE;
     }
 
@@ -534,14 +537,191 @@ uint32_t D3D11Device::convertCpuAccessFlagsToD3D11(uint32_t cpuAccessFlags) {
 uint32_t D3D11Device::convertCpuAccessFlagsFromD3D11(uint32_t cpuAccessFlags) {
     uint32_t flags = 0;
 
-    if (cpuAccessFlags || D3D11_CPU_ACCESS_READ) {
+    if (cpuAccessFlags & D3D11_CPU_ACCESS_READ) {
         cpuAccessFlags |= CPU_ACCESS_READ;
     }
-    if (cpuAccessFlags || D3D11_CPU_ACCESS_WRITE) {
+    if (cpuAccessFlags & D3D11_CPU_ACCESS_WRITE) {
         cpuAccessFlags |= CPU_ACCESS_WRITE;
     }
 
     return flags;
+}
+
+DXGI_FORMAT D3D11Device::convertInputLayoutTypeToDXGI(InputLayoutElementType type, uint32_t componentsNum) {
+    switch (type) {
+    case INPUT_LAYOUT_ELEMENT_TYPE_FLOAT16:
+    {
+        switch (componentsNum) {
+            case 1:
+                return DXGI_FORMAT_R16_FLOAT;
+                break;
+            case 2:
+                return DXGI_FORMAT_R16G16_FLOAT;
+                break;
+            case 4: 
+                return DXGI_FORMAT_R16G16B16A16_FLOAT;
+                break;
+            default:
+                return DXGI_FORMAT_UNKNOWN;
+                break;
+        }
+    }
+
+    case INPUT_LAYOUT_ELEMENT_TYPE_FLOAT32:
+    {
+        switch (componentsNum) {
+            case 1:
+                return DXGI_FORMAT_R32_FLOAT;
+                break;
+            case 2:
+                return DXGI_FORMAT_R32G32_FLOAT;
+                break;
+            case 3:
+                return DXGI_FORMAT_R32G32B32_FLOAT;
+                break;
+            case 4:
+                return DXGI_FORMAT_R32G32B32A32_FLOAT;
+                break;
+            default:
+                return DXGI_FORMAT_UNKNOWN;
+                break;
+        }
+    }
+
+    case INPUT_LAYOUT_ELEMENT_TYPE_INT32:
+    {
+        switch (componentsNum) {
+            case 1:
+                return DXGI_FORMAT_R32_SINT;
+                break;
+            case 2:
+                return DXGI_FORMAT_R32G32_SINT;
+                break;
+            case 3: return DXGI_FORMAT_R32G32B32_SINT;
+                break;
+            case 4:
+                return DXGI_FORMAT_R32G32B32A32_SINT;
+                break;
+            default:
+                return DXGI_FORMAT_UNKNOWN;
+                break;
+        }
+    }
+
+    case INPUT_LAYOUT_ELEMENT_TYPE_UINT32:
+    {
+        switch (componentsNum) {
+            case 1:
+                return DXGI_FORMAT_R32_UINT;
+                break;
+            case 2:
+                return DXGI_FORMAT_R32G32_UINT;
+                break;
+            case 3:
+                return DXGI_FORMAT_R32G32B32_UINT;
+                break;
+            case 4:
+                return DXGI_FORMAT_R32G32B32A32_UINT;
+                break;
+            default:
+                return DXGI_FORMAT_UNKNOWN;
+                break;
+        }
+    }
+
+    case INPUT_LAYOUT_ELEMENT_TYPE_INT16:
+    {
+        switch (componentsNum) {
+            case 1:
+                return DXGI_FORMAT_R16_SINT;
+                break;
+            case 2:
+                return DXGI_FORMAT_R16G16_SINT;
+                break;
+            case 4:
+                return DXGI_FORMAT_R16G16B16A16_SINT;
+                break;
+            default:
+                return DXGI_FORMAT_UNKNOWN;
+                break;
+        }
+    }
+
+    case INPUT_LAYOUT_ELEMENT_TYPE_UINT16:
+    {
+        switch (componentsNum) {
+            case 1:
+                return DXGI_FORMAT_R16_UINT;
+                break;
+            case 2:
+                return DXGI_FORMAT_R16G16_UINT;
+                break;
+            case 4:
+                return DXGI_FORMAT_R16G16B16A16_UINT;
+                break;
+            default:
+                return DXGI_FORMAT_UNKNOWN;
+                break;
+        }
+    }
+
+    case INPUT_LAYOUT_ELEMENT_TYPE_INT8:
+    {
+        switch (componentsNum) {
+            case 1:
+                return DXGI_FORMAT_R8_SINT;
+                break;
+            case 2:
+                return DXGI_FORMAT_R8G8_SINT;
+                break;
+            case 4:
+                return DXGI_FORMAT_R8G8B8A8_SINT;
+                break;
+            default:
+                return DXGI_FORMAT_UNKNOWN;
+                break;
+        }
+    }
+
+    case INPUT_LAYOUT_ELEMENT_TYPE_UINT8:
+    {
+        switch (componentsNum) {
+            case 1:
+                return DXGI_FORMAT_R8_UINT;
+                break;
+            case 2:
+                return DXGI_FORMAT_R8G8_UINT;
+                break;
+            case 4:
+                return DXGI_FORMAT_R8G8B8A8_UINT;
+                break;
+            default:
+                return DXGI_FORMAT_UNKNOWN;
+                break;
+        }
+    }
+
+    default:
+        return DXGI_FORMAT_UNKNOWN;
+        break;
+    }
+}
+
+void D3D11Device::convertInputLayoutDescToD3D11(const std::vector<InputLayoutElement>& desc, std::vector<D3D11_INPUT_ELEMENT_DESC>& result) {
+    result.reserve(desc.size());
+
+    for (const InputLayoutElement& element : desc) {
+        D3D11_INPUT_ELEMENT_DESC newD3D11Desc{};
+        newD3D11Desc.SemanticName = element.name;
+        newD3D11Desc.SemanticIndex = element.index;
+        newD3D11Desc.Format = convertInputLayoutTypeToDXGI(element.type, element.componentsNum);
+        newD3D11Desc.InputSlot = element.slot;
+        newD3D11Desc.AlignedByteOffset = element.offset;
+        newD3D11Desc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+        newD3D11Desc.InstanceDataStepRate = 0;
+
+        result.push_back(newD3D11Desc);
+    }
 }
 
 bool D3D11Device::init() {
@@ -776,4 +956,65 @@ GPUBufferReference D3D11Device::createGPUBuffer(const GPUBufferDesc& desc, const
     device->CreateBuffer(&d3d11Desc, &subresourceData, newBuffer->getBufferNativeHandle());
 
     return newBuffer;
+}
+
+VertexShaderReference D3D11Device::createVertexShaderFromCompiledCode(void* data, size_t size) {
+    void* sourceData = new uint8_t[size];
+    memcpy(sourceData, data, size);
+
+    D3D11VertexShader* newShader = new D3D11VertexShader(*this, sourceData, size);
+
+    device->CreateVertexShader(data, size, nullptr, newShader->getShaderNativeHandle());
+
+    return newShader;
+}
+
+PixelShaderReference D3D11Device::createPixelShaderFromCompiledCode(void* data, size_t size) {
+    void* sourceData = new uint8_t[size];
+    memcpy(sourceData, data, size);
+
+    D3D11PixelShader* newShader = new D3D11PixelShader(*this, sourceData, size);
+
+    device->CreatePixelShader(data, size, nullptr, newShader->getShaderNativeHandle());
+
+    return newShader;
+}
+
+VertexShaderReference D3D11Device::createVertexShaderFromStrSource(void* data, size_t size) {
+    return VertexShaderReference();
+}
+
+PixelShaderReference D3D11Device::createPixelShaderFromStrSource(void* data, size_t size) {
+    return PixelShaderReference();
+}
+
+InputLayerReference D3D11Device::createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) {
+    D3D11InputLayout* inputLayer = nullptr;
+
+    size_t id = desc.getID();
+
+    auto layoutFindIter = layouts.find(id);
+    if (layoutFindIter == layouts.end()) {
+        inputLayer = new D3D11InputLayout(*this, id);
+
+        const std::vector<InputLayoutElement>& descElements = desc.getElements();
+        std::vector<D3D11_INPUT_ELEMENT_DESC> d3d11Desc;
+        convertInputLayoutDescToD3D11(descElements, d3d11Desc);
+
+        D3D11VertexShader* vertexShaderObject = (D3D11VertexShader*)(vertexShader.getObject());
+
+        device->CreateInputLayout(d3d11Desc.data(), d3d11Desc.size(), vertexShaderObject->getSourceData(), vertexShaderObject->getSourceDataSize(), inputLayer->getInputLayerNativeHandle());
+
+        layouts.insert(std::make_pair(id, inputLayer));
+    }
+    else {
+        inputLayer = layoutFindIter->second;
+    }
+
+    return inputLayer;
+}
+
+PipelineStateReference D3D11Device::createPipelineState(const PipelineStateDesc& desc) {
+    D3D11PipelineState* pipeline = new D3D11PipelineState(*this, desc);
+    return pipeline;
 }

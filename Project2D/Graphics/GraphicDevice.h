@@ -1,12 +1,7 @@
 #pragma once
 
 #include <Graphics/GraphicTypes.h>
-#include <Multithreading/AtomicCounterObjectBase.h>
-
-typedef AtomicCounterObjetcBaseReference<Texture1D> Texture1DReference;
-typedef AtomicCounterObjetcBaseReference<Texture2D> Texture2DReference;
-typedef AtomicCounterObjetcBaseReference<Texture3D> Texture3DReference;
-typedef AtomicCounterObjetcBaseReference<GPUBuffer> GPUBufferReference;
+#include <Graphics/PipelineState.h>
 
 class GraphicDeviceManager;
 
@@ -32,5 +27,14 @@ public:
 
 	virtual GPUBufferReference createGPUBuffer(const GPUBufferDesc& desc, const SubresourceData* data) = 0;
 
+	virtual VertexShaderReference createVertexShaderFromCompiledCode(void* data, size_t size) = 0;
+	virtual PixelShaderReference createPixelShaderFromCompiledCode(void* data, size_t size) = 0;
+	virtual VertexShaderReference createVertexShaderFromStrSource(void* data, size_t size) = 0;
+	virtual PixelShaderReference createPixelShaderFromStrSource(void* data, size_t size) = 0;
+
+	virtual InputLayerReference createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) = 0;
+
+	virtual PipelineStateReference createPipelineState(const PipelineStateDesc& desc) = 0;
+
 	virtual GraphicalDeviceType getGraphicalDeviceType() const = 0;
-};
+}; 

@@ -1,6 +1,9 @@
 #pragma once
 
-#include <Graphics/D3D11/D3D11Device.h>
+#include <Graphics/GraphicTypes.h>
+#include <Graphics/D3D11/D3D11.h>
+
+class D3D11Device;
 
 class D3D11Texture1D final : public Texture1D {
 	friend D3D11Device;

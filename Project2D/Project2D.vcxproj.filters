@@ -90,9 +90,6 @@
     <ClCompile Include="Utilities\HashFunction\CRC32.cpp">
       <Filter>Utilities\HashFunction</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\HashFunction\SpookyV2.cpp">
-      <Filter>Utilities\HashFunction</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager\ResourceManager.cpp">
       <Filter>ResourceManager</Filter>
     </ClCompile>
@@ -241,6 +238,9 @@
     <ClCompile Include="Graphics\Resources\TextureResourceCreators.cpp">
       <Filter>Graphics\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Sprite.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryManager\Heap.h">
@@ -265,9 +265,6 @@
       <Filter>MemoryManager\Allocators</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\HashFunction\CRC32.h">
-      <Filter>Utilities\HashFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\HashFunction\SpookyV2.h">
       <Filter>Utilities\HashFunction</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\FileSystem.h">
@@ -489,6 +486,24 @@
     </ClInclude>
     <ClInclude Include="Graphics\D3D11\D3D11Buffer.h">
       <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11Shaders.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\PipelineState.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11PipelineState.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\HashFunction\StdHashCombine.h">
+      <Filter>Utilities\HashFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\D3D11\D3D11InputLayout.h">
+      <Filter>Graphics\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Sprite.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

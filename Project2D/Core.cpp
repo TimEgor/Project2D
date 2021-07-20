@@ -5,6 +5,7 @@
 #include <UserInterfaces/Input.h>
 #include <LevelManager/LevelManager.h>
 #include <Graphics/GraphicDeviceManager.h>
+#include <Graphics/Sprite.h>
 
 #include <chrono>
 
@@ -19,8 +20,10 @@ Core& Core::get() {
 }
 
 bool Core::init() {
-	CHECK_INITIALIZATION(ResourceManager::get().init())
+	CHECK_INITIALIZATION(ResourceManager::get().init());
 	CHECK_INITIALIZATION(UserInterfaces::get().init());
+	CHECK_INITIALIZATION(GraphicDeviceManager::get().initNewDevice(D3D11_GraphicalDeviceType));
+	CHECK_INITIALIZATION(Sprite::get().init());
 
 	return true;
 }
@@ -28,6 +31,8 @@ bool Core::init() {
 void Core::release() {
 	ResourceManager::get().release();
 	UserInterfaces::get().release();
+
+	Sprite::get().release();
 
 	GraphicDeviceManager::get().releaseCurrentDevice();
 }
@@ -43,8 +48,6 @@ void Core::run() {
 	UserInterfaces& userInterfaces = UserInterfaces::get();
 	Input* input = UserInterfaces::get().getInput();	
 	LevelManager& levelManager = LevelManager::get();
-
-	GraphicDeviceManager::get().initNewDevice(D3D11_GraphicalDeviceType);
 
 	MSG msg{ 0 };
 	while (msg.message != WM_QUIT) {

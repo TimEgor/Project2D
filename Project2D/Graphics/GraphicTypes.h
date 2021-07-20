@@ -1,9 +1,10 @@
 #pragma once
 
 #include <Multithreading/AtomicCounterObjectBase.h>
+#include <Utilities/HashFunction/StdHashCombine.h>
 
 #include <cstdint>
-#include <atomic>
+#include <vector>
 
 class GraphicDevice;
 
@@ -99,6 +100,24 @@ enum CPUAccess {
 
 	CPU_ACCESS_WRITE = 1,
 	CPU_ACCESS_READ = 2
+};
+
+enum ShaderType {
+	VERTEX_SHADER_TYPE,
+	PIXEL_SHADER_TYPE
+};
+
+enum InputLayoutElementType {
+	INPUT_LAYOUT_ELEMENT_TYPE_UNKNOWN,
+
+	INPUT_LAYOUT_ELEMENT_TYPE_INT8,
+	INPUT_LAYOUT_ELEMENT_TYPE_INT16,
+	INPUT_LAYOUT_ELEMENT_TYPE_INT32,
+	INPUT_LAYOUT_ELEMENT_TYPE_UINT8,
+	INPUT_LAYOUT_ELEMENT_TYPE_UINT16,
+	INPUT_LAYOUT_ELEMENT_TYPE_UINT32,
+	INPUT_LAYOUT_ELEMENT_TYPE_FLOAT16,
+	INPUT_LAYOUT_ELEMENT_TYPE_FLOAT32
 };
 
 struct SubresourceData {
@@ -206,3 +225,85 @@ public:
 
 	const GPUBufferDesc& getDesc() const { return desc; }
 };
+
+class VertexShader : public GPUObject {
+public:
+	VertexShader(GraphicDevice& device)
+		: GPUObject(device) {}
+
+	ShaderType getType() const { return VERTEX_SHADER_TYPE; }
+};
+
+class PixelShader : public GPUObject {
+public:
+	PixelShader(GraphicDevice& device)
+		: GPUObject(device) {}
+
+	ShaderType getType() const { return PIXEL_SHADER_TYPE; }
+};
+
+struct InputLayoutElement final {
+	const char* name = "ATTRIB";
+	uint32_t index = 0;
+	uint32_t slot = 0;
+	InputLayoutElementType type;
+	uint32_t componentsNum = 0;
+	uint32_t offset = 0;
+	uint32_t stride = 0;
+
+	size_t getID() const {
+		size_t res = 0;
+
+		hash_combine(res, name);
+		hash_combine(res, index);
+		hash_combine(res, slot);
+		hash_combine(res, type);
+		hash_combine(res, componentsNum);
+		hash_combine(res, offset);
+		hash_combine(res, stride);
+
+		return res;
+	}
+};
+
+class InputLayoutDesc final {
+private:
+	std::vector<InputLayoutElement> elements;
+
+public:
+	InputLayoutDesc() = default;
+
+	const std::vector<InputLayoutElement>& getElements() const { return elements; }
+
+	void add(const InputLayoutElement& element) { elements.push_back(element); }
+	void reserve(size_t size) { elements.reserve(size); }
+	void clear() { elements.clear(); }
+
+	size_t getID() const {
+		size_t res = 0;
+
+		for (const auto& element : elements) {
+			hash_combine(res, element.getID());
+		}
+
+		return res;
+	}
+};
+
+class InputLayout : public GPUObject {
+	size_t id;
+
+public:
+	InputLayout(GraphicDevice& device, size_t id)
+		: GPUObject(device), id(id) {}
+
+	size_t getID() const { return id; }
+};
+
+typedef AtomicCounterObjetcBaseReference<Texture1D> Texture1DReference;
+typedef AtomicCounterObjetcBaseReference<Texture2D> Texture2DReference;
+typedef AtomicCounterObjetcBaseReference<Texture3D> Texture3DReference;
+typedef AtomicCounterObjetcBaseReference<GPUBuffer> GPUBufferReference;
+typedef AtomicCounterObjetcBaseReference<VertexShader> VertexShaderReference;
+typedef AtomicCounterObjetcBaseReference<PixelShader> PixelShaderReference;
+typedef AtomicCounterObjetcBaseReference<InputLayout> InputLayerReference;
