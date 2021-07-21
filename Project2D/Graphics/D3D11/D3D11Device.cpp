@@ -800,6 +800,8 @@ bool D3D11Device::init() {
 }
 
 void D3D11Device::release() {
+    inputLayouts.clear();
+
     D3D11ObjectRelease(swapChain);
     D3D11ObjectRelease(dxgiFactory);
     D3D11ObjectRelease(deviceContext);
@@ -824,6 +826,12 @@ void D3D11Device::release() {
         FreeLibrary(d3d11LibHandle);
         d3d11LibHandle = 0;
     }
+}
+
+void D3D11Device::outputShaderCompilingError(ID3D10Blob* errorBlob) {
+#ifdef _MSC_VER 
+    OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+#endif // _MSC_VER 
 }
 
 Texture1DReference D3D11Device::createTexture1D(const Texture1DDesc& desc, const SubresourceData* data) {
@@ -911,14 +919,16 @@ Texture3DReference D3D11Device::createTexture3D(const Texture3DDesc& desc, const
     return newTexture;
 }
 
-Texture2DReference D3D11Device::createTexture2DFromMemory(const SubresourceData* data) {
+Texture2DReference D3D11Device::createTexture2DFromMemory(void* data, size_t dataSize) {
     assert(device);
+    assert(data);
+    assert(dataSize);
 
     Texture2DDesc desc{};
     D3D11Texture2D* newTexture = new D3D11Texture2D(*this, desc);
 
     ID3D11Resource** nativeTextureObject = (ID3D11Resource**)(newTexture->getTextureNativeHandle());
-    DirectX::CreateWICTextureFromMemory(device, (const uint8_t*)(data->mem), data->memPitch, nativeTextureObject, nullptr);
+    DirectX::CreateWICTextureFromMemory(device, (const uint8_t*)(data), dataSize, nativeTextureObject, nullptr);
 
     D3D11_TEXTURE2D_DESC d3d11Desc{};
     (*newTexture->getTextureNativeHandle())->GetDesc(&d3d11Desc);
@@ -981,20 +991,72 @@ PixelShaderReference D3D11Device::createPixelShaderFromCompiledCode(void* data, 
 }
 
 VertexShaderReference D3D11Device::createVertexShaderFromStrSource(void* data, size_t size) {
-    return VertexShaderReference();
+    ID3D10Blob* shaderBlob = nullptr;
+
+#ifdef _DEBUG
+    ID3D10Blob* errorBlob = nullptr;
+#endif // _DEBUG
+
+    //VS
+    if (FAILED(D3DCompile(data, size, NULL, NULL, NULL, "VS", "vs_5_0", NULL, NULL, &shaderBlob, &errorBlob))) {
+#ifdef _DEBUG
+        outputShaderCompilingError(errorBlob);
+        D3D11ObjectRelease(errorBlob);
+#endif // _DEBUG
+       
+        assert(false && "Vertex shader hasn't been compiled !!!");
+
+        return nullptr;
+    }
+
+    VertexShaderReference newShader = createVertexShaderFromCompiledCode(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize());
+
+    D3D11ObjectRelease(shaderBlob);
+
+#ifdef _DEBUG
+    D3D11ObjectRelease(errorBlob);
+#endif // _DEBUG
+
+    return newShader;
 }
 
 PixelShaderReference D3D11Device::createPixelShaderFromStrSource(void* data, size_t size) {
-    return PixelShaderReference();
+    ID3D10Blob* shaderBlob = nullptr;
+
+#ifdef _DEBUG
+    ID3D10Blob* errorBlob = nullptr;
+#endif // _DEBUG
+
+    //VS
+    if (FAILED(D3DCompile(data, size, NULL, NULL, NULL, "PS", "ps_5_0", NULL, NULL, &shaderBlob, &errorBlob))) {
+#ifdef _DEBUG
+        outputShaderCompilingError(errorBlob);
+        D3D11ObjectRelease(errorBlob);
+#endif // _DEBUG
+
+        assert(false && "Vertex shader hasn't been compiled !!!");
+
+        return nullptr;
+    }
+
+    PixelShaderReference newShader = createPixelShaderFromCompiledCode(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize());
+
+    D3D11ObjectRelease(shaderBlob);
+
+#ifdef _DEBUG
+    D3D11ObjectRelease(errorBlob);
+#endif // _DEBUG
+
+    return newShader;
 }
 
-InputLayerReference D3D11Device::createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) {
+InputLayoutReference D3D11Device::createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) {
     D3D11InputLayout* inputLayer = nullptr;
 
     size_t id = desc.getID();
 
-    auto layoutFindIter = layouts.find(id);
-    if (layoutFindIter == layouts.end()) {
+    auto layoutFindIter = inputLayouts.find(id);
+    if (layoutFindIter == inputLayouts.end()) {
         inputLayer = new D3D11InputLayout(*this, id);
 
         const std::vector<InputLayoutElement>& descElements = desc.getElements();
@@ -1005,7 +1067,7 @@ InputLayerReference D3D11Device::createInputLayout(const InputLayoutDesc& desc, 
 
         device->CreateInputLayout(d3d11Desc.data(), d3d11Desc.size(), vertexShaderObject->getSourceData(), vertexShaderObject->getSourceDataSize(), inputLayer->getInputLayerNativeHandle());
 
-        layouts.insert(std::make_pair(id, inputLayer));
+        inputLayouts.insert(std::make_pair(id, inputLayer));
     }
     else {
         inputLayer = layoutFindIter->second;

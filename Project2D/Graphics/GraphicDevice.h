@@ -23,7 +23,7 @@ public:
 	virtual Texture2DReference createTexture2D(const Texture2DDesc& desc, const SubresourceData* data) = 0;
 	virtual Texture3DReference createTexture3D(const Texture3DDesc& desc, const SubresourceData* data) = 0;
 
-	virtual Texture2DReference createTexture2DFromMemory(const SubresourceData* data) = 0;
+	virtual Texture2DReference createTexture2DFromMemory(void* data, size_t dataSize) = 0;
 
 	virtual GPUBufferReference createGPUBuffer(const GPUBufferDesc& desc, const SubresourceData* data) = 0;
 
@@ -32,7 +32,7 @@ public:
 	virtual VertexShaderReference createVertexShaderFromStrSource(void* data, size_t size) = 0;
 	virtual PixelShaderReference createPixelShaderFromStrSource(void* data, size_t size) = 0;
 
-	virtual InputLayerReference createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) = 0;
+	virtual InputLayoutReference createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) = 0;
 
 	virtual PipelineStateReference createPipelineState(const PipelineStateDesc& desc) = 0;
 

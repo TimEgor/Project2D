@@ -12,7 +12,36 @@ class D3D11InputLayout;
 
 class D3D11Device final : public GraphicDevice {
 private:
-	std::unordered_map<size_t, D3D11InputLayout*> layouts;
+	enum HLSL_Type {
+		HLSL_Bool,
+		HLSL_Int,
+		HLSL_UInt,
+		HLSL_DWord,
+		HLSL_Float,
+		HLSL_Double,
+		HLSL_Float2,
+		HLSL_Float3,
+		HLSL_Float4,
+		HLSL_Float3x3,
+		HLSL_Float4x4
+	};
+
+	const std::unordered_map<std::string, HLSL_Type> hlslTypes = {
+		{ "bool", HLSL_Bool },
+		{ "int", HLSL_Int },
+		{ "uint", HLSL_UInt },
+		{ "dword", HLSL_DWord },
+		{ "float", HLSL_Float },
+		{ "double", HLSL_Double },
+		{ "float2", HLSL_Float2 },
+		{ "float3", HLSL_Float3 },
+		{ "float4", HLSL_Float4 },
+		{ "float3x3", HLSL_Float3x3 },
+		{ "float4x4", HLSL_Float4x4 }
+	};
+
+private:
+	std::unordered_map<size_t, D3D11InputLayout*> inputLayouts;
 
 	HMODULE d3d11LibHandle = 0;
 	HMODULE d3dCompilerLibHandle = 0;
@@ -39,6 +68,8 @@ private:
 	DXGI_FORMAT convertInputLayoutTypeToDXGI(InputLayoutElementType type, uint32_t componentsNum);
 	void convertInputLayoutDescToD3D11(const std::vector<InputLayoutElement>& desc, std::vector<D3D11_INPUT_ELEMENT_DESC>& result);
 
+	void outputShaderCompilingError(ID3D10Blob* errorBlob);
+
 	virtual bool init() override;
 	virtual void release() override;
 
@@ -49,7 +80,7 @@ public:
 	virtual Texture2DReference createTexture2D(const Texture2DDesc& desc, const SubresourceData* data) override;
 	virtual Texture3DReference createTexture3D(const Texture3DDesc& desc, const SubresourceData* data) override;
 
-	virtual Texture2DReference createTexture2DFromMemory(const SubresourceData* data) override;
+	virtual Texture2DReference createTexture2DFromMemory(void* data, size_t dataSize) override;
 
 	virtual GPUBufferReference createGPUBuffer(const GPUBufferDesc& desc, const SubresourceData* data) override;
 
@@ -58,7 +89,7 @@ public:
 	virtual VertexShaderReference createVertexShaderFromStrSource(void* data, size_t size) override;
 	virtual PixelShaderReference createPixelShaderFromStrSource(void* data, size_t size) override;
 
-	virtual InputLayerReference createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) override;
+	virtual InputLayoutReference createInputLayout(const InputLayoutDesc& desc, VertexShaderReference vertexShader) override;
 
 	virtual PipelineStateReference createPipelineState(const PipelineStateDesc& desc) override;
 

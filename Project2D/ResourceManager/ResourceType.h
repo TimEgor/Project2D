@@ -2,5 +2,7 @@
 
 enum ResourceType {
 	DefaultResourceType,
-	Texture2DResourceType
+	Texture2DResourceType,
+	VertexShaderResourceType,
+	PixelShaderResourceType
 };

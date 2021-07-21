@@ -53,6 +53,7 @@ bool Sprite::init() {
 void Sprite::release() {
 	vertecesBuffer = nullptr;
 	indecesBuffer = nullptr;
+	inputLayout = nullptr;
 }
 
 GPUBufferReference Sprite::getVertecesBuffer() {
